@@ -1,0 +1,28 @@
+name: manual publish to npmjs.com and GitHub Pages
+
+on: [workflow_dispatch]
+
+jobs:
+  npmjs_deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - uses: JS-DevTools/npm-publish@v1
+      with:
+        token: ${{ secrets.NPM_TOKEN }}
+        dry-tun: true
+ 
+  gh_pages_deploy:
+    #runs-on: ubuntu-latest
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 16
+      - run: npm install
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
