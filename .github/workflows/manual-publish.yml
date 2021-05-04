@@ -10,7 +10,6 @@ jobs:
     - uses: JS-DevTools/npm-publish@v1
       with:
         token: ${{ secrets.NPM_TOKEN }}
-        dry-tun: true
  
   gh_pages_deploy:
     #runs-on: ubuntu-latest
