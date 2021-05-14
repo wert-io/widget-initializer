@@ -32,7 +32,7 @@ const wertWidget = new WertWidget(options);
 | :--- | :---: | :---: | :---: | :---: | --- |
 | **partner_id** | required | *String* | | | **partner_id** will be given after registering you as a partner, it's needed to track your comissions and statistics. If you don't have one, [contact us](https://wert.io/for-partners) |
 | **container_id** | required / optional | *String* | | | id of widget parent DOM element, needed if you want to use **mount** method |
-| **origin** | optional | *String* | `http://widget.wert.io/` | `https://sandbox.wert.io/` | Needed to initialize widget on specific environment |
+| **origin** | optional | *String* | `https://widget.wert.io/` | `https://sandbox.wert.io/` | Needed to initialize widget on specific environment |
 | **autosize** | optional | *Boolean* | `false` | `true, false` | Widget will use 100% width and 100% height of parent element, if "true" **width** and **height** options are ignored |
 | **width** | optional | *Number* | | | Widget width in pixels |
 | **height** | optional | *Number* | | | Widget height in pixels |
