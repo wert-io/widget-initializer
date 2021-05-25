@@ -131,11 +131,11 @@
     throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
 
-  var version = "0.0.3";
-
+  /* eslint-disable prefer-template, prefer-destructuring */
+  var version = '0.0.3';
   var externalStaticOrigin = 'https://javascript.wert.io';
 
-  var WertWidget$1 = /*#__PURE__*/function () {
+  var WertWidget = /*#__PURE__*/function () {
     function WertWidget() {
       var givenOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
@@ -233,31 +233,10 @@
     return WertWidget;
   }();
 
-  module.exports = WertWidget$1;
-
-  var widgetInitializer = /*#__PURE__*/Object.freeze({
-    __proto__: null
-  });
-
-  function getAugmentedNamespace(n) {
-  	if (n.__esModule) return n;
-  	var a = Object.defineProperty({}, '__esModule', {value: true});
-  	Object.keys(n).forEach(function (k) {
-  		var d = Object.getOwnPropertyDescriptor(n, k);
-  		Object.defineProperty(a, k, d.get ? d : {
-  			enumerable: true,
-  			get: function () {
-  				return n[k];
-  			}
-  		});
-  	});
-  	return a;
-  }
-
-  var WertWidget = /*@__PURE__*/getAugmentedNamespace(widgetInitializer);
+  var widgetInitializer = WertWidget;
 
   if (!window.WertWidget) {
-    window.WertWidget = WertWidget;
+    window.WertWidget = widgetInitializer;
   }
 
   var browserScriptEntry = {};
