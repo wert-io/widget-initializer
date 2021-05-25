@@ -1,7 +1,6 @@
 /* eslint-disable prefer-template, prefer-destructuring */
 
-import { version } from './package.json';
-
+const version = '0.0.3';
 const externalStaticOrigin = 'https://javascript.wert.io';
 
 class WertWidget {
