@@ -131,8 +131,11 @@
     throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
 
-  /* eslint-disable prefer-template, prefer-destructuring */
-  var WertWidget = /*#__PURE__*/function () {
+  var version = "0.0.3";
+
+  var externalStaticOrigin = 'https://javascript.wert.io';
+
+  var WertWidget$1 = /*#__PURE__*/function () {
     function WertWidget() {
       var givenOptions = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
@@ -179,7 +182,7 @@
       key: "getEmbedCode",
       value: function getEmbedCode() {
         var br = '\n';
-        var fileScriptOpen = "<script type=\"text/javascript\" src=\"".concat(this.origin, "/wert.js\">");
+        var fileScriptOpen = "<script type=\"text/javascript\" src=\"".concat(externalStaticOrigin, "/wert-").concat(version, ".js\">");
         var scriptEnd = '<' + '/script>'; // eslint-disable-line
 
         var codeScriptOpen = '<script type="text/javascript">';
@@ -230,10 +233,31 @@
     return WertWidget;
   }();
 
-  var widgetInitializer = WertWidget;
+  module.exports = WertWidget$1;
+
+  var widgetInitializer = /*#__PURE__*/Object.freeze({
+    __proto__: null
+  });
+
+  function getAugmentedNamespace(n) {
+  	if (n.__esModule) return n;
+  	var a = Object.defineProperty({}, '__esModule', {value: true});
+  	Object.keys(n).forEach(function (k) {
+  		var d = Object.getOwnPropertyDescriptor(n, k);
+  		Object.defineProperty(a, k, d.get ? d : {
+  			enumerable: true,
+  			get: function () {
+  				return n[k];
+  			}
+  		});
+  	});
+  	return a;
+  }
+
+  var WertWidget = /*@__PURE__*/getAugmentedNamespace(widgetInitializer);
 
   if (!window.WertWidget) {
-    window.WertWidget = widgetInitializer;
+    window.WertWidget = WertWidget;
   }
 
   var browserScriptEntry = {};
