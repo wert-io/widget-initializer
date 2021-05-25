@@ -1,5 +1,9 @@
 /* eslint-disable prefer-template, prefer-destructuring */
 
+import { version } from './package.json';
+
+const externalStaticOrigin = 'https://javascript.wert.io';
+
 class WertWidget {
   constructor(givenOptions = {}) {
     const options = { ...givenOptions };
@@ -43,7 +47,7 @@ class WertWidget {
 
   getEmbedCode() {
     const br = '\n';
-    const fileScriptOpen = `<script type="text/javascript" src="${this.origin}/wert.js">`;
+    const fileScriptOpen = `<script type="text/javascript" src="${externalStaticOrigin}/wert-${version}.js">`;
     const scriptEnd = '<' + '/script>'; // eslint-disable-line
     const codeScriptOpen = '<script type="text/javascript">';
     const widgetOptions = {
