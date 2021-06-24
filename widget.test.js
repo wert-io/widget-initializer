@@ -2,13 +2,7 @@
   * @jest-environment jsdom
 */
 
-const WertWidget = require('./index')
-
-const widget = new WertWidget({
-  container_id: 'widget',
-})
-
-const widgetLink = widget.getEmbedUrl()
+let widget, widgetLink
 
 const getScript = (url) => {
   return new Promise((resolve, reject) => {
@@ -29,6 +23,25 @@ const getScript = (url) => {
     }).on("error", (err) => reject(err))
   })
 }
+
+beforeEach((done) => {
+
+  getScript(`https://javascript.wert.io/wert-${require('./package.json').version}.js`)
+    .then(data => {
+
+      eval(data)
+
+      widget = new WertWidget({
+        container_id: 'widget',
+      })
+
+      widgetLink = widget.getEmbedUrl()
+
+    })
+    .finally(done)
+
+})
+
 
 test('load page via link', () => {
 
