@@ -3,11 +3,13 @@
   "version": "0.0.4",
   "description": "WertWidget helper",
   "main": "index.js",
+  "types": "index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/wert-io/widget-initializer.git"
   },
   "scripts": {
+    "build": "tsc -p .",
     "build-script": "rollup -c",
     "test": "jest"
   },
