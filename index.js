@@ -1,6 +1,5 @@
 "use strict";
-/* eslint-disable prefer-template, prefer-destructuring */
-const version = require('./package.json').version;
+const package_json_1 = require("./package.json");
 const externalStaticOrigin = 'https://javascript.wert.io';
 class WertWidget {
     constructor(givenOptions = {}) {
@@ -36,7 +35,7 @@ class WertWidget {
     }
     getEmbedCode() {
         const br = '\n';
-        const fileScriptOpen = `<script type="text/javascript" src="${externalStaticOrigin}/wert-${version}.js">`;
+        const fileScriptOpen = `<script type="text/javascript" src="${externalStaticOrigin}/wert-${package_json_1.version}.js">`;
         const scriptEnd = '<' + '/script>'; // eslint-disable-line
         const codeScriptOpen = '<script type="text/javascript">';
         const widgetOptions = Object.assign({ partner_id: this.partner_id, container_id: this.container_id, origin: this.origin, width: this.width, height: this.height }, this.options);

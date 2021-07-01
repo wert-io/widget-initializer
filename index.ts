@@ -1,6 +1,4 @@
-/* eslint-disable prefer-template, prefer-destructuring */
-
-const version = require('./package.json').version;
+import { version } from './package.json';
 
 const externalStaticOrigin = 'https://javascript.wert.io';
 
@@ -17,6 +15,7 @@ interface options {
   currency_amount?: number
   commodity?: string
   commodity_amount?: number
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [x: string]: any
 }
 
@@ -48,7 +47,7 @@ class WertWidget {
     this.options = options;
   }
 
-  mount() {
+  mount(): void {
     if (!this.container_id) {
       throw Error('No container_id was provided');
     }
@@ -69,7 +68,7 @@ class WertWidget {
     containerEl.appendChild(iframe);
   }
 
-  getEmbedCode() {
+  getEmbedCode(): string {
     const br = '\n';
     const fileScriptOpen = `<script type="text/javascript" src="${externalStaticOrigin}/wert-${version}.js">`;
     const scriptEnd = '<' + '/script>'; // eslint-disable-line
@@ -93,21 +92,21 @@ class WertWidget {
     return code;
   }
 
-  getEmbedUrl() {
+  getEmbedUrl(): string {
     const parametersString = this.getParametersString();
     const url = this.origin + '/' + this.partner_id + '/widget' + parametersString;
 
     return url;
   }
 
-  getRedirectUrl() {
+  getRedirectUrl(): string {
     const parametersString = this.getParametersString();
     const url = this.origin + '/' + this.partner_id + '/redirect' + parametersString;
 
     return url;
   }
 
-  getParametersString() {
+  getParametersString(): string {
     const parametersString = Object.entries(this.options)
       .reduce((accum, [key, value]) => {
         if (value === undefined) return accum;
