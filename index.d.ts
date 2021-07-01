@@ -2,18 +2,25 @@ interface options {
     partner_id?: string;
     container_id?: string;
     origin?: string;
-    width?: string;
-    height?: string;
-    autosize?: string;
+    width?: number;
+    height?: number;
+    autosize?: boolean;
+    address?: string;
+    theme?: string;
+    currency?: string;
+    currency_amount?: number;
+    commodity?: string;
+    commodity_amount?: number;
+    [x: string]: any;
 }
 declare class WertWidget {
     partner_id?: string;
     container_id?: string;
     origin?: string;
-    width?: string;
-    height?: string;
+    width?: number;
+    height?: number;
     options: options;
-    constructor(givenOptions?: {});
+    constructor(givenOptions?: options);
     mount(): void;
     getEmbedCode(): string;
     getEmbedUrl(): string;

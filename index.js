@@ -12,7 +12,7 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var version = '0.0.4';
+var package_json_1 = require("./package.json");
 var externalStaticOrigin = 'https://javascript.wert.io';
 var WertWidget = /** @class */ (function () {
     function WertWidget(givenOptions) {
@@ -49,7 +49,7 @@ var WertWidget = /** @class */ (function () {
     };
     WertWidget.prototype.getEmbedCode = function () {
         var br = '\n';
-        var fileScriptOpen = "<script type=\"text/javascript\" src=\"" + externalStaticOrigin + "/wert-" + version + ".js\">";
+        var fileScriptOpen = "<script type=\"text/javascript\" src=\"" + externalStaticOrigin + "/wert-" + package_json_1.version + ".js\">";
         var scriptEnd = '<' + '/script>'; // eslint-disable-line
         var codeScriptOpen = '<script type="text/javascript">';
         var widgetOptions = __assign({ partner_id: this.partner_id, container_id: this.container_id, origin: this.origin, width: this.width, height: this.height }, this.options);

@@ -1,15 +1,23 @@
 /* eslint-disable prefer-template, prefer-destructuring */
 
-const version = '0.0.4';
+import { version } from './package.json';
+
 const externalStaticOrigin = 'https://javascript.wert.io';
 
 interface options {
   partner_id?: string
   container_id?: string
   origin?: string
-  width?: string
-  height?: string
-  autosize?: string
+  width?: number
+  height?: number
+  autosize?: boolean
+  address?: string
+  theme?: string
+  currency?: string
+  currency_amount?: number
+  commodity?: string
+  commodity_amount?: number
+  [x: string]: any
 }
 
 class WertWidget {
@@ -17,11 +25,11 @@ class WertWidget {
   partner_id?: string;
   container_id?: string;
   origin?: string;
-  width?: string;
-  height?: string;
+  width?: number;
+  height?: number;
   options: options;
 
-  constructor(givenOptions = {}) {
+  constructor(givenOptions: options = {}) {
     const options: options = { ...givenOptions };
 
     this.partner_id = options.partner_id;
