@@ -27,4 +27,4 @@ declare class WertWidget {
     getRedirectUrl(): string;
     getParametersString(): string;
 }
-export default WertWidget;
+export = WertWidget;

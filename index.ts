@@ -1,6 +1,6 @@
 /* eslint-disable prefer-template, prefer-destructuring */
 
-import { version } from './package.json';
+const version = require('./package.json').version;
 
 const externalStaticOrigin = 'https://javascript.wert.io';
 
@@ -121,4 +121,4 @@ class WertWidget {
   }
 }
 
-export default WertWidget
+export = WertWidget;
