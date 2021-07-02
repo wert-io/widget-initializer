@@ -39,7 +39,8 @@ const wertWidget = new WertWidget(options);
 | **theme** | optional | *String* | | `dark` | Widget will use theme colors as base, ability to set colors for specific elements will be available soon |
 | **currency** | optional | *String* | `USD` | `USD, EUR` | Default currency that will be selected in widget |
 | **currency_amount** | optional | *Number* | | | Default currency amount that will be prefilled in widget |
-| **commodity** | optional | *String* | | `BTC, ETH, XTZ` | Default commodity that will be selected in widget |
+| **commodity** | optional | *String* | `BTC` | `BTC, ETH, XTZ` | Default commodity that will be selected in widget |
+| **commodities** | optional | *String* | | | Comma separated commodity values that will be available for user for selection |
 | **commodity_amount** | optional | *Number* | | | Default commodity amount that will be prefilled in widget, ignored if **currency_amount** was set |
 | **address** | optional | *String* | | | Address is checked for validity based on which **commodity** is set, if commodity is not set then BTC is used by default. If address is invalid - this option is ignored |
 
