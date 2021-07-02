@@ -3,6 +3,8 @@
 node_modules
 dist
 
+test-script.html
+
 # Log files
 npm-debug.log*
 yarn-debug.log*
