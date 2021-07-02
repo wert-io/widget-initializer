@@ -11,8 +11,8 @@ export default {
     format: 'iife',
   },
   plugins: [
-    json(),
     commonjs(),
+    json(),
     babel({
       babelrc: false,
       presets: [
