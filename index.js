@@ -30,6 +30,7 @@ class WertWidget {
         iframe.style.width = this.width ? (this.width + 'px') : '100%';
         iframe.style.height = this.height ? (this.height + 'px') : '100%';
         iframe.setAttribute('src', this.getEmbedUrl());
+        iframe.setAttribute('allow', 'camera *; microphone *');
         containerEl.innerHTML = '';
         containerEl.appendChild(iframe);
     }
