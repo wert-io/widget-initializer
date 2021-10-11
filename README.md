@@ -36,7 +36,7 @@ const wertWidget = new WertWidget(options);
 | **autosize** | optional | *Boolean* | `false` | `true, false` | Widget will use 100% width and 100% height of parent element, if "true" **width** and **height** options are ignored |
 | **width** | optional | *Number* | | | Widget width in pixels |
 | **height** | optional | *Number* | | | Widget height in pixels |
-| **theme** | optional | *String* | | `dark` | Widget will use theme colors as base, ability to set colors for specific elements will be available soon |
+| **theme** | optional | *String* | | `dark` | Widget will use theme colors as base |
 | **currency** | optional | *String* | `USD` | `USD, EUR` | Default currency that will be selected in widget |
 | **currency_amount** | optional | *Number* | | | Default currency amount that will be prefilled in widget |
 | **commodity** | optional | *String* | `BTC` | `BTC, ETH, XTZ` | Default commodity that will be selected in widget |
