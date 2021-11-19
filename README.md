@@ -39,10 +39,15 @@ const wertWidget = new WertWidget(options);
 | **theme** | optional | *String* | | `dark` | Widget will use theme colors as base |
 | **currency** | optional | *String* | `USD` | `USD, EUR` | Default currency that will be selected in widget |
 | **currency_amount** | optional | *Number* | | | Default currency amount that will be prefilled in widget |
-| **commodity** | optional | *String* | `BTC` | `BTC, ETH, XTZ` | Default commodity that will be selected in widget |
+| **commodity** | optional | *String* | `BTC` | `BTC, ETH, XTZ, MATIC` | Default commodity that will be selected in widget |
 | **commodities** | optional | *String* | | | Comma separated commodity values that will be available for user for selection |
 | **commodity_amount** | optional | *Number* | | | Default commodity amount that will be prefilled in widget, ignored if **currency_amount** was set |
-| **address** | optional | *String* | | | Address is checked for validity based on which **commodity** is set, if commodity is not set then BTC is used by default. If address is invalid - this option is ignored |
+| **address** | optional | *String* | | | User's wallet address. Address is checked for validity based on which **commodity** is set, if commodity is not set then BTC is used by default. If address is invalid - this option is ignored |
+| **sc_id** | required for smart contracts | *string* | | | Unique ID of the smart contract invocation — uuid4.hex generated on your side. |
+| **sc_address** | required for smart contracts | *string* | | | Address of the smart contract where the transaction should be sent. |
+| **sc_input_data** | required for smart contracts | *string* | | | Input data to be executed by the smart contract, in hex format. For Tezos it must be Michelson code as JSON transformed into hex. |
+| **pk_id** | required for smart contracts | *string* | | | Always 'key1' |
+| **signature** | required for smart contracts | *string* | | | Signature to sign data for the smart contract execution. [Signature helper](https://www.npmjs.com/package/@wert-io/widget-sc-signer) . |
 | **color_background<br>color_buttons<br>color_buttons_text<br>color_secondary_buttons<br>color_secondary_buttons_text<br>color_main_text<br>color_secondary_text<br>color_icons<br>color_links<br>color_success<br>color_warning<br>color_error** | optional | *String* | | | Custom colors of elements |
 | **buttons_border_radius<br>secondary_buttons_border_radius** | optional | *Number* | `4` | | Custom radius of elements (in pixels) |
 
