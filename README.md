@@ -43,6 +43,8 @@ const wertWidget = new WertWidget(options);
 | **commodities** | optional | *String* | | | Comma separated commodity values that will be available for user for selection |
 | **commodity_amount** | optional | *Number* | | | Default commodity amount that will be prefilled in widget, ignored if **currency_amount** was set |
 | **address** | optional | *String* | | | User's wallet address. Address is checked for validity based on which **commodity** is set, if commodity is not set then BTC is used by default. If address is invalid - this option is ignored |
+| **phone** | optional | *String* | | +11014321111 | User's phone number. Can be sent in any format with or without + |
+| **email** | optional | *String* | | test@test.com | User's email address. |
 | **sc_id** | required for smart contracts | *string* | | | Unique ID of the smart contract invocation — uuid4.hex generated on your side. |
 | **sc_address** | required for smart contracts | *string* | | | Address of the smart contract where the transaction should be sent. |
 | **sc_input_data** | required for smart contracts | *string* | | | Input data to be executed by the smart contract, in hex format. For Tezos it must be Michelson code as JSON transformed into hex. |
