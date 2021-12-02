@@ -26,11 +26,16 @@ class WertWidget {
             throw Error('Container wasn\'t found');
         }
         const iframe = document.createElement('iframe');
+        const backgroundNeeded = Boolean(this.options.color_background || this.options.theme === 'dark');
+        const defaultDarkBackgroundColor = '#1F2732';
         iframe.style.border = 'none';
         iframe.style.width = this.width ? (this.width + 'px') : '100%';
         iframe.style.height = this.height ? (this.height + 'px') : '100%';
         iframe.setAttribute('src', this.getEmbedUrl());
         iframe.setAttribute('allow', 'camera *; microphone *');
+        if (backgroundNeeded) {
+            iframe.style.background = this.options.color_background || defaultDarkBackgroundColor;
+        }
         containerEl.innerHTML = '';
         containerEl.appendChild(iframe);
     }
