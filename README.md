@@ -31,7 +31,6 @@ const wertWidget = new WertWidget(options);
 | Property | Required | Type | Default value | Possible value(s) | Description |
 | :--- | :---: | :---: | :---: | :---: | --- |
 | **partner_id** | required | *String* | | | **partner_id** will be given to you upon your registration as partner. It's required to track your commission and statistics. If you don't have one, [contact us](https://wert.io/for-partners) |
-| **blockchain** | required | *string* | `bitcoin`|`bitcoin, ethereum, tezos, polygon`| Blockchain of a selected commodity. |
 | **container_id** | required / optional | *String* | | | ID of the parent DOM element of the widget. Required if you want to use the **mount** method. |
 | **origin** | optional | *String* | `https://widget.wert.io/` | `https://sandbox.wert.io/` | Required to initialise a widget in the specific environment. |
 | **autosize** | optional | *Boolean* | `false` | `true, false` | By default, widget will use 100% of the width and 100% of the height of the parent element. If 'true', width and height options are ignored. |
@@ -40,8 +39,8 @@ const wertWidget = new WertWidget(options);
 | **theme** | optional | *String* | | `dark` | Widget will use theme colors as a basis. |
 | **currency** | optional | *String* | `USD` | `USD, EUR` | Default currency which will be selected when the widget opens. |
 | **currency_amount** | optional | *Number* | | | Default currency amount that can be pre-filled in the widget. |
-| **commodity** | optional | *String* | `BTC` | `BTC, ETH, XTZ, MATIC` | Default commodity that will be selected in the widget. |
-| **commodities** | optional | *String* | | | Commodities that will be available in the widget, separated with commas. By default, all commodities are present. |
+| **commodity** | optional | *String* | `BTC` | `BTC, ETH, XTZ, MATIC, USDC:polygon` | Default commodity that will be selected in the widget.
+| **commodities** | optional | *String* | |`ETH, MATIC, USDC:polygon, USDC:ethereum`| Commodities that will be available in the widget, separated with commas. By default, all commodities are present. Indicate blockchain for ERC-20 tokens supported on multiple networks, e.g. `USDC:ethereum`||
 | **commodity_amount** | optional | *Number* | | | Default commodity amount that will be pre-filled in the widget. This option is ignored if **currency_amount** has been set |
 | **address** | optional | *String* |`BTC`| | User's wallet address. Address is checked for validity based on the chosen **commodity.** BTC address format  is used by default. If address is invalid, this option is ignored. |
 | **phone** | optional | *String* | | +11014321111 | User's phone number in international format (E. 164 standard). Can go with or without + |
