@@ -39,17 +39,17 @@ const wertWidget = new WertWidget(options);
 | **theme** | optional | *String* | | `dark` | Widget will use theme colors as a basis. |
 | **currency** | optional | *String* | `USD` | `USD, EUR` | Default currency which will be selected when the widget opens. |
 | **currency_amount** | optional | *Number* | | | Default currency amount that can be pre-filled in the widget. |
-| **commodity** | optional | *String* | `BTC` | `BTC, ETH, XTZ, MATIC, USDC:polygon` | Default commodity that will be selected in the widget.
-| **commodities** | optional | *String* | |`ETH, MATIC, USDC:polygon, USDC:ethereum`| Commodities that will be available in the widget, separated with commas. By default, all commodities are present. Indicate blockchain for ERC-20 tokens supported on multiple networks, e.g. `USDC:ethereum`||
+| **commodity** | optional | *String* | `BTC` | `BTC, ETH, XTZ, MATIC, USDC:polygon` | Default commodity that will be selected in the widget. |
+| **commodities** | optional | *String* | | `ETH, MATIC, USDC:polygon, USDC:ethereum` | Commodities that will be available in the widget, separated with commas. By default, all commodities are present. Indicate blockchain for ERC-20 tokens supported on multiple networks, e.g. `USDC:ethereum` | |
 | **commodity_amount** | optional | *Number* | | | Default commodity amount that will be pre-filled in the widget. This option is ignored if **currency_amount** has been set |
-| **address** | optional | *String* |`BTC`| | User's wallet address. Address is checked for validity based on the chosen **commodity.** BTC address format  is used by default. If address is invalid, this option is ignored. |
+| **address** | optional | *String* | `BTC` | | User's wallet address. Address is checked for validity based on the chosen **commodity.** BTC address format  is used by default. If address is invalid, this option is ignored. |
 | **phone** | optional | *String* | | +11014321111 | User's phone number in international format (E. 164 standard). Can go with or without + |
 | **email** | optional | *String* | | test@test.com | User's email address. |
-| **sc_id** | required for smart contracts | *string* | | | Unique ID of the smart contract invocation — uuid4.hex generated on your side. |
-| **sc_address** | required for smart contracts | *string* | | | Address of the smart contract where the transaction should be sent. |
-| **sc_input_data** | required for smart contracts | *string* | | | Input data to be executed by smart contract, in hex format. For Tezos, it must be Michelson code passed as JSON transformed into hex format. |
-| **pk_id** | required for smart contracts | *string* | | | It's 'key1' at the moment.|
-| **signature** | required for smart contracts | *string* | | | Signature to sign data for the smart contract execution. [Signature helper](https://www.npmjs.com/package/@wert-io/widget-sc-signer) . |
+| **sc_id** | required for smart contracts | *String* | | | Unique ID of the smart contract invocation — uuid4.hex generated on your side. |
+| **sc_address** | required for smart contracts | *String* | | | Address of the smart contract where the transaction should be sent. |
+| **sc_input_data** | required for smart contracts | *String* | | | Input data to be executed by smart contract, in hex format. For Tezos, it must be Michelson code passed as JSON transformed into hex format. |
+| **pk_id** | required for smart contracts | *String* | | | It's 'key1' at the moment. |
+| **signature** | required for smart contracts | *String* | | | Signature to sign data for the smart contract execution. [Signature helper](https://www.npmjs.com/package/@wert-io/widget-sc-signer). |
 | **color_background<br>color_buttons<br>color_buttons_text<br>color_secondary_buttons<br>color_secondary_buttons_text<br>color_main_text<br>color_secondary_text<br>color_icons<br>color_links<br>color_success<br>color_warning<br>color_error** | optional | *String* | | | Custom colors of elements |
 | **buttons_border_radius<br>secondary_buttons_border_radius** | optional | *Number* | `4` | | Custom radius of elements (in pixels) |
 
