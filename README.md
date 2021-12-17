@@ -32,19 +32,19 @@ const wertWidget = new WertWidget(options);
 | :--- | :---: | :---: | :---: | :---: | --- |
 | **partner_id** | required | *String* | | | **partner_id** will be given to you upon your registration as partner. It's required to track your commission and statistics. If you don't have one, [contact us](https://wert.io/for-partners) |
 | **container_id** | required / optional | *String* | | | ID of the parent DOM element of the widget. Required if you want to use the **mount** method. |
-| **origin** | optional | *String* | `https://widget.wert.io/` | `https://sandbox.wert.io/` | Required to initialise a widget in the specific environment. |
+| **origin** | optional | *String* | `https://widget.wert.io` | `https://sandbox.wert.io` | Required to initialise a widget in the specific environment. |
 | **autosize** | optional | *Boolean* | `false` | `true, false` | By default, widget will use 100% of the width and 100% of the height of the parent element. If 'true', width and height options are ignored. |
 | **width** | optional | *Number* | | | Fixed widget width, in pixels. |
 | **height** | optional | *Number* | | | Fixed widget height, in pixels. |
 | **theme** | optional | *String* | | `dark` | Widget will use theme colors as a basis. |
 | **currency** | optional | *String* | `USD` | `USD, EUR` | Default currency which will be selected when the widget opens. |
 | **currency_amount** | optional | *Number* | | | Default currency amount that can be pre-filled in the widget. |
-| **commodity** | optional | *String* | `BTC` | `BTC, ETH, XTZ, MATIC, USDC:polygon` | Default commodity that will be selected in the widget. |
-| **commodities** | optional | *String* | | `ETH, MATIC, USDC:polygon, USDC:ethereum` | Commodities that will be available in the widget, separated with commas. By default, all commodities are present. Indicate blockchain for ERC-20 tokens supported on multiple networks, e.g. `USDC:ethereum` | |
+| **commodity** | optional | *String* | `BTC:bitcoin` | [List of supported currencies](https://wert-io.notion.site/Supported-Currencies-8a2a5f6a6ccb49709419793d34d86223) | Default commodity that will be selected in the widget. |
+| **commodities** | optional | *String* | | [List of supported currencies](https://wert-io.notion.site/Supported-Currencies-8a2a5f6a6ccb49709419793d34d86223) | Commodities that will be available in the widget, separated with commas. By default, all commodities are present. Indicate blockchain for ERC-20 tokens supported on multiple networks, e.g. `USDC:ethereum` | |
 | **commodity_amount** | optional | *Number* | | | Default commodity amount that will be pre-filled in the widget. This option is ignored if **currency_amount** has been set |
 | **address** | optional | *String* | `BTC` | | User's wallet address. Address is checked for validity based on the chosen **commodity.** BTC address format  is used by default. If address is invalid, this option is ignored. |
-| **phone** | optional | *String* | | +11014321111 | User's phone number in international format (E. 164 standard). Can go with or without + |
-| **email** | optional | *String* | | test@test.com | User's email address. |
+| **phone** | optional | *String* | | `+11014321111` | User's phone number in international format (E. 164 standard). Can go with or without + |
+| **email** | optional | *String* | | `test@test.com` | User's email address. |
 | **sc_id** | required for smart contracts | *String* | | | Unique ID of the smart contract invocation — uuid4.hex generated on your side. |
 | **sc_address** | required for smart contracts | *String* | | | Address of the smart contract where the transaction should be sent. |
 | **sc_input_data** | required for smart contracts | *String* | | | Input data to be executed by smart contract, in hex format. For Tezos, it must be Michelson code passed as JSON transformed into hex format. |
