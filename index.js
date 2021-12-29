@@ -1,6 +1,11 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+const widget_themes_1 = __importDefault(require("@wert-io/widget-themes"));
 const package_json_1 = require("./package.json");
 const externalStaticOrigin = 'https://javascript.wert.io';
+const { darkSemanticColors } = widget_themes_1.default;
 class WertWidget {
     constructor(givenOptions = {}) {
         const options = Object.assign({}, givenOptions);
@@ -26,11 +31,15 @@ class WertWidget {
             throw Error('Container wasn\'t found');
         }
         const iframe = document.createElement('iframe');
+        const backgroundNeeded = Boolean(this.options.color_background || this.options.theme === 'dark');
         iframe.style.border = 'none';
         iframe.style.width = this.width ? (this.width + 'px') : '100%';
         iframe.style.height = this.height ? (this.height + 'px') : '100%';
         iframe.setAttribute('src', this.getEmbedUrl());
         iframe.setAttribute('allow', 'camera *; microphone *');
+        if (backgroundNeeded) {
+            iframe.style.background = this.options.color_background || darkSemanticColors.background;
+        }
         containerEl.innerHTML = '';
         containerEl.appendChild(iframe);
     }

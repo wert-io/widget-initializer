@@ -1,6 +1,8 @@
+import WidgetThemes from '@wert-io/widget-themes';
 import { version } from './package.json';
 
 const externalStaticOrigin = 'https://javascript.wert.io';
+const { darkSemanticColors } = WidgetThemes;
 
 interface options {
   partner_id?: string
@@ -59,11 +61,17 @@ class WertWidget {
     }
 
     const iframe = document.createElement('iframe');
+    const backgroundNeeded = Boolean(this.options.color_background || this.options.theme === 'dark');
+
     iframe.style.border = 'none';
     iframe.style.width = this.width ? (this.width + 'px') : '100%';
     iframe.style.height = this.height ? (this.height + 'px') : '100%';
     iframe.setAttribute('src', this.getEmbedUrl());
     iframe.setAttribute('allow', 'camera *; microphone *');
+
+    if (backgroundNeeded) {
+      iframe.style.background = this.options.color_background || darkSemanticColors.background;
+    }
 
     containerEl.innerHTML = '';
     containerEl.appendChild(iframe);
