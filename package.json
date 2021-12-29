@@ -28,5 +28,8 @@
     "jest": "^27.0.5",
     "rollup": "^2.45.2",
     "typescript": "^4.3.5"
+  },
+  "dependencies": {
+    "@wert-io/widget-themes": "^1.2.0"
   }
 }

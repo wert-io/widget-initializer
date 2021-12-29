@@ -1,6 +1,8 @@
+import WidgetThemes from '@wert-io/widget-themes';
 import { version } from './package.json';
 
 const externalStaticOrigin = 'https://javascript.wert.io';
+const { darkSemanticColors } = WidgetThemes;
 
 interface options {
   partner_id?: string
@@ -60,7 +62,7 @@ class WertWidget {
 
     const iframe = document.createElement('iframe');
     const backgroundNeeded = Boolean(this.options.color_background || this.options.theme === 'dark');
-    const defaultDarkBackgroundColor = '#1F2732';
+
     iframe.style.border = 'none';
     iframe.style.width = this.width ? (this.width + 'px') : '100%';
     iframe.style.height = this.height ? (this.height + 'px') : '100%';
@@ -68,7 +70,7 @@ class WertWidget {
     iframe.setAttribute('allow', 'camera *; microphone *');
 
     if (backgroundNeeded) {
-      iframe.style.background = this.options.color_background || defaultDarkBackgroundColor;
+      iframe.style.background = this.options.color_background || darkSemanticColors.background;
     }
 
     containerEl.innerHTML = '';
