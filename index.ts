@@ -68,6 +68,7 @@ class WertWidget {
     iframe.style.height = this.height ? (this.height + 'px') : '100%';
     iframe.setAttribute('src', this.getEmbedUrl());
     iframe.setAttribute('allow', 'camera *; microphone *');
+    iframe.setAttribute('sandbox', 'allow-scripts allow-forms allow-popups allow-same-origin');
 
     if (backgroundNeeded) {
       iframe.style.background = this.options.color_background || darkSemanticColors.background;
