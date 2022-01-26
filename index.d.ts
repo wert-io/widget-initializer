@@ -22,6 +22,9 @@ interface eventOptions {
         [x: string]: any;
     };
 }
+declare type customListener = (data: {
+    [x: string]: any;
+}) => void;
 declare class WertWidget {
     partner_id?: string;
     container_id?: string;
@@ -30,7 +33,11 @@ declare class WertWidget {
     height?: number;
     options: options;
     extraOptions: extraOptions;
+    listeners: {
+        [x: string]: customListener;
+    };
     widgetWindow: Window | null;
+    static get eventTypes(): string[];
     constructor(givenOptions?: options);
     mount(): void;
     open(): void;

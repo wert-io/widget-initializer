@@ -12,7 +12,7 @@ class WertWidget {
                 `expected origin: ${this.origin}`,
                 `event origin equals expected origin: ${event.origin === this.origin}`,
                 `event source equals expected source: ${thisWidgetEvent}`,
-                `event data:\n\t${`event.data:\n\t\t${JSON.stringify(event.data, null, 2).replace(/\n/g, '\n\t\t')}`}`
+                `event data:\n\t\t${JSON.stringify(event.data, null, 2).replace(/\n/g, '\n\t\t')}`,
             ].join('\n\t')}`);
             if (!thisWidgetEvent || !isDataObject)
                 return;
@@ -27,6 +27,9 @@ class WertWidget {
                 default:
                     break;
             }
+            const customListener = this.listeners[event.data.type];
+            if (customListener)
+                customListener(event.data.data);
         };
         this.onWidgetClose = (event) => {
             console.log('pagehide event:', event);
@@ -52,6 +55,7 @@ class WertWidget {
         this.width = options.autosize ? undefined : options.width;
         this.height = options.autosize ? undefined : options.height;
         this.extraOptions = options.extra ? Object.assign({}, options.extra) : undefined;
+        this.listeners = options.listeners || {};
         this.widgetWindow = null;
         delete options.partner_id;
         delete options.container_id;
@@ -60,8 +64,18 @@ class WertWidget {
         delete options.height;
         delete options.autosize;
         delete options.extra;
+        delete options.listeners;
         options.await_data = (options.await_data || this.extraOptions) ? '1' : undefined;
         this.options = options;
+    }
+    static get eventTypes() {
+        return [
+            'close',
+            'error',
+            'loaded',
+            'payment-status',
+            'position',
+        ];
     }
     mount() {
         if (!this.container_id) {
