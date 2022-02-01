@@ -50,6 +50,7 @@ class WertWidget {
     [x: string]: customListener;
   };
   widgetWindow: Window | null;
+  checkIntervalId: number | undefined;
 
   static get eventTypes(): string[] {
     return [
@@ -72,6 +73,7 @@ class WertWidget {
     this.extraOptions = options.extra ? { ...options.extra } : undefined;
     this.listeners = options.listeners || {};
     this.widgetWindow = null;
+    this.checkIntervalId = undefined;
 
     delete options.partner_id;
     delete options.container_id;
@@ -98,6 +100,8 @@ class WertWidget {
       throw Error('Container wasn\'t found');
     }
 
+    this.unlistenWidget();
+
     const iframe = document.createElement('iframe');
     const backgroundNeeded = Boolean(this.options.color_background || this.options.theme === 'dark');
 
@@ -106,6 +110,7 @@ class WertWidget {
     iframe.style.height = this.height ? (this.height + 'px') : '100%';
     iframe.setAttribute('src', this.getEmbedUrl());
     iframe.setAttribute('allow', 'camera *; microphone *');
+
 
     if (backgroundNeeded) {
       iframe.style.background = this.options.color_background || '#040405';
@@ -116,10 +121,12 @@ class WertWidget {
 
     this.widgetWindow = iframe.contentWindow;
 
-    this.listenWidget();
+    iframe.onload = () => this.listenWidget();
   }
 
   open(): void {
+    this.unlistenWidget();
+
     const url = this.getRedirectUrl();
 
     this.widgetWindow = window.open(url);
@@ -127,14 +134,50 @@ class WertWidget {
     this.listenWidget();
   }
 
+  destroy(): void {
+    this.unlistenWidget();
+  }
+
+  private listenWidget(): void {
+    window.addEventListener('message', this.onMessage);
+
+    const checkLiveness = (): void => {
+      const alive = this.widgetWindow && !this.widgetWindow.closed;
+
+      if (alive) return;
+
+      this.unlistenWidget();
+
+      console.log('...widget was closed');
+    };
+
+    this.checkIntervalId = window.setInterval(checkLiveness, 200);
+
+    console.log('listen...', 'interval id:', this.checkIntervalId);
+  }
+
+  private unlistenWidget(): void {
+    if (!this.checkIntervalId) return;
+
+    console.log('unlisten...', 'interval id:', this.checkIntervalId);
+
+    clearInterval(this.checkIntervalId);
+
+    this.checkIntervalId = undefined;
+
+    window.removeEventListener('message', this.onMessage);
+
+  }
+
   private onMessage = (event: MessageEvent): void => {
     const thisWidgetEvent = event.source === this.widgetWindow;
+    const expectedOrigin = event.origin === this.origin;
     const isDataObject = typeof event.data === 'object';
 
     console.log(`message event in parent\n\t${[
       `event origin: ${event.origin}`,
       `expected origin: ${this.origin}`,
-      `event origin equals expected origin: ${event.origin === this.origin}`,
+      `event origin equals expected origin: ${expectedOrigin}`,
       `event source equals expected source: ${thisWidgetEvent}`,
       `event data:\n\t\t${JSON.stringify(event.data, null, 2).replace(/\n/g, '\n\t\t')}`,
     ].join('\n\t')}`);
@@ -148,8 +191,6 @@ class WertWidget {
           data: this.extraOptions,
         });
 
-        this.widgetWindow?.addEventListener('pagehide', event => this.onWidgetClose(event));
-
         break;
       default:
         break;
@@ -158,30 +199,6 @@ class WertWidget {
     const customListener = this.listeners[event.data.type];
 
     if (customListener) customListener(event.data.data);
-  }
-
-  private onWidgetClose = (event: PageTransitionEvent): void => {
-    console.log('pagehide event:', event);
-
-    if (event.persisted) return;
-    // if we are here it means widget will be closed
-
-    // TODO: we logout user with page refresh, which fires this event too
-    //       in this case we do not need remove event listener
-    setTimeout(() => {
-      console.log('pagehide timeout...');
-
-      if (this.widgetWindow && !this.widgetWindow.closed) return;
-
-      console.log('widget closed');
-
-      window.removeEventListener('message', this.onMessage);
-      this.widgetWindow?.removeEventListener('pagehide', this.onWidgetClose);
-    }, 100);
-  }
-
-  private listenWidget(): void {
-    window.addEventListener('message', this.onMessage);
   }
 
   sendTypeExtraEvent(options: eventOptions): void {

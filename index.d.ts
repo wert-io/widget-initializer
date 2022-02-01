@@ -37,13 +37,15 @@ declare class WertWidget {
         [x: string]: customListener;
     };
     widgetWindow: Window | null;
+    checkIntervalId: number | undefined;
     static get eventTypes(): string[];
     constructor(givenOptions?: options);
     mount(): void;
     open(): void;
-    private onMessage;
-    private onWidgetClose;
+    destroy(): void;
     private listenWidget;
+    private unlistenWidget;
+    private onMessage;
     sendTypeExtraEvent(options: eventOptions): void;
     getEmbedCode(): string;
     getEmbedUrl(): string;

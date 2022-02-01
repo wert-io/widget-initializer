@@ -4,13 +4,13 @@ const externalStaticOrigin = 'https://javascript.wert.io';
 class WertWidget {
     constructor(givenOptions = {}) {
         this.onMessage = (event) => {
-            var _a;
             const thisWidgetEvent = event.source === this.widgetWindow;
+            const expectedOrigin = event.origin === this.origin;
             const isDataObject = typeof event.data === 'object';
             console.log(`message event in parent\n\t${[
                 `event origin: ${event.origin}`,
                 `expected origin: ${this.origin}`,
-                `event origin equals expected origin: ${event.origin === this.origin}`,
+                `event origin equals expected origin: ${expectedOrigin}`,
                 `event source equals expected source: ${thisWidgetEvent}`,
                 `event data:\n\t\t${JSON.stringify(event.data, null, 2).replace(/\n/g, '\n\t\t')}`,
             ].join('\n\t')}`);
@@ -22,7 +22,6 @@ class WertWidget {
                         origin: event.origin,
                         data: this.extraOptions,
                     });
-                    (_a = this.widgetWindow) === null || _a === void 0 ? void 0 : _a.addEventListener('pagehide', event => this.onWidgetClose(event));
                     break;
                 default:
                     break;
@@ -30,23 +29,6 @@ class WertWidget {
             const customListener = this.listeners[event.data.type];
             if (customListener)
                 customListener(event.data.data);
-        };
-        this.onWidgetClose = (event) => {
-            console.log('pagehide event:', event);
-            if (event.persisted)
-                return;
-            // if we are here it means widget will be closed
-            // TODO: we logout user with page refresh, which fires this event too
-            //       in this case we do not need remove event listener
-            setTimeout(() => {
-                var _a;
-                console.log('pagehide timeout...');
-                if (this.widgetWindow && !this.widgetWindow.closed)
-                    return;
-                console.log('widget closed');
-                window.removeEventListener('message', this.onMessage);
-                (_a = this.widgetWindow) === null || _a === void 0 ? void 0 : _a.removeEventListener('pagehide', this.onWidgetClose);
-            }, 100);
         };
         const options = Object.assign({}, givenOptions);
         this.partner_id = options.partner_id;
@@ -57,6 +39,7 @@ class WertWidget {
         this.extraOptions = options.extra ? Object.assign({}, options.extra) : undefined;
         this.listeners = options.listeners || {};
         this.widgetWindow = null;
+        this.checkIntervalId = undefined;
         delete options.partner_id;
         delete options.container_id;
         delete options.origin;
@@ -85,6 +68,7 @@ class WertWidget {
         if (!containerEl) {
             throw Error('Container wasn\'t found');
         }
+        this.unlistenWidget();
         const iframe = document.createElement('iframe');
         const backgroundNeeded = Boolean(this.options.color_background || this.options.theme === 'dark');
         iframe.style.border = 'none';
@@ -98,15 +82,36 @@ class WertWidget {
         containerEl.innerHTML = '';
         containerEl.appendChild(iframe);
         this.widgetWindow = iframe.contentWindow;
-        this.listenWidget();
+        iframe.onload = () => this.listenWidget();
     }
     open() {
+        this.unlistenWidget();
         const url = this.getRedirectUrl();
         this.widgetWindow = window.open(url);
         this.listenWidget();
     }
+    destroy() {
+        this.unlistenWidget();
+    }
     listenWidget() {
         window.addEventListener('message', this.onMessage);
+        const checkLiveness = () => {
+            const alive = this.widgetWindow && !this.widgetWindow.closed;
+            if (alive)
+                return;
+            this.unlistenWidget();
+            console.log('...widget was closed');
+        };
+        this.checkIntervalId = window.setInterval(checkLiveness, 200);
+        console.log('listen...', 'interval id:', this.checkIntervalId);
+    }
+    unlistenWidget() {
+        if (!this.checkIntervalId)
+            return;
+        console.log('unlisten...', 'interval id:', this.checkIntervalId);
+        clearInterval(this.checkIntervalId);
+        this.checkIntervalId = undefined;
+        window.removeEventListener('message', this.onMessage);
     }
     sendTypeExtraEvent(options) {
         var _a;
