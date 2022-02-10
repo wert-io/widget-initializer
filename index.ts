@@ -111,7 +111,6 @@ class WertWidget {
     iframe.setAttribute('src', this.getEmbedUrl());
     iframe.setAttribute('allow', 'camera *; microphone *');
 
-
     if (backgroundNeeded) {
       iframe.style.background = this.options.color_background || '#040405';
     }
@@ -121,7 +120,7 @@ class WertWidget {
 
     this.widgetWindow = iframe.contentWindow;
 
-    iframe.onload = () => this.listenWidget();
+    this.listenWidget();
   }
 
   open(): void {

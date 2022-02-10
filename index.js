@@ -82,7 +82,7 @@ class WertWidget {
         containerEl.innerHTML = '';
         containerEl.appendChild(iframe);
         this.widgetWindow = iframe.contentWindow;
-        iframe.onload = () => this.listenWidget();
+        this.listenWidget();
     }
     open() {
         this.unlistenWidget();
