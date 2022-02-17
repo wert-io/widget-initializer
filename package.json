@@ -1,6 +1,6 @@
 {
   "name": "@wert-io/widget-initializer",
-  "version": "0.3.0-beta.1",
+  "version": "0.3.0",
   "description": "WertWidget helper",
   "main": "index.js",
   "types": "index.d.ts",
@@ -30,7 +30,5 @@
     "rollup": "^2.45.2",
     "typescript": "^4.3.5"
   },
-  "dependencies": {
-    "@wert-io/widget-themes": "^1.2.0"
-  }
+  "dependencies": {}
 }
