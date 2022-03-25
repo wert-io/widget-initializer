@@ -49,9 +49,30 @@ const wertWidget = new WertWidget(options);
 | **sc_address** | required for smart contracts | *String* | | | Address of the smart contract where the transaction should be sent. |
 | **sc_input_data** | required for smart contracts | *String* | | | Input data to be executed by smart contract, in hex format. For Tezos, it must be Michelson code passed as JSON transformed into hex format. |
 | **pk_id** | required for smart contracts | *String* | | | It's 'key1' at the moment. |
+| **redirect_url** | optional | *String* | | `https://origin.us/item_id` | Full url string (with protocol) where user will be redirected from KYC emails to proceed payment |
 | **signature** | required for smart contracts | *String* | | | Signature to sign data for the smart contract execution. [Signature helper](https://www.npmjs.com/package/@wert-io/widget-sc-signer). |
+| **extra** | optional | *Object* | | See [extra object structure](#extra-object-structure) | Additional data that will be sent through **window.postMessage** method |
+| **listeners** | optional | *Object* | | | _Coming soon..._ |
 | **color_background<br>color_buttons<br>color_buttons_text<br>color_secondary_buttons<br>color_secondary_buttons_text<br>color_main_text<br>color_secondary_text<br>color_icons<br>color_links<br>color_success<br>color_warning<br>color_error** | optional | *String* | | | Custom colors of elements |
 | **buttons_border_radius<br>secondary_buttons_border_radius** | optional | *Number* | `4` | | Custom radius of elements (in pixels) |
+
+### Extra object structure
+
+```
+{
+  item_info: {
+    author_image_url: String // example: https://something.com/images/image.jpg
+    author: String
+    image_url: String
+    name: String
+    seller: String
+  }
+}
+```
+
+### Listeners
+
+_Coming soon..._
 
 ### Configuration object methods
 
