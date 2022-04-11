@@ -60,6 +60,6 @@ test('mount iframe', () => {
   widget.mount()
 
   expect(document.body.innerHTML)
-    .toBe(`${startWidget}<iframe style="width: 100%; height: 100%;" src="${widgetLink}"></iframe>${endWidget}`)
+    .toBe(`${startWidget}<iframe style="width: 100%; height: 100%;" src="${widgetLink}" allow="camera *; microphone *"></iframe>${endWidget}`)
 
 })
