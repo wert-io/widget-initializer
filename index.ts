@@ -146,19 +146,13 @@ class WertWidget {
       if (alive) return;
 
       this.unlistenWidget();
-
-      console.log('...widget was closed');
     };
 
     this.checkIntervalId = window.setInterval(checkLiveness, 200);
-
-    console.log('listen...', 'interval id:', this.checkIntervalId);
   }
 
   private unlistenWidget(): void {
     if (!this.checkIntervalId) return;
-
-    console.log('unlisten...', 'interval id:', this.checkIntervalId);
 
     clearInterval(this.checkIntervalId);
 
@@ -172,14 +166,6 @@ class WertWidget {
     const thisWidgetEvent = event.source === this.widgetWindow;
     const expectedOrigin = event.origin === this.origin;
     const isDataObject = typeof event.data === 'object';
-
-    console.log(`message event in parent\n\t${[
-      `event origin: ${event.origin}`,
-      `expected origin: ${this.origin}`,
-      `event origin equals expected origin: ${expectedOrigin}`,
-      `event source equals expected source: ${thisWidgetEvent}`,
-      `event data:\n\t\t${JSON.stringify(event.data, null, 2).replace(/\n/g, '\n\t\t')}`,
-    ].join('\n\t')}`);
 
     if (!thisWidgetEvent || !isDataObject) return;
 
