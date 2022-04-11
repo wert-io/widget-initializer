@@ -3,19 +3,55 @@ const package_json_1 = require("./package.json");
 const externalStaticOrigin = 'https://javascript.wert.io';
 class WertWidget {
     constructor(givenOptions = {}) {
+        this.onMessage = (event) => {
+            const thisWidgetEvent = event.source === this.widgetWindow;
+            const expectedOrigin = event.origin === this.origin;
+            const isDataObject = typeof event.data === 'object';
+            if (!thisWidgetEvent || !isDataObject)
+                return;
+            switch (event.data.type) {
+                case 'loaded':
+                    this.sendTypeExtraEvent({
+                        origin: event.origin,
+                        data: this.extraOptions,
+                    });
+                    break;
+                default:
+                    break;
+            }
+            const customListener = this.listeners[event.data.type];
+            if (customListener)
+                customListener(event.data.data);
+        };
         const options = Object.assign({}, givenOptions);
         this.partner_id = options.partner_id;
         this.container_id = options.container_id;
         this.origin = options.origin || 'https://widget.wert.io';
         this.width = options.autosize ? undefined : options.width;
         this.height = options.autosize ? undefined : options.height;
+        this.extraOptions = options.extra ? Object.assign({}, options.extra) : undefined;
+        this.listeners = options.listeners || {};
+        this.widgetWindow = null;
+        this.checkIntervalId = undefined;
         delete options.partner_id;
         delete options.container_id;
         delete options.origin;
         delete options.width;
         delete options.height;
         delete options.autosize;
+        delete options.extra;
+        delete options.listeners;
+        options.await_data = (options.await_data || this.extraOptions) ? '1' : undefined;
         this.options = options;
+    }
+    static get eventTypes() {
+        return [
+            'close',
+            'error',
+            'loaded',
+            'payment-status',
+            'position',
+        ];
     }
     mount() {
         if (!this.container_id) {
@@ -25,6 +61,7 @@ class WertWidget {
         if (!containerEl) {
             throw Error('Container wasn\'t found');
         }
+        this.unlistenWidget();
         const iframe = document.createElement('iframe');
         const backgroundNeeded = Boolean(this.options.color_background || this.options.theme === 'dark');
         iframe.style.border = 'none';
@@ -37,6 +74,43 @@ class WertWidget {
         }
         containerEl.innerHTML = '';
         containerEl.appendChild(iframe);
+        this.widgetWindow = iframe.contentWindow;
+        this.listenWidget();
+    }
+    open() {
+        this.unlistenWidget();
+        const url = this.getRedirectUrl();
+        this.widgetWindow = window.open(url);
+        this.listenWidget();
+    }
+    destroy() {
+        this.unlistenWidget();
+    }
+    listenWidget() {
+        window.addEventListener('message', this.onMessage);
+        const checkLiveness = () => {
+            const alive = this.widgetWindow && !this.widgetWindow.closed;
+            if (alive)
+                return;
+            this.unlistenWidget();
+        };
+        this.checkIntervalId = window.setInterval(checkLiveness, 200);
+    }
+    unlistenWidget() {
+        if (!this.checkIntervalId)
+            return;
+        clearInterval(this.checkIntervalId);
+        this.checkIntervalId = undefined;
+        window.removeEventListener('message', this.onMessage);
+    }
+    sendTypeExtraEvent(options) {
+        var _a;
+        if (!options.data)
+            return;
+        (_a = this.widgetWindow) === null || _a === void 0 ? void 0 : _a.postMessage({
+            type: 'extra',
+            data: options.data,
+        }, options.origin);
     }
     getEmbedCode() {
         const br = '\n';

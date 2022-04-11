@@ -19,6 +19,24 @@ interface options {
   [x: string]: any
 }
 
+interface extraOptions {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [x: string]: any
+}
+
+interface eventOptions {
+  origin: string
+  data: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    [x: string]: any
+  }
+}
+
+type customListener = (data: {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [x: string]: any
+}) => void;
+
 class WertWidget {
 
   partner_id?: string;
@@ -27,6 +45,22 @@ class WertWidget {
   width?: number;
   height?: number;
   options: options;
+  extraOptions: extraOptions;
+  listeners: {
+    [x: string]: customListener;
+  };
+  widgetWindow: Window | null;
+  checkIntervalId: number | undefined;
+
+  static get eventTypes(): string[] {
+    return [
+      'close',
+      'error',
+      'loaded',
+      'payment-status',
+      'position',
+    ];
+  }
 
   constructor(givenOptions: options = {}) {
     const options: options = { ...givenOptions };
@@ -36,6 +70,10 @@ class WertWidget {
     this.origin = options.origin || 'https://widget.wert.io';
     this.width = options.autosize ? undefined : options.width;
     this.height = options.autosize ? undefined : options.height;
+    this.extraOptions = options.extra ? { ...options.extra } : undefined;
+    this.listeners = options.listeners || {};
+    this.widgetWindow = null;
+    this.checkIntervalId = undefined;
 
     delete options.partner_id;
     delete options.container_id;
@@ -43,6 +81,10 @@ class WertWidget {
     delete options.width;
     delete options.height;
     delete options.autosize;
+    delete options.extra;
+    delete options.listeners;
+
+    options.await_data = (options.await_data || this.extraOptions) ? '1' : undefined;
 
     this.options = options;
   }
@@ -57,6 +99,8 @@ class WertWidget {
     if (!containerEl) {
       throw Error('Container wasn\'t found');
     }
+
+    this.unlistenWidget();
 
     const iframe = document.createElement('iframe');
     const backgroundNeeded = Boolean(this.options.color_background || this.options.theme === 'dark');
@@ -73,6 +117,82 @@ class WertWidget {
 
     containerEl.innerHTML = '';
     containerEl.appendChild(iframe);
+
+    this.widgetWindow = iframe.contentWindow;
+
+    this.listenWidget();
+  }
+
+  open(): void {
+    this.unlistenWidget();
+
+    const url = this.getRedirectUrl();
+
+    this.widgetWindow = window.open(url);
+
+    this.listenWidget();
+  }
+
+  destroy(): void {
+    this.unlistenWidget();
+  }
+
+  private listenWidget(): void {
+    window.addEventListener('message', this.onMessage);
+
+    const checkLiveness = (): void => {
+      const alive = this.widgetWindow && !this.widgetWindow.closed;
+
+      if (alive) return;
+
+      this.unlistenWidget();
+    };
+
+    this.checkIntervalId = window.setInterval(checkLiveness, 200);
+  }
+
+  private unlistenWidget(): void {
+    if (!this.checkIntervalId) return;
+
+    clearInterval(this.checkIntervalId);
+
+    this.checkIntervalId = undefined;
+
+    window.removeEventListener('message', this.onMessage);
+
+  }
+
+  private onMessage = (event: MessageEvent): void => {
+    const thisWidgetEvent = event.source === this.widgetWindow;
+    const expectedOrigin = event.origin === this.origin;
+    const isDataObject = typeof event.data === 'object';
+
+    if (!thisWidgetEvent || !isDataObject) return;
+
+    switch (event.data.type) {
+      case 'loaded':
+        this.sendTypeExtraEvent({
+          origin: event.origin,
+          data: this.extraOptions,
+        });
+
+        break;
+      default:
+        break;
+    }
+
+    const customListener = this.listeners[event.data.type];
+
+    if (customListener) customListener(event.data.data);
+  }
+
+  sendTypeExtraEvent(options: eventOptions): void {
+    if (!options.data) return;
+
+    this.widgetWindow?.postMessage({
+      type: 'extra',
+      data: options.data,
+    }, options.origin);
   }
 
   getEmbedCode(): string {
@@ -101,6 +221,7 @@ class WertWidget {
 
   getEmbedUrl(): string {
     const parametersString = this.getParametersString();
+
     const url = this.origin + '/' + this.partner_id + '/widget' + parametersString;
 
     return url;

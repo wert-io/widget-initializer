@@ -13,6 +13,18 @@ interface options {
     commodity_amount?: number;
     [x: string]: any;
 }
+interface extraOptions {
+    [x: string]: any;
+}
+interface eventOptions {
+    origin: string;
+    data: {
+        [x: string]: any;
+    };
+}
+declare type customListener = (data: {
+    [x: string]: any;
+}) => void;
 declare class WertWidget {
     partner_id?: string;
     container_id?: string;
@@ -20,8 +32,21 @@ declare class WertWidget {
     width?: number;
     height?: number;
     options: options;
+    extraOptions: extraOptions;
+    listeners: {
+        [x: string]: customListener;
+    };
+    widgetWindow: Window | null;
+    checkIntervalId: number | undefined;
+    static get eventTypes(): string[];
     constructor(givenOptions?: options);
     mount(): void;
+    open(): void;
+    destroy(): void;
+    private listenWidget;
+    private unlistenWidget;
+    private onMessage;
+    sendTypeExtraEvent(options: eventOptions): void;
     getEmbedCode(): string;
     getEmbedUrl(): string;
     getRedirectUrl(): string;
