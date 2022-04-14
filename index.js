@@ -5,13 +5,14 @@ class WertWidget {
     constructor(givenOptions = {}) {
         this.onMessage = (event) => {
             const thisWidgetEvent = event.source === this.widgetWindow;
-            const expectedOrigin = event.origin === this.origin;
+            // const expectedOrigin = event.origin === this.origin;
             const isDataObject = typeof event.data === 'object';
             if (!thisWidgetEvent || !isDataObject)
                 return;
             switch (event.data.type) {
                 case 'loaded':
-                    this.sendTypeExtraEvent({
+                    this.sendEvent({
+                        type: 'extra',
                         origin: event.origin,
                         data: this.extraOptions,
                     });
@@ -104,12 +105,12 @@ class WertWidget {
         this.checkIntervalId = undefined;
         window.removeEventListener('message', this.onMessage);
     }
-    sendTypeExtraEvent(options) {
+    sendEvent(options) {
         var _a;
         if (!options.data)
             return;
         (_a = this.widgetWindow) === null || _a === void 0 ? void 0 : _a.postMessage({
-            type: 'extra',
+            type: options.type,
             data: options.data,
         }, options.origin);
     }
@@ -147,6 +148,16 @@ class WertWidget {
             return (accum + startSymbol + key + '=' + encodeURIComponent(value));
         }, '');
         return parametersString;
+    }
+    setTheme(data) {
+        if (!data || !Object.keys(data).length)
+            return;
+        this.sendEvent({
+            type: 'theme',
+            origin: this.origin,
+            // origin: '*',
+            data,
+        });
     }
 }
 module.exports = WertWidget;
