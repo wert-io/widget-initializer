@@ -52,7 +52,7 @@ const wertWidget = new WertWidget(options);
 | **redirect_url** | optional | *String* | | `https://origin.us/item_id` | Full url string (with protocol) where user will be redirected from KYC emails to proceed payment |
 | **signature** | required for smart contracts | *String* | | | Signature to sign data for the smart contract execution. [Signature helper](https://www.npmjs.com/package/@wert-io/widget-sc-signer). |
 | **extra** | optional | *Object* | | See [extra object structure](#extra-object-structure) | Additional data that will be sent through **window.postMessage** method |
-| **listeners** | optional | *Object* | | | _Coming soon..._ |
+| **listeners** | optional | *Object* | | See [listeners object structure](#listeners) | Listeners on widget events |
 | **color_background<br>color_buttons<br>color_buttons_text<br>color_secondary_buttons<br>color_secondary_buttons_text<br>color_main_text<br>color_secondary_text<br>color_icons<br>color_links<br>color_success<br>color_warning<br>color_error** | optional | *String* | | | Custom colors of elements |
 | **buttons_border_radius<br>secondary_buttons_border_radius** | optional | *Number* | `4` | | Custom radius of elements (in pixels) |
 
@@ -72,7 +72,129 @@ const wertWidget = new WertWidget(options);
 
 ### Listeners
 
-_Coming soon..._
+There is an ability to listen some widget events in order to react on them. Whole list of available events one can get by calling static property **eventTypes** on helper:
+
+```
+import WertWidget from '@wert-io/widget-initializer';
+
+console.log(WertWidget.eventTypes);
+
+/* console output:
+[
+  'close',
+  'error',
+  'loaded',
+  'payment-status',
+  'position',
+]
+*/
+```
+
+Subscribing:
+
+```
+const widget = new WertWidget({
+  ...options,
+  listeners: {
+    position: data => console.log('step:', data.step),
+  },
+});
+```
+
+Expected data by event:
+
+<table>
+  <tr>
+    <th>Event type</th>
+        <th>Data</th>
+        <th>Description</th>
+  </tr>
+    <tr>
+<td>
+
+`close`
+</td>
+<td>
+
+```
+undefined
+```
+</td>
+<td>
+Event threw by widget when it's time to close it (by flow logic). Widget won't be closed by itself — it only throws event.
+</td>
+    </tr>
+    <tr>
+<td>
+
+`error`
+</td>
+<td>
+
+```
+{
+  name: String
+    message: String
+}
+```
+</td>
+<td>
+Information about error occurred in widget.
+</td>
+    </tr>
+    <tr>
+<td>
+
+`loaded`
+</td>
+<td>
+
+```
+undefined
+```
+</td>
+<td>
+Widget got necessary data and either ready to work or to receive extra data (if it was used). Can be duplicated because of 3DS redirects.
+</td>
+    </tr>
+    <tr>
+<td>
+
+`payment-status`
+</td>
+<td>
+
+```
+{
+  status: String
+  payment_id: String
+  order_id: String
+}
+```
+</td>
+<td>
+
+Possible statuses: `pending`, `canceled`, `failed`, `success`, `failover`. Event for each status can be not unique.
+</td>
+    </tr>
+    <tr>
+<td>
+
+`position`
+</td>
+<td>
+
+```
+{
+  step: String
+}
+```
+</td>
+<td>
+Event informs about changes in user position on the flow.
+</td>
+    </tr>
+</table>
 
 ### Configuration object methods
 
@@ -80,6 +202,12 @@ After creating a configuration object, you can call **mount** method to show the
 
 ```
 wertWidget.mount();
+```
+
+or
+
+```
+wertWidget.open();
 ```
 
 If you want to handle widget **iframe** yourself, (for example, if you use **React** or other framework that doesn't respect working with DOM directly), you can call **getEmbedUrl** and set it to **iframe** src attribute. In this case, you should set **iframe** width and height yourself.
@@ -99,5 +227,6 @@ const redirectUrl = wertWidget.getRedirectUrl();
 | Method | Description |
 | --- | --- |
 | **mount** | Mounts widget in DOM element with given **container_id** |
+| **open** | Opens widget in new browser tab |
 | **getEmdedUrl** | Returns embed widget url |
 | **getRedirectUrl** | Returns redirect widget url |
