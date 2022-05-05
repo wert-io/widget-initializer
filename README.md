@@ -31,17 +31,17 @@ const wertWidget = new WertWidget(options);
 | Property | Required | Type | Default value | Possible value(s) | Description |
 | :--- | :---: | :---: | :---: | :---: | --- |
 | **partner_id** | required | *String* | | | **partner_id** will be given to you upon your registration as partner. It's required to track your commission and statistics. If you don't have one, [contact us](https://wert.io/for-partners) |
-| **container_id** | required / optional | *String* | | | ID of the parent DOM element of the widget. Required if you want to use the **mount** method. |
-| **origin** | optional | *String* | `https://widget.wert.io` | `https://sandbox.wert.io` | Required to initialise a widget in the specific environment. |
-| **autosize** | optional | *Boolean* | `false` | `true, false` | By default, widget will use 100% of the width and 100% of the height of the parent element. If 'true', width and height options are ignored. |
-| **width** | optional | *Number* | | | Fixed widget width, in pixels. |
-| **height** | optional | *Number* | | | Fixed widget height, in pixels. |
-| **theme** | optional | *String* | | `dark` | Widget will use theme colors as a basis. |
-| **currency** | optional | *String* | `USD` | `USD, EUR` | Default currency which will be selected when the widget opens. |
-| **currency_amount** | optional | *Number* | | | Default currency amount that can be pre-filled in the widget. |
-| **commodity** | optional | *String* | `BTC:bitcoin` | [List of supported currencies](https://wert-io.notion.site/Supported-Currencies-8a2a5f6a6ccb49709419793d34d86223) | Default commodity that will be selected in the widget. |
-| **commodities** | optional | *String* | | [List of supported currencies](https://wert-io.notion.site/Supported-Currencies-8a2a5f6a6ccb49709419793d34d86223) | Commodities that will be available in the widget, separated with commas. By default, all commodities are present. Indicate blockchain for ERC-20 tokens supported on multiple networks, e.g. `USDC:ethereum` | |
-| **commodity_amount** | optional | *Number* | | | Default commodity amount that will be pre-filled in the widget. This option is ignored if **currency_amount** has been set |
+| **container_id** | required / optional | *String* | | | ID of the parent DOM element of the module. Required if you want to use the **mount** method. |
+| **origin** | optional | *String* | `https://widget.wert.io` | `https://sandbox.wert.io` | Required to initialise the module in the specific environment. |
+| **autosize** | optional | *Boolean* | `false` | `true, false` | By default, module will use 100% of the width and 100% of the height of the parent element. If 'true', width and height options are ignored. |
+| **width** | optional | *Number* | | | Fixed module width, in pixels. |
+| **height** | optional | *Number* | | | Fixed module height, in pixels. |
+| **theme** | optional | *String* | | `dark` | Module will use theme colors as a basis. |
+| **currency** | optional | *String* | `USD` | `USD, EUR` | Default currency which will be selected when the module opens. |
+| **currency_amount** | optional | *Number* | | | Default currency amount that can be pre-filled in the module. |
+| **commodity** | optional | *String* | `BTC:bitcoin` | [List of supported currencies](https://wert-io.notion.site/Supported-Currencies-8a2a5f6a6ccb49709419793d34d86223) | Default commodity that will be selected in the module. |
+| **commodities** | optional | *String* | | [List of supported currencies](https://wert-io.notion.site/Supported-Currencies-8a2a5f6a6ccb49709419793d34d86223) | Commodities that will be available in the module, separated with commas. By default, all commodities are present. Indicate blockchain for ERC-20 tokens supported on multiple networks, e.g. `USDC:ethereum` | |
+| **commodity_amount** | optional | *Number* | | | Default commodity amount that will be pre-filled in the module. This option is ignored if **currency_amount** has been set |
 | **address** | optional | *String* | `BTC` | | User's wallet address. Address is checked for validity based on the chosen **commodity.** BTC address format  is used by default. If address is invalid, this option is ignored. |
 | **phone** | optional | *String* | | `+11014321111` | User's phone number in international format (E. 164 standard). Can go with or without + |
 | **email** | optional | *String* | | `test@test.com` | User's email address. |
@@ -52,7 +52,7 @@ const wertWidget = new WertWidget(options);
 | **redirect_url** | optional | *String* | | `https://origin.us/item_id` | Full url string (with protocol) where user will be redirected from KYC emails to proceed payment |
 | **signature** | required for smart contracts | *String* | | | Signature to sign data for the smart contract execution. [Signature helper](https://www.npmjs.com/package/@wert-io/widget-sc-signer). |
 | **extra** | optional | *Object* | | See [extra object structure](#extra-object-structure) | Additional data that will be sent through **window.postMessage** method |
-| **listeners** | optional | *Object* | | See [listeners object structure](#listeners) | Listeners on widget events |
+| **listeners** | optional | *Object* | | See [listeners object structure](#listeners) | Use this if you want to listen to some module events and react to them |
 | **color_background<br>color_buttons<br>color_buttons_text<br>color_secondary_buttons<br>color_secondary_buttons_text<br>color_main_text<br>color_secondary_text<br>color_icons<br>color_links<br>color_success<br>color_warning<br>color_error** | optional | *String* | | | Custom colors of elements |
 | **buttons_border_radius<br>secondary_buttons_border_radius** | optional | *Number* | `4` | | Custom radius of elements (in pixels) |
 
@@ -72,7 +72,7 @@ const wertWidget = new WertWidget(options);
 
 ### Listeners
 
-There is an ability to listen some widget events in order to react on them. Whole list of available events one can get by calling static property **eventTypes** on helper:
+To get the whole list of available events, call a static property **eventTypes** on helper:
 
 ```
 import WertWidget from '@wert-io/widget-initializer';
@@ -121,7 +121,7 @@ undefined
 ```
 </td>
 <td>
-Event threw by widget when it's time to close it (by flow logic). Widget won't be closed by itself — it only throws event.
+An event raised by module when it's time to close it (by flow logic). The module won't close itself, it only raises an event.
 </td>
     </tr>
     <tr>
@@ -139,7 +139,7 @@ Event threw by widget when it's time to close it (by flow logic). Widget won't b
 ```
 </td>
 <td>
-Information about error occurred in widget.
+Information about an error that occurred in the module.
 </td>
     </tr>
     <tr>
@@ -154,7 +154,7 @@ undefined
 ```
 </td>
 <td>
-Widget got necessary data and either ready to work or to receive extra data (if it was used). Can be duplicated because of 3DS redirects.
+The module has the necessary data and is ready to work. In case extra data was used, it's ready to receive it. This event can be duplicated if there was a 3D Secure redirection.
 </td>
     </tr>
     <tr>
@@ -191,14 +191,14 @@ Possible statuses: `pending`, `canceled`, `failed`, `success`, `failover`. Event
 ```
 </td>
 <td>
-Event informs about changes in user position on the flow.
+Informs about the changes in user's position in the flow.
 </td>
     </tr>
 </table>
 
 ### Configuration object methods
 
-After creating a configuration object, you can call **mount** method to show the widget to the user (in this case, make sure that you've set **container_id** option).
+After creating a configuration object, you can call **mount** method to show the module to the user (in this case, make sure that you've set **container_id** option).
 
 ```
 wertWidget.mount();
@@ -210,13 +210,13 @@ or
 wertWidget.open();
 ```
 
-If you want to handle widget **iframe** yourself, (for example, if you use **React** or other framework that doesn't respect working with DOM directly), you can call **getEmbedUrl** and set it to **iframe** src attribute. In this case, you should set **iframe** width and height yourself.
+If you want to handle module **iframe** yourself, (for example, if you use **React** or other framework that doesn't respect working with DOM directly), you can call **getEmbedUrl** and set it to **iframe** src attribute. In this case, you should set **iframe** width and height yourself.
 
 ```
 const iframeSrc = wertWidget.getEmbedUrl();
 ```
 
-In addition, if you want to open the widget in a separate window (in this case, tips will be available), call **getRedirectUrl** and send user to it. Widget will look like [this](https://widget.wert.io/default/redirect).
+In addition, if you want to open the module in a separate window (in this case, tips will be available), call **getRedirectUrl** and send user to it. Module will look like [this](https://widget.wert.io/default/redirect).
 
 ```
 const redirectUrl = wertWidget.getRedirectUrl();
@@ -226,7 +226,7 @@ const redirectUrl = wertWidget.getRedirectUrl();
 
 | Method | Description |
 | --- | --- |
-| **mount** | Mounts widget in DOM element with given **container_id** |
-| **open** | Opens widget in new browser tab |
-| **getEmdedUrl** | Returns embed widget url |
-| **getRedirectUrl** | Returns redirect widget url |
+| **mount** | Mounts module in DOM element with given **container_id** |
+| **open** | Opens module in new browser tab |
+| **getEmdedUrl** | Returns url for embed module |
+| **getRedirectUrl** | Returns url for redirect |
