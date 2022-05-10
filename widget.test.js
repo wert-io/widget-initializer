@@ -47,5 +47,5 @@ test('Mount iframe', () => {
   widget.mount();
 
   expect(document.body.innerHTML)
-    .toBe(`${startWidget}<iframe style="width: 100%; height: 100%;" src="${widgetLink}" allow="camera *; microphone *"></iframe>${endWidget}`)
+    .toBe(`${startWidget}<iframe style="width: 100%; height: 100%;" src="${widgetLink}" allow="camera *; microphone *" sandbox="allow-scripts allow-forms allow-popups allow-same-origin"></iframe>${endWidget}`);
 });
