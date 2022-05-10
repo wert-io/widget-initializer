@@ -16,19 +16,19 @@ interface options {
 interface extraOptions {
     [x: string]: any;
 }
-interface eventOptions {
-    origin: string;
-    data: {
-        [x: string]: any;
-    };
-}
 declare type customListener = (data: {
     [x: string]: any;
 }) => void;
+declare type setThemeData = {
+    theme?: string;
+    colors?: {
+        [x: string]: string;
+    };
+};
 declare class WertWidget {
     partner_id?: string;
     container_id?: string;
-    origin?: string;
+    origin: string;
     width?: number;
     height?: number;
     options: options;
@@ -46,10 +46,11 @@ declare class WertWidget {
     private listenWidget;
     private unlistenWidget;
     private onMessage;
-    sendTypeExtraEvent(options: eventOptions): void;
+    private sendEvent;
     getEmbedCode(): string;
     getEmbedUrl(): string;
     getRedirectUrl(): string;
     getParametersString(): string;
+    setTheme(data: setThemeData): void;
 }
 export = WertWidget;

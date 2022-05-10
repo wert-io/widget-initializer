@@ -25,6 +25,7 @@ interface extraOptions {
 }
 
 interface eventOptions {
+  type: string
   origin: string
   data: {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -37,11 +38,18 @@ type customListener = (data: {
   [x: string]: any
 }) => void;
 
+type setThemeData = {
+  theme?: string
+  colors?: {
+    [x: string]: string
+  }
+};
+
 class WertWidget {
 
   partner_id?: string;
   container_id?: string;
-  origin?: string;
+  origin: string;
   width?: number;
   height?: number;
   options: options;
@@ -165,14 +173,15 @@ class WertWidget {
 
   private onMessage = (event: MessageEvent): void => {
     const thisWidgetEvent = event.source === this.widgetWindow;
-    const expectedOrigin = event.origin === this.origin;
+    // const expectedOrigin = event.origin === this.origin;
     const isDataObject = typeof event.data === 'object';
 
     if (!thisWidgetEvent || !isDataObject) return;
 
     switch (event.data.type) {
       case 'loaded':
-        this.sendTypeExtraEvent({
+        this.sendEvent({
+          type: 'extra',
           origin: event.origin,
           data: this.extraOptions,
         });
@@ -187,11 +196,11 @@ class WertWidget {
     if (customListener) customListener(event.data.data);
   }
 
-  sendTypeExtraEvent(options: eventOptions): void {
+  private sendEvent(options: eventOptions): void {
     if (!options.data) return;
 
     this.widgetWindow?.postMessage({
-      type: 'extra',
+      type: options.type,
       data: options.data,
     }, options.origin);
   }
@@ -246,6 +255,17 @@ class WertWidget {
       }, '');
 
     return parametersString;
+  }
+
+  setTheme(data: setThemeData): void {
+    if (!data || !Object.keys(data).length) return;
+
+    this.sendEvent({
+      type: 'theme',
+      origin: this.origin,
+      // origin: '*',
+      data,
+    });
   }
 }
 
