@@ -134,7 +134,7 @@ An event raised by module when it's time to close it (by flow logic). The module
 ```
 {
   name: String
-    message: String
+  message: String
 }
 ```
 </td>
@@ -210,16 +210,18 @@ or
 wertWidget.open();
 ```
 
-If you want to handle module **iframe** yourself, (for example, if you use **React** or other framework that doesn't respect working with DOM directly), you can call **getEmbedUrl** and set it to **iframe** src attribute. In this case, you should set **iframe** width and height yourself.
+### Switching theme without reload
+
+For switching theme without reloading whole widget you can use method `setTheme`:
 
 ```
-const iframeSrc = wertWidget.getEmbedUrl();
-```
-
-In addition, if you want to open the module in a separate window (in this case, tips will be available), call **getRedirectUrl** and send user to it. Module will look like [this](https://widget.wert.io/default/redirect).
-
-```
-const redirectUrl = wertWidget.getRedirectUrl();
+wertWidget.setTheme({
+  theme: 'dark', // undefined — for default white theme 
+  colors: {
+    // supported colors listed in options table above 
+    color_buttons: 'red',
+  },
+});
 ```
 
 <br>
@@ -228,5 +230,4 @@ const redirectUrl = wertWidget.getRedirectUrl();
 | --- | --- |
 | **mount** | Mounts module in DOM element with given **container_id** |
 | **open** | Opens module in new browser tab |
-| **getEmdedUrl** | Returns url for embed module |
-| **getRedirectUrl** | Returns url for redirect |
+| **setTheme** | Switches theme without reload |
