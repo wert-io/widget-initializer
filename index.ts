@@ -229,7 +229,7 @@ class WertWidget {
     return code;
   }
 
-  getEmbedUrl(): string {
+  private getEmbedUrl(): string {
     const parametersString = this.getParametersString();
 
     const url = this.origin + '/' + this.partner_id + '/widget' + parametersString;
@@ -237,14 +237,14 @@ class WertWidget {
     return url;
   }
 
-  getRedirectUrl(): string {
+  private getRedirectUrl(): string {
     const parametersString = this.getParametersString();
     const url = this.origin + '/' + this.partner_id + '/redirect' + parametersString;
 
     return url;
   }
 
-  getParametersString(): string {
+  private getParametersString(): string {
     const parametersString = Object.entries(this.options)
       .reduce((accum, [key, value]) => {
         if (value === undefined) return accum;

@@ -48,9 +48,9 @@ declare class WertWidget {
     private onMessage;
     private sendEvent;
     getEmbedCode(): string;
-    getEmbedUrl(): string;
-    getRedirectUrl(): string;
-    getParametersString(): string;
+    private getEmbedUrl;
+    private getRedirectUrl;
+    private getParametersString;
     setTheme(data: setThemeData): void;
 }
 export = WertWidget;
