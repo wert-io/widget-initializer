@@ -58,6 +58,8 @@ const wertWidget = new WertWidget(options);
 
 ### Extra object structure
 
+With extra option you can provide additional data about sold item (in **item_info** property) and more default wallets that will be prefilled when user changes cryptocurrency (in **wallets** property).
+
 ```
 {
   item_info: {
@@ -66,7 +68,15 @@ const wertWidget = new WertWidget(options);
     image_url: String
     name: String
     seller: String
-  }
+  },
+  wallets: [
+    {
+      name: String, // case-ignored, example: 'ETH'
+      blockchain: String, // case-ignored, example: 'Ethereum'
+      address: String,
+    },
+    ...
+  ],
 }
 ```
 
