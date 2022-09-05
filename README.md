@@ -58,7 +58,7 @@ const wertWidget = new WertWidget(options);
 
 ### Extra object structure
 
-With extra option you can provide additional data about sold item (in **item_info** property) and more default wallets that will be prefilled when user changes cryptocurrency (in **wallets** property).
+With extra option you can provide additional data about the NFT (in **item_info** property) and add more default wallets which will be prefilled when user changes cryptocurrency (in **wallets** property, non-valid addresses will be ignored).
 
 ```
 {
