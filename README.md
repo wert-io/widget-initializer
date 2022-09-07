@@ -179,6 +179,7 @@ The module has the necessary data and is ready to work. In case extra data was u
   status: String
   payment_id: String
   order_id: String
+  tx_id: String // if available
 }
 ```
 </td>
