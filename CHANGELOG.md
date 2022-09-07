@@ -1,5 +1,11 @@
 # Changelog
 
+## v2.0.2 (2022-09-07)
+
+### Changes
+
+* Documentation about tx_id property in `payment-status` event was added
+
 ## v2.0.1 (2022-09-05)
 
 ### Changes
