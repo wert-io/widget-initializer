@@ -36,6 +36,7 @@ const wertWidget = new WertWidget(options);
 | **autosize** | optional | *Boolean* | `false` | `true, false` | By default, module will use 100% of the width and 100% of the height of the parent element. If 'true', width and height options are ignored. |
 | **width** | optional | *Number* | | | Fixed module width, in pixels. |
 | **height** | optional | *Number* | | | Fixed module height, in pixels. |
+| **lang** | optional | *String* | | `en, fr` | Defines the language in the module. |
 | **theme** | optional | *String* | | `dark` | Module will use theme colors as a basis. |
 | **currency** | optional | *String* | `USD` | `USD, EUR` | Default currency which will be selected when the module opens. |
 | **currency_amount** | optional | *Number* | | | Default currency amount that can be pre-filled in the module. |
