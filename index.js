@@ -3,6 +3,7 @@ const package_json_1 = require("./package.json");
 const externalStaticOrigin = 'https://javascript.wert.io';
 class WertWidget {
     constructor(givenOptions = {}) {
+        this.iframe = document.createElement('iframe');
         this.onMessage = (event) => {
             const thisWidgetEvent = event.source === this.widgetWindow;
             // const expectedOrigin = event.origin === this.origin;
@@ -16,6 +17,12 @@ class WertWidget {
                         origin: event.origin,
                         data: this.extraOptions,
                     });
+                    break;
+                case 'close':
+                    if (!this.container_id) {
+                        document.body.removeChild(this.iframe);
+                        document.body.style.overflow = 'inherit';
+                    }
                     break;
                 default:
                     break;
@@ -34,6 +41,7 @@ class WertWidget {
         this.listeners = options.listeners || {};
         this.widgetWindow = null;
         this.checkIntervalId = undefined;
+        options.isLegacyIntegration = !!options.container_id;
         delete options.partner_id;
         delete options.container_id;
         delete options.origin;
@@ -55,28 +63,28 @@ class WertWidget {
         ];
     }
     mount() {
-        if (!this.container_id) {
-            throw Error('No container_id was provided');
-        }
-        const containerEl = document.querySelector('#' + this.container_id);
-        if (!containerEl) {
-            throw Error('Container wasn\'t found');
-        }
+        var _a;
         this.unlistenWidget();
-        const iframe = document.createElement('iframe');
+        const legacyContainer = document.getElementById((_a = this.container_id) !== null && _a !== void 0 ? _a : '');
         const backgroundNeeded = Boolean(this.options.color_background || this.options.theme === 'dark');
-        iframe.style.border = 'none';
-        iframe.style.width = this.width ? (this.width + 'px') : '100%';
-        iframe.style.height = this.height ? (this.height + 'px') : '100%';
-        iframe.setAttribute('src', this.getEmbedUrl());
-        iframe.setAttribute('allow', 'camera *; microphone *');
-        iframe.setAttribute('sandbox', 'allow-scripts allow-forms allow-popups allow-same-origin');
-        if (backgroundNeeded) {
-            iframe.style.background = this.options.color_background || '#040405';
+        this.iframe.style.border = 'none';
+        this.iframe.style.width = this.width ? (this.width + 'px') : '100%';
+        this.iframe.style.height = this.height ? (this.height + 'px') : '100%';
+        if (!legacyContainer) {
+            this.iframe.style.bottom = '0';
+            this.iframe.style.right = '0';
+            this.iframe.style.position = 'fixed';
+            this.iframe.style.zIndex = '10000';
+            document.body.style.overflow = 'hidden';
         }
-        containerEl.innerHTML = '';
-        containerEl.appendChild(iframe);
-        this.widgetWindow = iframe.contentWindow;
+        this.iframe.setAttribute('src', this.getEmbedUrl());
+        this.iframe.setAttribute('allow', 'camera *; microphone *');
+        this.iframe.setAttribute('sandbox', 'allow-scripts allow-forms allow-popups allow-same-origin');
+        if (backgroundNeeded) {
+            this.iframe.style.background = this.options.color_background || '#040405';
+        }
+        (legacyContainer !== null && legacyContainer !== void 0 ? legacyContainer : document.body).appendChild(this.iframe);
+        this.widgetWindow = this.iframe.contentWindow;
         this.listenWidget();
     }
     open() {

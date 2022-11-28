@@ -47,6 +47,8 @@ type setThemeData = {
 
 class WertWidget {
 
+  private iframe: HTMLIFrameElement = document.createElement('iframe');
+
   partner_id?: string;
   container_id?: string;
   origin: string;
@@ -59,6 +61,7 @@ class WertWidget {
   };
   widgetWindow: Window | null;
   checkIntervalId: number | undefined;
+
 
   static get eventTypes(): string[] {
     return [
@@ -83,6 +86,8 @@ class WertWidget {
     this.widgetWindow = null;
     this.checkIntervalId = undefined;
 
+    options.isLegacyIntegration = !!options.container_id;
+
     delete options.partner_id;
     delete options.container_id;
     delete options.origin;
@@ -98,36 +103,35 @@ class WertWidget {
   }
 
   mount(): void {
-    if (!this.container_id) {
-      throw Error('No container_id was provided');
-    }
-
-    const containerEl = document.querySelector('#' + this.container_id);
-
-    if (!containerEl) {
-      throw Error('Container wasn\'t found');
-    }
-
     this.unlistenWidget();
 
-    const iframe = document.createElement('iframe');
+    const legacyContainer = document.getElementById(this.container_id ?? '');
+
     const backgroundNeeded = Boolean(this.options.color_background || this.options.theme === 'dark');
 
-    iframe.style.border = 'none';
-    iframe.style.width = this.width ? (this.width + 'px') : '100%';
-    iframe.style.height = this.height ? (this.height + 'px') : '100%';
-    iframe.setAttribute('src', this.getEmbedUrl());
-    iframe.setAttribute('allow', 'camera *; microphone *');
-    iframe.setAttribute('sandbox', 'allow-scripts allow-forms allow-popups allow-same-origin');
+    this.iframe.style.border = 'none';
+    this.iframe.style.width = this.width ? (this.width + 'px') : '100%';
+    this.iframe.style.height = this.height ? (this.height + 'px') : '100%';
 
-    if (backgroundNeeded) {
-      iframe.style.background = this.options.color_background || '#040405';
+    if (!legacyContainer) {
+      this.iframe.style.bottom = '0';
+      this.iframe.style.right = '0';
+      this.iframe.style.position = 'fixed';
+      this.iframe.style.zIndex = '10000';
+      document.body.style.overflow = 'hidden';
     }
 
-    containerEl.innerHTML = '';
-    containerEl.appendChild(iframe);
+    this.iframe.setAttribute('src', this.getEmbedUrl());
+    this.iframe.setAttribute('allow', 'camera *; microphone *');
+    this.iframe.setAttribute('sandbox', 'allow-scripts allow-forms allow-popups allow-same-origin');
 
-    this.widgetWindow = iframe.contentWindow;
+    if (backgroundNeeded) {
+      this.iframe.style.background = this.options.color_background || '#040405';
+    }
+
+    (legacyContainer ?? document.body).appendChild(this.iframe);
+
+    this.widgetWindow = this.iframe.contentWindow;
 
     this.listenWidget();
   }
@@ -187,6 +191,15 @@ class WertWidget {
         });
 
         break;
+
+      case 'close':
+        if (!this.container_id) {
+          document.body.removeChild(this.iframe);
+          document.body.style.overflow = 'inherit';
+        }
+
+        break;
+
       default:
         break;
     }

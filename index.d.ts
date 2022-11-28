@@ -26,6 +26,7 @@ declare type setThemeData = {
     };
 };
 declare class WertWidget {
+    private iframe;
     partner_id?: string;
     container_id?: string;
     origin: string;
