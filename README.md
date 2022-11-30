@@ -56,6 +56,7 @@ const wertWidget = new WertWidget(options);
 | **listeners** | optional | *Object* | | See [listeners object structure](#listeners) | Use this if you want to listen to some module events and react to them |
 | **color_background<br>color_buttons<br>color_buttons_text<br>color_secondary_buttons<br>color_secondary_buttons_text<br>color_main_text<br>color_secondary_text<br>color_icons<br>color_links<br>color_success<br>color_warning<br>color_error** | optional | *String* | | | Custom colors of elements |
 | **buttons_border_radius<br>secondary_buttons_border_radius** | optional | *Number* | `4` | | Custom radius of elements (in pixels) |
+| **skip_init_navigation** | optional | *Boolean* | `false` | `true, false` | By default, module will try to provide the closest to purchase starting route depending on provided parameters. If 'true', this navigation logic will be skipped.                                            |
 
 ### Extra object structure
 
