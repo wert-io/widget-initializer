@@ -28,34 +28,34 @@ const wertWidget = new WertWidget(options);
 
 ### Options
 
-| Property | Required | Type | Default value | Possible value(s) | Description |
-| :--- | :---: | :---: | :---: | :---: | --- |
-| **partner_id** | required | *String* | | | **partner_id** will be given to you upon your registration as partner. It's required to track your commission and statistics. If you don't have one, [contact us](https://wert.io/for-partners) |
-| **container_id** | required / optional | *String* | | | ID of the parent DOM element of the module. Required if you want to use the **mount** method. |
-| **origin** | optional | *String* | `https://widget.wert.io` | `https://sandbox.wert.io` | Required to initialise the module in the specific environment. |
-| **autosize** | optional | *Boolean* | `false` | `true, false` | By default, module will use 100% of the width and 100% of the height of the parent element. If 'true', width and height options are ignored. |
-| **width** | optional | *Number* | | | Fixed module width, in pixels. |
-| **height** | optional | *Number* | | | Fixed module height, in pixels. |
-| **lang** | optional | *String* | | `en, fr` | Defines the language in the module. |
-| **theme** | optional | *String* | | `dark` | Module will use theme colors as a basis. |
-| **currency** | optional | *String* | `USD` | `USD, EUR` | Default currency which will be selected when the module opens. |
-| **currency_amount** | optional | *Number* | | | Default currency amount that can be pre-filled in the module. |
-| **commodity** | optional | *String* | `BTC:bitcoin` | [List of supported currencies](https://wert-io.notion.site/Supported-Currencies-8a2a5f6a6ccb49709419793d34d86223) | Default commodity that will be selected in the module. |
+| Property | Required | Type | Default value | Possible value(s) | Description                                                                                                                                                                                                  |
+| :--- | :---: | :---: | :---: | :---: |--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **partner_id** | required | *String* | | | **partner_id** will be given to you upon your registration as partner. It's required to track your commission and statistics. If you don't have one, [contact us](https://wert.io/for-partners)              |
+| **origin** | optional | *String* | `https://widget.wert.io` | `https://sandbox.wert.io` | Required to initialise the module in the specific environment.                                                                                                                                               |
+| **autosize** | optional | *Boolean* | `false` | `true, false` | By default, module will use 100% of the width and 100% of the height of the parent element. If 'true', width and height options are ignored.                                                                 |
+| **width** | optional | *Number* | | | Fixed module width, in pixels.                                                                                                                                                                               |
+| **height** | optional | *Number* | | | Fixed module height, in pixels.                                                                                                                                                                              |
+| **lang** | optional | *String* | | `en, fr` | Defines the language in the module.                                                                                                                                                                          |
+| **theme** | optional | *String* | | `dark` | Module will use theme colors as a basis.                                                                                                                                                                     |
+| **currency** | optional | *String* | `USD` | `USD, EUR` | Default currency which will be selected when the module opens.                                                                                                                                               |
+| **currency_amount** | optional | *Number* | | | Default currency amount that can be pre-filled in the module.                                                                                                                                                |
+| **commodity** | optional | *String* | `BTC:bitcoin` | [List of supported currencies](https://wert-io.notion.site/Supported-Currencies-8a2a5f6a6ccb49709419793d34d86223) | Default commodity that will be selected in the module.                                                                                                                                                       |
 | **commodities** | optional | *String* | | [List of supported currencies](https://wert-io.notion.site/Supported-Currencies-8a2a5f6a6ccb49709419793d34d86223) | Commodities that will be available in the module, separated with commas. By default, all commodities are present. Indicate blockchain for ERC-20 tokens supported on multiple networks, e.g. `USDC:ethereum` | |
-| **commodity_amount** | optional | *Number* | | | Default commodity amount that will be pre-filled in the module. This option is ignored if **currency_amount** has been set |
-| **address** | optional | *String* | `BTC` | | User's wallet address. Address is checked for validity based on the chosen **commodity.** BTC address format  is used by default. If address is invalid, this option is ignored. |
-| **phone** | optional | *String* | | `+11014321111` | User's phone number in international format (E. 164 standard). Can go with or without + |
-| **email** | optional | *String* | | `test@test.com` | User's email address. |
-| **sc_id** | required for smart contracts | *String* | | | Unique ID of the smart contract invocation — uuid4.hex generated on your side. |
-| **sc_address** | required for smart contracts | *String* | | | Address of the smart contract where the transaction should be sent. |
-| **sc_input_data** | required for smart contracts | *String* | | | Input data to be executed by smart contract, in hex format. For Tezos, it must be Michelson code passed as JSON transformed into hex format. |
-| **pk_id** | required for smart contracts | *String* | | | It's 'key1' at the moment. |
-| **redirect_url** | optional | *String* | | `https://origin.us/item_id` | Full url string (with protocol) where user will be redirected from KYC emails to proceed payment |
-| **signature** | required for smart contracts | *String* | | | Signature to sign data for the smart contract execution. [Signature helper](https://www.npmjs.com/package/@wert-io/widget-sc-signer). |
-| **extra** | optional | *Object* | | See [extra object structure](#extra-object-structure) | Additional data that will be sent through **window.postMessage** method |
-| **listeners** | optional | *Object* | | See [listeners object structure](#listeners) | Use this if you want to listen to some module events and react to them |
-| **color_background<br>color_buttons<br>color_buttons_text<br>color_secondary_buttons<br>color_secondary_buttons_text<br>color_main_text<br>color_secondary_text<br>color_icons<br>color_links<br>color_success<br>color_warning<br>color_error** | optional | *String* | | | Custom colors of elements |
-| **buttons_border_radius<br>secondary_buttons_border_radius** | optional | *Number* | `4` | | Custom radius of elements (in pixels) |
+| **commodity_amount** | optional | *Number* | | | Default commodity amount that will be pre-filled in the module. This option is ignored if **currency_amount** has been set                                                                                   |
+| **address** | optional | *String* | `BTC` | | User's wallet address. Address is checked for validity based on the chosen **commodity.** BTC address format  is used by default. If address is invalid, this option is ignored.                             |
+| **phone** | optional | *String* | | `+11014321111` | User's phone number in international format (E. 164 standard). Can go with or without +                                                                                                                      |
+| **email** | optional | *String* | | `test@test.com` | User's email address.                                                                                                                                                                                        |
+| **sc_id** | required for smart contracts | *String* | | | Unique ID of the smart contract invocation — uuid4.hex generated on your side.                                                                                                                               |
+| **sc_address** | required for smart contracts | *String* | | | Address of the smart contract where the transaction should be sent.                                                                                                                                          |
+| **sc_input_data** | required for smart contracts | *String* | | | Input data to be executed by smart contract, in hex format. For Tezos, it must be Michelson code passed as JSON transformed into hex format.                                                                 |
+| **pk_id** | required for smart contracts | *String* | | | It's 'key1' at the moment.                                                                                                                                                                                   |
+| **redirect_url** | optional | *String* | | `https://origin.us/item_id` | Full url string (with protocol) where user will be redirected from KYC emails to proceed payment                                                                                                             |
+| **signature** | required for smart contracts | *String* | | | Signature to sign data for the smart contract execution. [Signature helper](https://www.npmjs.com/package/@wert-io/widget-sc-signer).                                                                        |
+| **extra** | optional | *Object* | | See [extra object structure](#extra-object-structure) | Additional data that will be sent through **window.postMessage** method                                                                                                                                      |
+| **listeners** | optional | *Object* | | See [listeners object structure](#listeners) | Use this if you want to listen to some module events and react to them                                                                                                                                       |
+| **color_background<br>color_buttons<br>color_buttons_text<br>color_secondary_buttons<br>color_secondary_buttons_text<br>color_main_text<br>color_secondary_text<br>color_icons<br>color_links<br>color_success<br>color_warning<br>color_error** | optional | *String* | | | Custom colors of elements                                                                                                                                                                                    |
+| **buttons_border_radius<br>secondary_buttons_border_radius** | optional | *Number* | `4` | | Custom radius of elements (in pixels)                                                                                                                                                                        |
+| **container_id** | optional | *String* | | | You can provide an id of specific element to mount widget in container mode inside it. Not recommended.                                                                                                      |
 
 ### Extra object structure
 

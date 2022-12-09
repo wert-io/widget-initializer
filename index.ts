@@ -45,6 +45,11 @@ type setThemeData = {
   }
 };
 
+enum WidgetLayoutModes {
+  Container = 'Container',
+  Modal = 'Modal',
+}
+
 class WertWidget {
 
   private iframe: HTMLIFrameElement = document.createElement('iframe');
@@ -86,7 +91,7 @@ class WertWidget {
     this.widgetWindow = null;
     this.checkIntervalId = undefined;
 
-    options.isLegacyIntegration = !!options.container_id;
+    options.widgetLayoutMode = options.container_id ? WidgetLayoutModes.Container : WidgetLayoutModes.Modal;
 
     delete options.partner_id;
     delete options.container_id;
@@ -105,15 +110,13 @@ class WertWidget {
   mount(): void {
     this.unlistenWidget();
 
-    const legacyContainer = document.getElementById(this.container_id ?? '');
-
     const backgroundNeeded = Boolean(this.options.color_background || this.options.theme === 'dark');
 
     this.iframe.style.border = 'none';
     this.iframe.style.width = this.width ? (this.width + 'px') : '100%';
     this.iframe.style.height = this.height ? (this.height + 'px') : '100%';
 
-    if (!legacyContainer) {
+    if (this.options.widgetLayoutMode === WidgetLayoutModes.Modal) {
       this.iframe.style.bottom = '0';
       this.iframe.style.right = '0';
       this.iframe.style.position = 'fixed';
@@ -129,7 +132,15 @@ class WertWidget {
       this.iframe.style.background = this.options.color_background || '#040405';
     }
 
-    (legacyContainer ?? document.body).appendChild(this.iframe);
+    const container = this.options.widgetLayoutMode === WidgetLayoutModes.Container
+      ? document.getElementById(this.container_id!)
+      : document.body
+
+    if (!container) {
+      throw Error('No container was found with provided container_id');
+    }
+
+    container.appendChild(this.iframe)
 
     this.widgetWindow = this.iframe.contentWindow;
 
@@ -193,9 +204,9 @@ class WertWidget {
         break;
 
       case 'close':
-        if (!this.container_id) {
+        if (this.options.widgetLayoutMode === WidgetLayoutModes.Modal) {
           document.body.removeChild(this.iframe);
-          document.body.style.overflow = 'inherit';
+          document.body.style.overflow = '';
         }
 
         break;
