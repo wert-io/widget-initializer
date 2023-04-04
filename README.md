@@ -31,11 +31,7 @@ const wertWidget = new WertWidget(options);
 | Property                                                                                                                                                                                                                                         |           Required           |   Type    |      Default value       |                                     Possible value(s)                                     | Description                                                                                                                                                                                                                                                                                                                           |
 |:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:----------------------------:|:---------:|:------------------------:|:-----------------------------------------------------------------------------------------:|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **partner_id**                                                                                                                                                                                                                                   |           required           | *String*  |                          |                                                                                           | **partner_id** will be given to you upon your registration as partner. It's required to track your commission and statistics. If you don't have one, [contact us](https://wert.io/for-partners)                                                                                                                                       |
-| **container_id**                                                                                                                                                                                                                                 |     required / optional      | *String*  |                          |                                                                                           | ID of the parent DOM element of the module. Required if you want to use the **mount** method.                                                                                                                                                                                                                                         |
 | **origin**                                                                                                                                                                                                                                       |           optional           | *String*  | `https://widget.wert.io` |                                 `https://sandbox.wert.io`                                 | Required to initialise the module in the specific environment.                                                                                                                                                                                                                                                                        |
-| **autosize**                                                                                                                                                                                                                                     |           optional           | *Boolean* |         `false`          |                                       `true, false`                                       | By default, module will use 100% of the width and 100% of the height of the parent element. If 'true', width and height options are ignored.                                                                                                                                                                                          |
-| **width**                                                                                                                                                                                                                                        |           optional           | *Number*  |                          |                                                                                           | Fixed module width, in pixels.                                                                                                                                                                                                                                                                                                        |
-| **height**                                                                                                                                                                                                                                       |           optional           | *Number*  |                          |                                                                                           | Fixed module height, in pixels.                                                                                                                                                                                                                                                                                                       |
 | **lang**                                                                                                                                                                                                                                         |           optional           | *String*  |                          |                                         `en, fr`                                          | Defines the language in the module.                                                                                                                                                                                                                                                                                                   |
 | **theme**                                                                                                                                                                                                                                        |           optional           | *String*  |                          |                                          `dark`                                           | Module will use theme colors as a basis.                                                                                                                                                                                                                                                                                              |
 | **currency**                                                                                                                                                                                                                                     |           optional           | *String*  |          `USD`           |                                           `USD`                                           | Default currency which will be selected when the module opens.                                                                                                                                                                                                                                                                        |
@@ -132,7 +128,7 @@ undefined
 ```
 </td>
 <td>
-An event raised by module when it's time to close it (by flow logic). The module won't close itself, it only raises an event.
+An event raised by module when user closed a widget.
 </td>
     </tr>
     <tr>
@@ -210,16 +206,10 @@ Informs about the changes in user's position in the flow.
 
 ### Configuration object methods
 
-After creating a configuration object, you can call **mount** method to show the module to the user (in this case, make sure that you've set **container_id** option).
+After creating a configuration object, you can call **mount** method to show the module to the user.
 
 ```
 wertWidget.mount();
-```
-
-or
-
-```
-wertWidget.open();
 ```
 
 ### Switching theme without reload
@@ -238,8 +228,7 @@ wertWidget.setTheme({
 
 <br>
 
-| Method       | Description                                              |
-|--------------|----------------------------------------------------------|
-| **mount**    | Mounts module in DOM element with given **container_id** |
-| **open**     | Opens module in new browser tab                          |
-| **setTheme** | Switches theme without reload                            |
+| Method       | Description                   |
+|--------------|-------------------------------|
+| **mount**    | Mounts module in DOM          |
+| **setTheme** | Switches theme without reload |
