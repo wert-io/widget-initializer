@@ -45,11 +45,6 @@ type setThemeData = {
   }
 };
 
-enum WidgetLayoutModes {
-  Container = 'Container',
-  Modal = 'Modal',
-}
-
 class WertWidget {
 
   private iframe: HTMLIFrameElement = document.createElement('iframe');
@@ -81,6 +76,10 @@ class WertWidget {
   constructor(givenOptions: options = {}) {
     const options: options = { ...givenOptions };
 
+    if (options.container_id) {
+      throw Error('container_id is no longer supported');
+    }
+
     this.partner_id = options.partner_id;
     this.container_id = options.container_id;
     this.origin = options.origin || 'https://widget.wert.io';
@@ -91,7 +90,7 @@ class WertWidget {
     this.widgetWindow = null;
     this.checkIntervalId = undefined;
 
-    options.widgetLayoutMode = options.container_id ? WidgetLayoutModes.Container : WidgetLayoutModes.Modal;
+    options.widgetLayoutMode = 'Modal';
 
     delete options.partner_id;
     delete options.container_id;
@@ -116,13 +115,11 @@ class WertWidget {
     this.iframe.style.width = this.width ? (this.width + 'px') : '100%';
     this.iframe.style.height = this.height ? (this.height + 'px') : '100%';
 
-    if (this.options.widgetLayoutMode === WidgetLayoutModes.Modal) {
-      this.iframe.style.bottom = '0';
-      this.iframe.style.right = '0';
-      this.iframe.style.position = 'fixed';
-      this.iframe.style.zIndex = '10000';
-      document.body.style.overflow = 'hidden';
-    }
+    this.iframe.style.bottom = '0';
+    this.iframe.style.right = '0';
+    this.iframe.style.position = 'fixed';
+    this.iframe.style.zIndex = '10000';
+    document.body.style.overflow = 'hidden';
 
     this.iframe.setAttribute('src', this.getEmbedUrl());
     this.iframe.setAttribute('allow', 'camera *; microphone *');
@@ -132,15 +129,7 @@ class WertWidget {
       this.iframe.style.background = this.options.color_background || '#040405';
     }
 
-    const container = this.options.widgetLayoutMode === WidgetLayoutModes.Container
-      ? document.getElementById(this.container_id!)
-      : document.body
-
-    if (!container) {
-      throw Error('No container was found with provided container_id');
-    }
-
-    container.appendChild(this.iframe)
+    document.body.appendChild(this.iframe)
 
     this.widgetWindow = this.iframe.contentWindow;
 
@@ -204,10 +193,8 @@ class WertWidget {
         break;
 
       case 'close':
-        if (this.options.widgetLayoutMode === WidgetLayoutModes.Modal) {
-          document.body.removeChild(this.iframe);
-          document.body.style.overflow = '';
-        }
+        document.body.removeChild(this.iframe);
+        document.body.style.overflow = '';
 
         break;
 
