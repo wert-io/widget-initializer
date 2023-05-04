@@ -31,7 +31,7 @@ class WertWidget {
         };
         const options = Object.assign({}, givenOptions);
         if (options.container_id) {
-            throw Error('container_id is no longer supported');
+            console.error('container_id is no longer supported');
         }
         this.partner_id = options.partner_id;
         this.container_id = options.container_id;
