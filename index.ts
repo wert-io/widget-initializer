@@ -77,7 +77,7 @@ class WertWidget {
     const options: options = { ...givenOptions };
 
     if (options.container_id) {
-      throw Error('container_id is no longer supported');
+      console.error('container_id is no longer supported')
     }
 
     this.partner_id = options.partner_id;
