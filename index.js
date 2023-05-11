@@ -34,21 +34,14 @@ class WertWidget {
             console.error('container_id is no longer supported');
         }
         this.partner_id = options.partner_id;
-        this.container_id = options.container_id;
         this.origin = options.origin || 'https://widget.wert.io';
-        this.width = options.autosize ? undefined : options.width;
-        this.height = options.autosize ? undefined : options.height;
         this.extraOptions = options.extra ? Object.assign({}, options.extra) : undefined;
         this.listeners = options.listeners || {};
         this.widgetWindow = null;
         this.checkIntervalId = undefined;
         options.widgetLayoutMode = 'Modal';
         delete options.partner_id;
-        delete options.container_id;
         delete options.origin;
-        delete options.width;
-        delete options.height;
-        delete options.autosize;
         delete options.extra;
         delete options.listeners;
         options.await_data = (options.await_data || this.extraOptions) ? '1' : undefined;
@@ -65,10 +58,9 @@ class WertWidget {
     }
     mount() {
         this.unlistenWidget();
-        const backgroundNeeded = Boolean(this.options.color_background || this.options.theme === 'dark');
         this.iframe.style.border = 'none';
-        this.iframe.style.width = this.width ? (this.width + 'px') : '100%';
-        this.iframe.style.height = this.height ? (this.height + 'px') : '100%';
+        this.iframe.style.width = '100%';
+        this.iframe.style.height = '100%';
         this.iframe.style.bottom = '0';
         this.iframe.style.right = '0';
         this.iframe.style.position = 'fixed';
@@ -77,17 +69,8 @@ class WertWidget {
         this.iframe.setAttribute('src', this.getEmbedUrl());
         this.iframe.setAttribute('allow', 'camera *; microphone *');
         this.iframe.setAttribute('sandbox', 'allow-scripts allow-forms allow-popups allow-same-origin');
-        if (backgroundNeeded) {
-            this.iframe.style.background = this.options.color_background || '#040405';
-        }
         document.body.appendChild(this.iframe);
         this.widgetWindow = this.iframe.contentWindow;
-        this.listenWidget();
-    }
-    open() {
-        this.unlistenWidget();
-        const url = this.getRedirectUrl();
-        this.widgetWindow = window.open(url);
         this.listenWidget();
     }
     destroy() {
@@ -124,7 +107,7 @@ class WertWidget {
         const fileScriptOpen = `<script type="text/javascript" src="${externalStaticOrigin}/wert-${package_json_1.version}.js">`;
         const scriptEnd = '<' + '/script>'; // eslint-disable-line
         const codeScriptOpen = '<script type="text/javascript">';
-        const widgetOptions = Object.assign({ partner_id: this.partner_id, container_id: this.container_id, origin: this.origin, width: this.width, height: this.height }, this.options);
+        const widgetOptions = Object.assign({ partner_id: this.partner_id, origin: this.origin }, this.options);
         const codeScriptContent1 = `const wertWidget = new WertWidget(${JSON.stringify(widgetOptions, null, 2)});`;
         const codeScriptContent2 = 'wertWidget.mount();';
         const code = fileScriptOpen + scriptEnd + br
@@ -137,11 +120,6 @@ class WertWidget {
     getEmbedUrl() {
         const parametersString = this.getParametersString();
         const url = this.origin + '/' + this.partner_id + '/widget' + parametersString;
-        return url;
-    }
-    getRedirectUrl() {
-        const parametersString = this.getParametersString();
-        const url = this.origin + '/' + this.partner_id + '/redirect' + parametersString;
         return url;
     }
     getParametersString() {
