@@ -1,10 +1,6 @@
 interface options {
     partner_id?: string;
-    container_id?: string;
     origin?: string;
-    width?: number;
-    height?: number;
-    autosize?: boolean;
     address?: string;
     theme?: string;
     currency?: string;
@@ -26,11 +22,9 @@ declare type setThemeData = {
     };
 };
 declare class WertWidget {
+    private iframe;
     partner_id?: string;
-    container_id?: string;
     origin: string;
-    width?: number;
-    height?: number;
     options: options;
     extraOptions: extraOptions;
     listeners: {
@@ -41,7 +35,6 @@ declare class WertWidget {
     static get eventTypes(): string[];
     constructor(givenOptions?: options);
     mount(): void;
-    open(): void;
     destroy(): void;
     private listenWidget;
     private unlistenWidget;
@@ -49,7 +42,6 @@ declare class WertWidget {
     private sendEvent;
     getEmbedCode(): string;
     private getEmbedUrl;
-    private getRedirectUrl;
     private getParametersString;
     setTheme(data: setThemeData): void;
 }
