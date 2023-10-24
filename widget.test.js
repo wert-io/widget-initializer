@@ -24,7 +24,6 @@ const getScript = (url) => {
 
 beforeEach((done) => {
   widget = new WertWidget({
-    container_id: 'widget',
     partner_id: 'default',
   });
 
@@ -39,13 +38,8 @@ test('Load widget via link', () => {
 });
 
 test('Mount iframe', () => {
-  const startWidget = `<div id="widget">`;
-  const endWidget = `</div>`;
-
-  document.body.innerHTML = startWidget + endWidget;
-
   widget.mount();
 
   expect(document.body.innerHTML)
-    .toBe(`${startWidget}<iframe style="width: 100%; height: 100%;" src="${widgetLink}" allow="camera *; microphone *" sandbox="allow-scripts allow-forms allow-popups allow-same-origin"></iframe>${endWidget}`);
+    .toBe(`<iframe style="width: 100%; height: 100%; bottom: 0px; right: 0px; position: fixed; z-index: 10000;" src="${widgetLink}" allow="camera *; microphone *" sandbox="allow-scripts allow-forms allow-popups allow-same-origin"></iframe>`);
 });
