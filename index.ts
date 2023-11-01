@@ -63,6 +63,7 @@ class WertWidget {
       'loaded',
       'payment-status',
       'position',
+      'rate-update',
     ];
   }
 

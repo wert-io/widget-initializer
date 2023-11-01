@@ -95,6 +95,7 @@ console.log(WertWidget.eventTypes);
   'loaded',
   'payment-status',
   'position',
+  'rate-update',
 ]
 */
 ```
@@ -202,6 +203,30 @@ Possible statuses: `pending`, `canceled`, `failed`, `success`, `failover`. Event
 </td>
 <td>
 Informs about the changes in user's position in the flow.
+</td>
+    </tr>
+    <tr>
+<td>
+
+`rate-update`
+</td>
+<td>
+
+```
+{
+  ticker: String,
+  fee_percent: String,
+  currency_amount: String,
+  fee_amount: String,
+  commodity_amount: String,
+  purchase_amount: String,
+  miner_fee: String,
+  currency_miner_fee: String
+}
+```
+</td>
+<td>
+Information on when does the widget updates the rate.
 </td>
     </tr>
 </table>
