@@ -74,10 +74,6 @@ class WertWidget {
       console.error('container_id is no longer supported')
     }
 
-    if (options.container_id) {
-      console.error('container_id is no longer supported')
-    }
-
     if (
       options.restrict_inputs
       && !(options.address && (options.commodity_amount || options.currency_amount))
