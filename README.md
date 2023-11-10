@@ -256,10 +256,18 @@ wertWidget.setTheme({
   },
 });
 ```
+### Unsubscribing from events
+
+If you want to stop listening to the widget events, you can use method `unsubscribe` (pass an array of the event types or don't pass any arguments in case you want to unsubscribe from all optional events):
+
+```
+wertWidget.unsubscribe([ 'rate-update', 'payment-status' ]);
+```
 
 <br>
 
-| Method       | Description                   |
-|--------------|-------------------------------|
-| **mount**    | Mounts module in DOM          |
-| **setTheme** | Switches theme without reload |
+| Method          | Description                                          |
+|-----------------|------------------------------------------------------|
+| **mount**       | Mounts module in DOM                                 |
+| **setTheme**    | Switches theme without reload                        |
+| **unsubscribe** | Allows to unsubscribe from all or some of the events |

@@ -20,6 +20,19 @@ interface extraOptions {
   [x: string]: any
 }
 
+type EventTypes = 'close' | 'error' | 'loaded' | 'payment-status' | 'position' | 'rate-update';
+
+type EventTypesArray = (EventTypes)[];
+type OptionalEventTypesArray = Exclude<EventTypes, 'close' | 'loaded'>[];
+
+type EventData = {
+  type: EventTypes,
+  data?: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    [x: string]: any
+  }
+}
+
 interface eventOptions {
   type: string
   origin: string
@@ -29,10 +42,7 @@ interface eventOptions {
   }
 }
 
-type customListener = (data: {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [x: string]: any
-}) => void;
+type customListener = (data?: EventData['data']) => void;
 
 type setThemeData = {
   theme?: string
@@ -50,13 +60,13 @@ class WertWidget {
   options: options;
   extraOptions: extraOptions;
   listeners: {
-    [x: string]: customListener;
+    [key in EventTypes]?: customListener;
   };
+  ignoredEventTypes: OptionalEventTypesArray;
   widgetWindow: Window | null;
   checkIntervalId: number | undefined;
 
-
-  static get eventTypes(): string[] {
+  static get eventTypes(): EventTypesArray {
     return [
       'close',
       'error',
@@ -78,6 +88,7 @@ class WertWidget {
     this.origin = options.origin || 'https://widget.wert.io';
     this.extraOptions = options.extra ? { ...options.extra } : undefined;
     this.listeners = options.listeners || {};
+    this.ignoredEventTypes = [];
     this.widgetWindow = null;
     this.checkIntervalId = undefined;
 
@@ -117,8 +128,16 @@ class WertWidget {
     this.listenWidget();
   }
 
-  destroy(): void {
-    this.unlistenWidget();
+  unsubscribe(types?: OptionalEventTypesArray): void {
+    const optionalEventTypes = WertWidget.eventTypes.filter(type => type !== 'close' && type !== 'loaded') as OptionalEventTypesArray;
+
+    if (!types) {
+      this.ignoredEventTypes = optionalEventTypes;
+      return;
+    }
+
+    const filteredTypes = types.filter(type => optionalEventTypes.includes(type));
+    this.ignoredEventTypes = filteredTypes;
   }
 
   private listenWidget(): void {
@@ -143,15 +162,16 @@ class WertWidget {
     this.checkIntervalId = undefined;
 
     window.removeEventListener('message', this.onMessage);
-
   }
 
-  private onMessage = (event: MessageEvent): void => {
+  private onMessage = (event: MessageEvent & {data?: EventData}): void => {
     const thisWidgetEvent = event.source === this.widgetWindow;
     // const expectedOrigin = event.origin === this.origin;
     const isDataObject = typeof event.data === 'object';
 
     if (!thisWidgetEvent || !isDataObject) return;
+
+    if (this.ignoredEventTypes.includes(event.data.type)) return;
 
     switch (event.data.type) {
       case 'loaded':
@@ -173,7 +193,7 @@ class WertWidget {
         break;
     }
 
-    const customListener = this.listeners[event.data.type];
+    const customListener = this.listeners[event.data.type as EventData['type']];
 
     if (customListener) customListener(event.data.data);
   }
