@@ -10,6 +10,8 @@ class WertWidget {
             const isDataObject = typeof event.data === 'object';
             if (!thisWidgetEvent || !isDataObject)
                 return;
+            if (this.ignoredEventTypes.includes(event.data.type))
+                return;
             switch (event.data.type) {
                 case 'loaded':
                     this.sendEvent({
@@ -37,6 +39,7 @@ class WertWidget {
         this.origin = options.origin || 'https://widget.wert.io';
         this.extraOptions = options.extra ? Object.assign({}, options.extra) : undefined;
         this.listeners = options.listeners || {};
+        this.ignoredEventTypes = [];
         this.widgetWindow = null;
         this.checkIntervalId = undefined;
         options.widgetLayoutMode = 'Modal';
@@ -74,8 +77,14 @@ class WertWidget {
         this.widgetWindow = this.iframe.contentWindow;
         this.listenWidget();
     }
-    destroy() {
-        this.unlistenWidget();
+    unsubscribe(types) {
+        const optionalEventTypes = WertWidget.eventTypes.filter(type => type !== 'close' && type !== 'loaded');
+        if (!types) {
+            this.ignoredEventTypes = optionalEventTypes;
+            return;
+        }
+        const filteredTypes = types.filter(type => optionalEventTypes.includes(type));
+        this.ignoredEventTypes = filteredTypes;
     }
     listenWidget() {
         window.addEventListener('message', this.onMessage);

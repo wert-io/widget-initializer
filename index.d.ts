@@ -12,9 +12,16 @@ interface options {
 interface extraOptions {
     [x: string]: any;
 }
-declare type customListener = (data: {
-    [x: string]: any;
-}) => void;
+declare type EventTypes = 'close' | 'error' | 'loaded' | 'payment-status' | 'position' | 'rate-update';
+declare type EventTypesArray = (EventTypes)[];
+declare type OptionalEventTypesArray = Exclude<EventTypes, 'close' | 'loaded'>[];
+declare type EventData = {
+    type: EventTypes;
+    data?: {
+        [x: string]: any;
+    };
+};
+declare type customListener = (data?: EventData['data']) => void;
 declare type setThemeData = {
     theme?: string;
     colors?: {
@@ -28,14 +35,15 @@ declare class WertWidget {
     options: options;
     extraOptions: extraOptions;
     listeners: {
-        [x: string]: customListener;
+        [key in EventTypes]?: customListener;
     };
+    ignoredEventTypes: OptionalEventTypesArray;
     widgetWindow: Window | null;
     checkIntervalId: number | undefined;
-    static get eventTypes(): string[];
+    static get eventTypes(): EventTypesArray;
     constructor(givenOptions?: options);
     mount(): void;
-    destroy(): void;
+    unsubscribe(types?: OptionalEventTypesArray): void;
     private listenWidget;
     private unlistenWidget;
     private onMessage;
