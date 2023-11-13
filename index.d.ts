@@ -1,49 +1,18 @@
-interface options {
-    partner_id?: string;
-    origin?: string;
-    address?: string;
-    theme?: string;
-    currency?: string;
-    currency_amount?: number;
-    commodity?: string;
-    commodity_amount?: number;
-    [x: string]: any;
-}
-interface extraOptions {
-    [x: string]: any;
-}
-declare type EventTypes = 'close' | 'error' | 'loaded' | 'payment-status' | 'position' | 'rate-update';
-declare type EventTypesArray = (EventTypes)[];
-declare type OptionalEventTypesArray = Exclude<EventTypes, 'close' | 'loaded'>[];
-declare type EventData = {
-    type: EventTypes;
-    data?: {
-        [x: string]: any;
-    };
-};
-declare type customListener = (data?: EventData['data']) => void;
-declare type setThemeData = {
-    theme?: string;
-    colors?: {
-        [x: string]: string;
-    };
-};
+import type { GivenOptions, WidgetOptions, ExtraOptions, EventTypes, OptionalEventTypes, EventListeners, SetThemeParameters } from './types';
 declare class WertWidget {
     private iframe;
     partner_id?: string;
     origin: string;
-    options: options;
-    extraOptions: extraOptions;
-    listeners: {
-        [key in EventTypes]?: customListener;
-    };
-    ignoredEventTypes: OptionalEventTypesArray;
+    options: WidgetOptions;
+    extraOptions: ExtraOptions;
+    listeners: EventListeners;
+    ignoredEventTypes: OptionalEventTypes[];
     widgetWindow: Window | null;
     checkIntervalId: number | undefined;
-    static get eventTypes(): EventTypesArray;
-    constructor(givenOptions?: options);
+    static get eventTypes(): EventTypes[];
+    constructor(givenOptions?: GivenOptions);
     mount(): void;
-    unsubscribe(types?: OptionalEventTypesArray): void;
+    unsubscribe(types?: OptionalEventTypes[]): void;
     private listenWidget;
     private unlistenWidget;
     private onMessage;
@@ -51,6 +20,6 @@ declare class WertWidget {
     getEmbedCode(): string;
     private getEmbedUrl;
     private getParametersString;
-    setTheme(data: setThemeData): void;
+    setTheme(data: SetThemeParameters): void;
 }
 export = WertWidget;

@@ -10,8 +10,6 @@ class WertWidget {
             const isDataObject = typeof event.data === 'object';
             if (!thisWidgetEvent || !isDataObject)
                 return;
-            if (this.ignoredEventTypes.includes(event.data.type))
-                return;
             switch (event.data.type) {
                 case 'loaded':
                     this.sendEvent({
@@ -28,7 +26,8 @@ class WertWidget {
                     break;
             }
             const customListener = this.listeners[event.data.type];
-            if (customListener)
+            const isEventIgnored = this.ignoredEventTypes.includes(event.data.type);
+            if (customListener && !isEventIgnored)
                 customListener(event.data.data);
         };
         const options = Object.assign({}, givenOptions);
@@ -47,7 +46,8 @@ class WertWidget {
         delete options.origin;
         delete options.extra;
         delete options.listeners;
-        options.await_data = (options.await_data || this.extraOptions) ? '1' : undefined;
+        options.await_data =
+            options.await_data || this.extraOptions ? '1' : undefined;
         this.options = options;
     }
     static get eventTypes() {
@@ -78,12 +78,13 @@ class WertWidget {
         this.listenWidget();
     }
     unsubscribe(types) {
-        const optionalEventTypes = WertWidget.eventTypes.filter(type => type !== 'close' && type !== 'loaded');
+        const filterRequiredTypesFn = (type) => type !== 'close' && type !== 'loaded';
+        const optionalEventTypes = WertWidget.eventTypes.filter(filterRequiredTypesFn);
         if (!types) {
             this.ignoredEventTypes = optionalEventTypes;
             return;
         }
-        const filteredTypes = types.filter(type => optionalEventTypes.includes(type));
+        const filteredTypes = types.filter((type) => optionalEventTypes.includes(type));
         this.ignoredEventTypes = filteredTypes;
     }
     listenWidget() {
@@ -120,11 +121,16 @@ class WertWidget {
         const widgetOptions = Object.assign({ partner_id: this.partner_id, origin: this.origin }, this.options);
         const codeScriptContent1 = `const wertWidget = new WertWidget(${JSON.stringify(widgetOptions, null, 2)});`;
         const codeScriptContent2 = 'wertWidget.mount();';
-        const code = fileScriptOpen + scriptEnd + br
-            + codeScriptOpen + br
-            + codeScriptContent1 + br
-            + codeScriptContent2 + br
-            + scriptEnd;
+        const code = fileScriptOpen +
+            scriptEnd +
+            br +
+            codeScriptOpen +
+            br +
+            codeScriptContent1 +
+            br +
+            codeScriptContent2 +
+            br +
+            scriptEnd;
         return code;
     }
     getEmbedUrl() {
@@ -133,12 +139,11 @@ class WertWidget {
         return url;
     }
     getParametersString() {
-        const parametersString = Object.entries(this.options)
-            .reduce((accum, [key, value]) => {
+        const parametersString = Object.entries(this.options).reduce((accum, [key, value]) => {
             if (value === undefined)
                 return accum;
             const startSymbol = accum.length ? '&' : '?';
-            return (accum + startSymbol + key + '=' + encodeURIComponent(value));
+            return accum + startSymbol + key + '=' + encodeURIComponent(value);
         }, '');
         return parametersString;
     }
