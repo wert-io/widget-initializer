@@ -74,13 +74,6 @@ class WertWidget {
       console.error('container_id is no longer supported')
     }
 
-    if (
-      options.restrict_inputs
-      && !(options.address && (options.commodity_amount || options.currency_amount))
-    ) {
-      console.error('in order for restrict_inputs to work you need to provide address and at least one of the amounts')
-    }
-
     this.partner_id = options.partner_id;
     this.origin = options.origin || 'https://widget.wert.io';
     this.extraOptions = options.extra ? { ...options.extra } : undefined;
