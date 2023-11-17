@@ -21,8 +21,8 @@ export declare type GivenOptions = {
     extra?: ExtraOptions;
     listeners?: EventListeners;
     skip_init_navigation?: boolean;
-    isWarrantyDisabled?: boolean;
-    isCryptoHidden?: boolean;
+    is_warranty_disabled?: boolean;
+    is_crypto_hidden?: boolean;
     [x: string]: any;
 } & SCOptions & ColorsOptions & BordersOptions;
 declare type SCOptions = {

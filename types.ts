@@ -22,8 +22,8 @@ export type GivenOptions = {
   extra?: ExtraOptions;
   listeners?: EventListeners;
   skip_init_navigation?: boolean;
-  isWarrantyDisabled?: boolean;
-  isCryptoHidden?: boolean;
+  is_warranty_disabled?: boolean;
+  is_crypto_hidden?: boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [x: string]: any;
 } & SCOptions &
