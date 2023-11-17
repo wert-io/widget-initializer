@@ -325,37 +325,41 @@ const wertWidget = new WertWidget(options);
     <td>Defines the language in the module.</td>
   </tr>
   <tr>
-    <td><strong>isCryptoHidden</strong></td>
+    <td><strong>is_crypto_hidden</strong></td>
     <td>optional</td>
     <td><i>Boolean</i></td>
-    <td><code>false</code></td>
-    <td><code>true</code>, <code>false</code></td>
+    <td><code>undefined</code></td>
+    <td><code>true</code></td>
     <td>
       Allows to hide crypto mentions and exchange rate for NFT purchases if it is enabled for your partner_id.
       <br/><br/>
-      <i>Please note that any value passed to the property with the boolean type will be considered as <code>true</code>.<br/>
-      Example: <code>isCryptoHidden: "test"</code> will be equal to <code>isCryptoHidden: true</code>.</i>
+      <i>- Please note that any value passed to the property with the boolean type will be considered as <code>true</code>.<br/>
+      Example: <code>is_crypto_hidden: "test"</code> will be equal to <code>is_crypto_hidden: true</code>.</i>
+      <br/><br/>
+      <i>- The camelCase variation (<code>isCryptoHidden</code>) is currently supported but is set to be deprecated.</i>
     </td>
   </tr>
   <tr>
-    <td><strong>isWarrantyDisabled</strong></td>
+    <td><strong>is_warranty_disabled</strong></td>
     <td>optional</td>
     <td><i>Boolean</i></td>
-    <td><code>false</code></td>
-    <td><code>true</code>, <code>false</code></td>
+    <td><code>undefined</code></td>
+    <td><code>true</code></td>
     <td>
       Allows to disable NFT warranty option for a specific widget mount, even if it is enabled for your partner_id and smart contract.
       <br/><br/>
-      <i>Please note that any value passed to the property with the boolean type will be considered as <code>true</code>.<br/>
-      Example: <code>isWarrantyDisabled: "test"</code> will be equal to <code>isWarrantyDisabled: true</code>.</i>
+      <i>- Please note that any value passed to the property with the boolean type will be considered as <code>true</code>.<br/>
+      Example: <code>is_warranty_disabled: "test"</code> will be equal to <code>is_warranty_disabled: true</code>.</i>
+      <br/><br/>
+      <i>- The camelCase variation (<code>isWarrantyDisabled</code>) is currently supported but is set to be deprecated.</i>
     </td>
   </tr>
   <tr>
     <td><strong>skip_init_navigation</strong></td>
     <td>optional</td>
     <td><i>Boolean</i></td>
-    <td><code>false</code></td>
-    <td><code>true</code>, <code>false</code></td>
+    <td><code>undefined</code></td>
+    <td><code>true</code></td>
     <td>
       By default, module will try to provide the closest to purchase starting route depending on provided parameters. If <code>true</code>, this navigation logic will be skipped.
       <br/><br/>
