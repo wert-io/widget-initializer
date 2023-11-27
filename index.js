@@ -139,7 +139,7 @@ class WertWidget {
         return `${this.options.origin}/${this.options.origin}/widget${parametersString}`;
     }
     getParametersString() {
-        return Object.entries(Object.assign(Object.assign({}, this.options), { await_data: this.await_data, widget_layout_mode: this.widget_layout_mode })).reduce((accum, [key, value]) => {
+        return Object.entries(Object.assign(Object.assign(Object.assign({}, this.options), { widget_layout_mode: this.widget_layout_mode }), (this.await_data && { await_data: this.await_data }))).reduce((accum, [key, value]) => {
             if (value === undefined || typeof value === 'object' || ['origin', 'partner_id'].includes(key)) {
                 return accum;
             }
