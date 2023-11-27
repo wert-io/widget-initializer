@@ -189,8 +189,8 @@ class WertWidget {
   private getParametersString(): string {
     return Object.entries({
       ...this.options,
-      await_data: this.await_data,
-      widget_layout_mode: this.widget_layout_mode
+      widget_layout_mode: this.widget_layout_mode,
+      ...(this.await_data && { await_data: this.await_data })
     }).reduce(
       (accum, [key, value]) => {
         if (value === undefined || typeof value === 'object' || ['origin', 'partner_id'].includes(key)) {
