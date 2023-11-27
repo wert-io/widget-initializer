@@ -8,7 +8,7 @@ class WertWidget {
         this.widgetWindow = null;
         this.widget_layout_mode = 'Modal';
         this.await_data = false;
-        // THis is required for showing error during old integration usages
+        // This is required for showing error during old integration usages
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         if (this.options.container_id) {
@@ -136,7 +136,7 @@ class WertWidget {
     }
     getEmbedUrl() {
         const parametersString = this.getParametersString();
-        return `${this.options.origin}/${this.options.origin}/widget${parametersString}`;
+        return `${this.options.origin}/${this.options.partner_id}/widget${parametersString}`;
     }
     getParametersString() {
         return Object.entries(Object.assign(Object.assign(Object.assign({}, this.options), { widget_layout_mode: this.widget_layout_mode }), (this.await_data && { await_data: this.await_data }))).reduce((accum, [key, value]) => {
