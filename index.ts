@@ -1,77 +1,40 @@
 import { version } from './package.json';
+import { EventTypes, Options, WidgetEvents, SetThemeParameters } from './types';
 
 const externalStaticOrigin = 'https://javascript.wert.io';
 
-import type {
-  GivenOptions,
-  WidgetOptions,
-  ExtraOptions,
-  EventTypes,
-  OptionalEventTypes,
-  EventListeners,
-  CustomListener,
-  WidgetEvent,
-  SendEventParameters,
-  SetThemeParameters,
-} from './types';
 class WertWidget {
   private iframe: HTMLIFrameElement = document.createElement('iframe');
+  private widgetWindow: Window | null = null;
+  private checkIntervalId?: number;
+  private widget_layout_mode = 'Modal' as const
+  private await_data = false
 
-  partner_id?: string;
-  origin: string;
-  options: WidgetOptions;
-  extraOptions: ExtraOptions;
-  listeners: EventListeners;
-  ignoredEventTypes: OptionalEventTypes[];
-  widgetWindow: Window | null;
-  checkIntervalId: number | undefined;
-
-  static get eventTypes(): EventTypes[] {
-    return [
-      'close',
-      'error',
-      'loaded',
-      'payment-status',
-      'position',
-      'rate-update',
-    ];
-  }
-
-  constructor(givenOptions: GivenOptions = {}) {
-    const options: WidgetOptions = { ...givenOptions };
-
-    if (options.container_id) {
+  constructor(private options: Options) {
+    // THis is required for showing error during old integration usages
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    if (this.options.container_id) {
       console.error('container_id is no longer supported');
     }
 
-    this.partner_id = options.partner_id;
-    this.origin = options.origin || 'https://widget.wert.io';
-    this.extraOptions = options.extra ? { ...options.extra } : undefined;
-    this.listeners = options.listeners || {};
-    this.ignoredEventTypes = [];
-    this.widgetWindow = null;
-    this.checkIntervalId = undefined;
+    if (!this.options.partner_id) {
+      throw Error("Please provide a partner_id in order for widget to work correctly");
+    }
 
-    options.widgetLayoutMode = 'Modal';
+    if (!this.options.origin) {
+      this.options.origin = 'https://widget.wert.io';
+    }
 
-    delete options.partner_id;
-    delete options.origin;
-    delete options.extra;
-    delete options.listeners;
-
-    options.await_data =
-      options.await_data || this.extraOptions ? '1' : undefined;
-
-    this.options = options;
+    if (this.options.extra) {
+      this.await_data = true;
+    }
   }
 
-  mount(): void {
-    this.unlistenWidget();
-
+  open(): void {
     this.iframe.style.border = 'none';
     this.iframe.style.width = '100%';
     this.iframe.style.height = '100%';
-
     this.iframe.style.bottom = '0';
     this.iframe.style.right = '0';
     this.iframe.style.position = 'fixed';
@@ -92,40 +55,46 @@ class WertWidget {
     this.listenWidget();
   }
 
-  unsubscribe(types?: OptionalEventTypes[]): void {
-    const filterRequiredTypesFn = (
-      type: EventTypes
-    ): type is OptionalEventTypes => type !== 'close' && type !== 'loaded';
-    const optionalEventTypes = WertWidget.eventTypes.filter(
-      filterRequiredTypesFn
-    );
+  addEventListeners(listeners: Options['listeners']): void {
+    this.options.listeners = {...this.options.listeners, ...listeners};
+  }
 
-    if (!types) {
-      this.ignoredEventTypes = optionalEventTypes;
-      return;
+  removeEventListeners(type: EventTypes): void
+  removeEventListeners(types: Array<EventTypes>): void
+  removeEventListeners(): void
+  removeEventListeners(types?: EventTypes | Array<EventTypes>): void {
+    if (typeof types === 'undefined') {
+      delete this.options.listeners;
+    } else if (typeof types === 'string') {
+      delete this.options.listeners?.[types];
+    } else {
+      for (const type of types) {
+        delete this.options.listeners?.[type];
+      }
     }
+  }
 
-    const filteredTypes = types.filter((type) =>
-      optionalEventTypes.includes(type)
-    );
-    this.ignoredEventTypes = filteredTypes;
+  updateTheme(data: SetThemeParameters): void {
+    if (!data || !Object.keys(data).length) return;
+
+    this.sendEvent('theme', data);
   }
 
   private listenWidget(): void {
     window.addEventListener('message', this.onMessage);
 
-    const checkLiveness = (): void => {
+    const checkLiveliness = (): void => {
       const alive = this.widgetWindow && !this.widgetWindow.closed;
 
       if (alive) return;
 
-      this.unlistenWidget();
+      this.unListenWidget();
     };
 
-    this.checkIntervalId = window.setInterval(checkLiveness, 200);
+    this.checkIntervalId = window.setInterval(checkLiveliness, 200);
   }
 
-  private unlistenWidget(): void {
+  private unListenWidget(): void {
     if (!this.checkIntervalId) return;
 
     clearInterval(this.checkIntervalId);
@@ -135,73 +104,71 @@ class WertWidget {
     window.removeEventListener('message', this.onMessage);
   }
 
-  private onMessage = (event: MessageEvent<WidgetEvent>): void => {
+  private onMessage(event: MessageEvent<WidgetEvents>): void {
     const thisWidgetEvent = event.source === this.widgetWindow;
-    // const expectedOrigin = event.origin === this.origin;
     const isDataObject = typeof event.data === 'object';
 
     if (!thisWidgetEvent || !isDataObject) return;
 
     switch (event.data.type) {
       case 'loaded':
-        this.sendEvent({
-          type: 'extra',
-          origin: event.origin,
-          data: this.extraOptions,
-        });
+        this.sendEvent('extra', this.options.extra);
+        this.options.listeners?.[event.data.type]?.();
+
+        break;
+
+      case "payment-status":
+        this.options.listeners?.[event.data.type]?.(event.data.data);
+
+        break;
+
+      case "position":
+        this.options.listeners?.[event.data.type]?.(event.data.data);
+
+        break;
+
+      case "rate-update":
+        this.options.listeners?.[event.data.type]?.(event.data.data);
 
         break;
 
       case 'close':
         document.body.removeChild(this.iframe);
         document.body.style.overflow = '';
+        this.unListenWidget();
+        this.options.listeners?.[event.data.type]?.();
 
         break;
 
-      default:
+      case "error":
+        this.options.listeners?.[event.data.type]?.(event.data.data);
+
         break;
     }
+  }
 
-    const customListener = this.listeners[event.data.type] as CustomListener<
-      typeof event.data.type
-    >;
-    const isEventIgnored = this.ignoredEventTypes.includes(
-      event.data.type as OptionalEventTypes
-    );
-
-    if (customListener && !isEventIgnored) customListener(event.data.data);
-  };
-
-  private sendEvent(options: SendEventParameters): void {
-    if (!options.data) return;
+  private sendEvent(type: string, data: any): void {
+    if (!data) return;
 
     this.widgetWindow?.postMessage(
-      {
-        type: options.type,
-        data: options.data,
-      },
-      options.origin
+      { data, type },
+      this.options.origin!
     );
   }
 
-  getEmbedCode(): string {
+  private getEmbedCode(): string {
     const br = '\n';
     const fileScriptOpen = `<script type="text/javascript" src="${externalStaticOrigin}/wert-${version}.js">`;
-    const scriptEnd = '<' + '/script>'; // eslint-disable-line
+    const scriptEnd = '<' + '/script>';
     const codeScriptOpen = '<script type="text/javascript">';
-    const widgetOptions = {
-      partner_id: this.partner_id,
-      origin: this.origin,
-      ...this.options,
-    };
     const codeScriptContent1 = `const wertWidget = new WertWidget(${JSON.stringify(
-      widgetOptions,
+      this.options,
       null,
       2
     )});`;
-    const codeScriptContent2 = 'wertWidget.mount();';
-    const code =
-      fileScriptOpen +
+    const codeScriptContent2 = 'wertWidget.open();';
+
+    return fileScriptOpen +
       scriptEnd +
       br +
       codeScriptOpen +
@@ -211,23 +178,24 @@ class WertWidget {
       codeScriptContent2 +
       br +
       scriptEnd;
-
-    return code;
   }
 
   private getEmbedUrl(): string {
     const parametersString = this.getParametersString();
 
-    const url =
-      this.origin + '/' + this.partner_id + '/widget' + parametersString;
-
-    return url;
+    return `${this.options.origin}/${this.options.origin}/widget${parametersString}`;
   }
 
   private getParametersString(): string {
-    const parametersString = Object.entries(this.options).reduce(
+    return Object.entries({
+      ...this.options,
+      await_data: this.await_data,
+      widget_layout_mode: this.widget_layout_mode
+    }).reduce(
       (accum, [key, value]) => {
-        if (value === undefined) return accum;
+        if (value === undefined || typeof value === 'object' || ['origin', 'partner_id'].includes(key)) {
+          return accum;
+        }
 
         const startSymbol = accum.length ? '&' : '?';
 
@@ -235,19 +203,6 @@ class WertWidget {
       },
       ''
     );
-
-    return parametersString;
-  }
-
-  setTheme(data: SetThemeParameters): void {
-    if (!data || !Object.keys(data).length) return;
-
-    this.sendEvent({
-      type: 'theme',
-      origin: this.origin,
-      // origin: '*',
-      data,
-    });
   }
 }
 

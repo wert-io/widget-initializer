@@ -20,7 +20,8 @@ const getScript = (url) => {
 
     }).on('error', (err) => reject(err));
   });
-}
+};
+
 
 beforeEach((done) => {
   widget = new WertWidget({
@@ -38,7 +39,7 @@ test('Load widget via link', () => {
 });
 
 test('Mount iframe', () => {
-  widget.mount();
+  widget.open();
 
   expect(document.body.innerHTML)
     .toBe(`<iframe style="width: 100%; height: 100%; bottom: 0px; right: 0px; position: fixed; z-index: 10000;" src="${widgetLink}" allow="camera *; microphone *" sandbox="allow-scripts allow-forms allow-popups allow-same-origin"></iframe>`);

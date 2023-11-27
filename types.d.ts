@@ -1,5 +1,5 @@
-export declare type GivenOptions = {
-    partner_id?: string;
+export declare type Options = {
+    partner_id: string;
     click_id?: string;
     origin?: string;
     lang?: 'en' | 'fr';
@@ -19,22 +19,19 @@ export declare type GivenOptions = {
     email?: string;
     redirect_url?: string;
     extra?: ExtraOptions;
-    listeners?: EventListeners;
+    listeners?: EventListeners<WidgetEvents>;
     skip_init_navigation?: boolean;
     is_warranty_disabled?: boolean;
     is_crypto_hidden?: boolean;
-    [x: string]: any;
 } & SCOptions & ColorsOptions & BordersOptions;
 declare type SCOptions = {
     sc_address?: string;
     sc_input_data?: string;
     signature?: string;
 };
-export declare type WidgetOptions = Omit<GivenOptions, 'partner_id' | 'origin' | 'extra' | 'listeners'>;
 export interface ExtraOptions {
     item_info?: ItemInfo;
     wallets?: Wallet[];
-    [x: string]: any;
 }
 interface ItemInfo {
     author_image_url?: string;
@@ -66,24 +63,18 @@ export declare type SetThemeParameters = {
     colors?: ColorsOptions;
 };
 export declare type EventTypes = 'close' | 'error' | 'loaded' | 'payment-status' | 'position' | 'rate-update';
-export declare type OptionalEventTypes = Exclude<EventTypes, 'close' | 'loaded'>;
-interface BaseEvent<Type extends EventTypes> {
-    type: Type;
-    data: any;
+interface WidgetEvent<EventType extends EventTypes> {
+    type: EventType;
 }
-interface CloseEvent extends BaseEvent<'close'> {
-    data: undefined;
-}
-interface ErrorEvent extends BaseEvent<'error'> {
+declare type CloseEvent = WidgetEvent<"close">;
+declare type LoadedEvent = WidgetEvent<"loaded">;
+interface ErrorEvent extends WidgetEvent<"error"> {
     data: {
         name: string;
         message: string;
     };
 }
-interface LoadedEvent extends BaseEvent<'loaded'> {
-    data: undefined;
-}
-interface PaymentStatusEvent extends BaseEvent<'payment-status'> {
+interface PaymentStatusEvent extends WidgetEvent<"payment-status"> {
     data: {
         status: string;
         payment_id: string;
@@ -91,12 +82,12 @@ interface PaymentStatusEvent extends BaseEvent<'payment-status'> {
         tx_id: string;
     };
 }
-interface PositionEvent extends BaseEvent<'position'> {
+interface PositionEvent extends WidgetEvent<"position"> {
     data: {
         step: string;
     };
 }
-interface RateUpdateEvent extends BaseEvent<'rate-update'> {
+interface RateUpdateEvent extends WidgetEvent<"rate-update"> {
     data: {
         ticker: string;
         fee_percent: string;
@@ -108,21 +99,13 @@ interface RateUpdateEvent extends BaseEvent<'rate-update'> {
         currency_miner_fee: string;
     };
 }
-export declare type WidgetEvent = CloseEvent | ErrorEvent | LoadedEvent | PaymentStatusEvent | PositionEvent | RateUpdateEvent;
-export declare type EventReturnValues = {
-    [EventType in EventTypes]: Extract<WidgetEvent, {
-        type: EventType;
-    }>['data'];
-};
-export declare type CustomListener<T extends EventTypes> = (data: EventReturnValues[T]) => void;
-export declare type EventListeners = {
-    [EventType in EventTypes]?: CustomListener<EventType>;
-};
-export interface SendEventParameters {
+export declare type WidgetEvents = CloseEvent | ErrorEvent | LoadedEvent | PaymentStatusEvent | PositionEvent | RateUpdateEvent;
+declare type EventListeners<Events extends {
     type: string;
-    origin: string;
-    data?: {
-        [x: string]: any;
-    };
-}
+    data?: Record<string, unknown>;
+}> = {
+    [E in Events as E["type"]]?: E extends {
+        data: Record<string, unknown>;
+    } ? (event: E["data"]) => any : () => any;
+};
 export {};

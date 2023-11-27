@@ -14,22 +14,17 @@
       - [Adding NFT information](#adding-nft-information)
       - [Adding default wallets](#adding-default-wallets)
     - [Listeners](#listeners)
-      - [Event types](#event-types)
-      - [Subscribing to the widget events](#subscribing-to-the-widget-events)
-      - [Expected event data by type](#expected-event-data-by-type)
-  - [Configuration object methods](#configuration-object-methods)
+      - [Initial event listeners](#initial-event-listeners)
+      - [Events](#events)
+  - [Widget class methods](#widget-class-methods)
     - [Showing the module](#showing-the-module)
     - [Switching themes without reload](#switching-themes-without-reload)
-    - [Unsubscribing from events](#unsubscribing-from-events)
+    - [Removing event listeners](#removing-event-listeners)
+  - [Additional notes](#additional-notes)
+    - [Boolean usage](#boolean-usage)
 
 
 ## Installation
-
-```
-yarn add @wert-io/widget-initializer
-```
-
-or
 
 ```
 npm install @wert-io/widget-initializer
@@ -41,7 +36,7 @@ npm install @wert-io/widget-initializer
 import WertWidget from '@wert-io/widget-initializer';
 ```
 
-First of all, you need to create a configuration object:
+First of all, you need to create a widget class:
 
 ```
 const wertWidget = new WertWidget(options);
@@ -71,25 +66,17 @@ const wertWidget = new WertWidget(options);
   <tr>
     <td><strong>click_id</strong></td>
     <td>optional</td>
-    <td><i>Function</i></td>
+    <td><i>String</i></td>
     <td>-</td>
     <td><code>uuid_v4()</code></td>
     <td>Unique identifier for the order that lets you track it and helps us with troubleshooting.</td>
-  </tr>
-  <tr>
-    <td><strong>extra</strong></td>
-    <td>optional</td>
-    <td><i>Object</i></td>
-    <td>-</td>
-    <td>See the <a href="#extra-object-structure">extra object structure</a></td>
-    <td>Additional data about the NFT (the <strong>item_info</strong> property) and/or default wallets (the <strong>wallets</strong> property). This data will be sent through <strong>window.postMessage</strong> method.</td>
   </tr>
   <tr>
     <td><strong>listeners</strong></td>
     <td>optional</td>
     <td><i>Object</i></td>
     <td>-</td>
-    <td>See the <a href="#listeners">listeners object structure</a></td>
+    <td>See the <a href="#adding-event-listeners">listeners object structure</a></td>
     <td>Use this if you want to listen to some module events and react to them.</td>
   </tr>
   <tr>
@@ -144,26 +131,6 @@ const wertWidget = new WertWidget(options);
     <td>-</td>
     <td>-</td>
     <td>Signature to sign the data for the smart contract execution. You can use our <a href ="https://www.npmjs.com/package/@wert-io/widget-sc-signer" target="_blank">signature helper</a>.</td>
-  </tr>
-  <tr>
-    <td><strong>extra.item_info</strong></td>
-    <td>optional</td>
-    <td><i>Object</i></td>
-    <td>-</td>
-  <td>
-
-  ```
-  {
-    author_image_url: String,
-    author: String,
-    image_url: String,
-    name: String,
-    seller: String
-  }
-  ```
-
-  </td>
-    <td>Additional NFT data. See the <a href="#extra-object-structure">extra object structure</a>.</td>
   </tr>
 </table>
 
@@ -248,7 +215,7 @@ const wertWidget = new WertWidget(options);
     <td><i>String</i></td>
     <td>-</td>
     <td>code of USA state</td>
-    <td>User's state of residence (for USA).</td>
+    <td>User's state of residence (for the USA).</td>
   </tr>
   <tr>
     <td><strong>date_of_birth</strong></td>
@@ -282,27 +249,6 @@ const wertWidget = new WertWidget(options);
     <td><code>+11014321111</code> / <code>11014321111</code></td>
     <td>User's phone number in the international format (E. 164 standard). Can be with or without +.</td>
   </tr>
-  <tr>
-    <td><strong>extra.wallets</strong></td>
-    <td>optional</td>
-    <td><i>Array</i></td>
-    <td>-</td>
-  <td>
-
-  ```
-  [
-    {
-      name: String,
-      blockchain: String,
-      address: String,
-    },
-    ...
-  ]
-  ```
-
-  </td>
-    <td>Default wallets that will be prefilled when the user changes cryptocurrency, non-valid addresses will be ignored. See the <a href="#extra-object-structure">extra object structure</a>.</td>
-  </tr>
 </table>
 
 ### Appearance and restrictions
@@ -333,10 +279,7 @@ const wertWidget = new WertWidget(options);
     <td>
       Allows to hide crypto mentions and exchange rate for NFT purchases if it is enabled for your partner_id.
       <br/><br/>
-      <i>- Please note that any value passed to the property with the boolean type will be considered as <code>true</code>.<br/>
-      Example: <code>is_crypto_hidden: "test"</code> will be equal to <code>is_crypto_hidden: true</code>.</i>
-      <br/><br/>
-      <i>- The camelCase variation (<code>isCryptoHidden</code>) is currently supported but is set to be deprecated.</i>
+      <i>- Please check the <a href="#boolean-usage">boolean usage note</a></i>
     </td>
   </tr>
   <tr>
@@ -348,10 +291,7 @@ const wertWidget = new WertWidget(options);
     <td>
       Allows to disable NFT warranty option for a specific widget mount, even if it is enabled for your partner_id and smart contract.
       <br/><br/>
-      <i>- Please note that any value passed to the property with the boolean type will be considered as <code>true</code>.<br/>
-      Example: <code>is_warranty_disabled: "test"</code> will be equal to <code>is_warranty_disabled: true</code>.</i>
-      <br/><br/>
-      <i>- The camelCase variation (<code>isWarrantyDisabled</code>) is currently supported but is set to be deprecated.</i>
+      <i>- Please check the <a href="#boolean-usage">boolean usage note</a></i>
     </td>
   </tr>
   <tr>
@@ -363,8 +303,7 @@ const wertWidget = new WertWidget(options);
     <td>
       By default, module will try to provide the closest to purchase starting route depending on provided parameters. If <code>true</code>, this navigation logic will be skipped.
       <br/><br/>
-      <i>Please note that any value passed to the property with the boolean type will be considered as <code>true</code>.<br/>
-      Example: <code>skip_init_navigation: "test"</code> will be equal to <code>skip_init_navigation: true</code>.</i>
+      <i>- Please check the <a href="#boolean-usage">boolean usage note</a></i>
     </td>
   </tr>
   <tr>
@@ -413,29 +352,14 @@ const wertWidget = new WertWidget(options);
   </tr>
 </table>
 
----
-
 ### Extra object structure
 
-The `extra` object is an optional object that can contain some additional data about the NFT (the **item_info** property) and default wallets (the **wallets** property).
+The `extra` object is an optional object that can contain some additional data.
 
 ```
 extra: {
-  item_info: {
-    author_image_url: String
-    author: String
-    image_url: String
-    name: String
-    seller: String
-  },
-  wallets: [
-    {
-      name: String,
-      blockchain: String, 
-      address: String,
-    },
-    ...
-  ],
+  item_info: Object,
+  wallets: Array,
 }
 ```
 
@@ -461,33 +385,9 @@ The wallet object structure:
 | blockchain | String | Case-ignored, example: `Ethereum`. See the [list of supported currencies](https://docs.wert.io/docs/supported-coins-and-blockchains). |
 | address    | String | The wallet address. Non-valid addresses will be ignored.                                                                              |
 
-
----
-
 ### Listeners
 
-#### Event types
-
-To get the whole list of available events, call a static property `eventTypes` on helper:
-
-```
-import WertWidget from '@wert-io/widget-initializer';
-
-console.log(WertWidget.eventTypes);
-
-/* console output:
-[
-  'close',
-  'error',
-  'loaded',
-  'payment-status',
-  'position',
-  'rate-update',
-]
-*/
-```
-
-#### Subscribing to the widget events
+#### Initial event listeners
 
 Simply include the `listeners` object in the following format, where the key is the event type and the value is your callback.
 
@@ -500,7 +400,7 @@ const widget = new WertWidget({
 });
 ```
 
-#### Expected event data by type
+#### Events
 
 <table>
   <tr>
@@ -611,32 +511,34 @@ const widget = new WertWidget({
   </tr>
 </table>
 
----
+## Widget class methods
 
-## Configuration object methods
+| Method                   | Description                               |
+|--------------------------|-------------------------------------------|
+| **open**                 | Mounts module in DOM and makes it visible |
+| **updateTheme**          | Switches the theme without reload         |
+| **addEventListeners**    | Adds event listeners                      |
+| **removeEventListeners** | Removes event listeners                   |
 
-| Method          | Description                                          |
-| --------------- | ---------------------------------------------------- |
-| **mount**       | Mounts module in DOM                                 |
-| **setTheme**    | Switches the theme without reload                    |
-| **unsubscribe** | Allows to unsubscribe from all or some of the events |
-
-Please note that right now **there isn’t a specific method to close the widget** and remove the modal window from the webpage. Before, the widget didn’t have the close button, so our partners had to manually remove it from the webpage. Since then we’ve improved the widget, and now **users can easily close the widget at their convenience**.
+Please note that right now **there is no need anymore for a call of destroy() method** and manual removal of the 
+iframe. Before, 
+the widget didn’t have the close button, so our partners had to manually remove it from the webpage. Since then, 
+we’ve improved the widget, and now **users can easily close the widget at their convenience**.
 
 ### Showing the module
 
-After creating a configuration object, you can call `mount` method to show the module to the user:
+After creating a widget class, you can call `open` method to show the module to the user:
 
 ```
-wertWidget.mount();
+wertWidget.open();
 ```
 
 ### Switching themes without reload
 
-To switch to another theme without reloading the whole widget you can use the `setTheme` method:
+To switch to another theme without reloading the whole widget you can use the `updateTheme` method:
 
 ```
-wertWidget.setTheme({
+wertWidget.updateTheme({
   theme: 'dark', // undefined — for the default light theme 
   colors: {
     // supported colors listed in options table above 
@@ -644,10 +546,41 @@ wertWidget.setTheme({
   },
 });
 ```
-### Unsubscribing from events
 
-If you want to stop listening to the widget events, you can use the `unsubscribe` method. Pass an array of the event types you want to stop listening to or don't pass any arguments in case you want to unsubscribe from all optional events:
+### Adding event listeners
+
+If you want to listen to the [widget events](#events), you can use the `addEventListeners` method. Pass an object of 
+listeners to add listeners, potentially rewriting an existing listeners of the same types:
 
 ```
-wertWidget.unsubscribe([ 'rate-update', 'payment-status' ]);
+wertWidget.addEventListeners({
+  position: data => console.log('step:', data.step),
+});
 ```
+
+### Removing event listeners
+
+If you want to stop listening to the [widget events](#events), you can use the `removeEventListeners` method. Pass an event 
+type, array of 
+the event types or nothing to remove a listener, multiple listeners or all listeners:
+
+```
+wertWidget.removeEventListeners('rate-update');
+```
+or
+```
+wertWidget.removeEventListeners([ 'rate-update', 'payment-status' ]);
+```
+or
+```
+wertWidget.removeEventListeners();
+```
+
+## Additional notes
+
+Additional information about library usage
+
+### Boolean usage
+
+Please note that any value passed to the property with the boolean type will be considered as <code>true</code>.<br/>
+Example: <code>is_crypto_hidden: "test"</code> will be equal to <code>is_crypto_hidden: true</code>.
