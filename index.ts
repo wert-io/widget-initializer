@@ -11,7 +11,7 @@ class WertWidget {
   private await_data = false
 
   constructor(private options: Options) {
-    // THis is required for showing error during old integration usages
+    // This is required for showing error during old integration usages
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     if (this.options.container_id) {
@@ -183,7 +183,7 @@ class WertWidget {
   private getEmbedUrl(): string {
     const parametersString = this.getParametersString();
 
-    return `${this.options.origin}/${this.options.origin}/widget${parametersString}`;
+    return `${this.options.origin}/${this.options.partner_id}/widget${parametersString}`;
   }
 
   private getParametersString(): string {

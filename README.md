@@ -19,6 +19,7 @@
   - [Widget class methods](#widget-class-methods)
     - [Showing the module](#showing-the-module)
     - [Switching themes without reload](#switching-themes-without-reload)
+    - [Adding event listeners](#adding-event-listeners)
     - [Removing event listeners](#removing-event-listeners)
   - [Additional notes](#additional-notes)
     - [Boolean usage](#boolean-usage)
@@ -520,14 +521,14 @@ const widget = new WertWidget({
 | **addEventListeners**    | Adds event listeners                      |
 | **removeEventListeners** | Removes event listeners                   |
 
-Please note that right now **there is no need anymore for a call of destroy() method** and manual removal of the 
+Please note that **there is no need anymore for a call of the destroy() method** and manual removal of the 
 iframe. Before, 
 the widget didn’t have the close button, so our partners had to manually remove it from the webpage. Since then, 
 we’ve improved the widget, and now **users can easily close the widget at their convenience**.
 
 ### Showing the module
 
-After creating a widget class, you can call `open` method to show the module to the user:
+After creating an instance of the widget class, you can call the `open` method to show the module to the user:
 
 ```
 wertWidget.open();
@@ -550,7 +551,7 @@ wertWidget.updateTheme({
 ### Adding event listeners
 
 If you want to listen to the [widget events](#events), you can use the `addEventListeners` method. Pass an object of 
-listeners to add listeners, potentially rewriting an existing listeners of the same types:
+listeners to add listeners, potentially rewriting the existing listeners of the same type:
 
 ```
 wertWidget.addEventListeners({
@@ -578,9 +579,9 @@ wertWidget.removeEventListeners();
 
 ## Additional notes
 
-Additional information about library usage
+*Additional information about the library usage*
 
 ### Boolean usage
 
-Please note that any value passed to the property with the boolean type will be considered as <code>true</code>.<br/>
+Please note that any value passed to the property with the boolean type will be considered <code>true</code>.<br/>
 Example: <code>is_crypto_hidden: "test"</code> will be equal to <code>is_crypto_hidden: true</code>.
