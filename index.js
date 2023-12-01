@@ -8,6 +8,37 @@ class WertWidget {
         this.widgetWindow = null;
         this.widget_layout_mode = 'Modal';
         this.await_data = false;
+        this.onMessage = (event) => {
+            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
+            const thisWidgetEvent = event.source === this.widgetWindow;
+            const isDataObject = typeof event.data === 'object';
+            if (!thisWidgetEvent || !isDataObject)
+                return;
+            switch (event.data.type) {
+                case 'loaded':
+                    this.sendEvent('extra', this.options.extra);
+                    (_b = (_a = this.options.listeners) === null || _a === void 0 ? void 0 : _a[event.data.type]) === null || _b === void 0 ? void 0 : _b.call(_a);
+                    break;
+                case "payment-status":
+                    (_d = (_c = this.options.listeners) === null || _c === void 0 ? void 0 : _c[event.data.type]) === null || _d === void 0 ? void 0 : _d.call(_c, event.data.data);
+                    break;
+                case "position":
+                    (_f = (_e = this.options.listeners) === null || _e === void 0 ? void 0 : _e[event.data.type]) === null || _f === void 0 ? void 0 : _f.call(_e, event.data.data);
+                    break;
+                case "rate-update":
+                    (_h = (_g = this.options.listeners) === null || _g === void 0 ? void 0 : _g[event.data.type]) === null || _h === void 0 ? void 0 : _h.call(_g, event.data.data);
+                    break;
+                case 'close':
+                    document.body.removeChild(this.iframe);
+                    document.body.style.overflow = '';
+                    this.unListenWidget();
+                    (_k = (_j = this.options.listeners) === null || _j === void 0 ? void 0 : _j[event.data.type]) === null || _k === void 0 ? void 0 : _k.call(_j);
+                    break;
+                case "error":
+                    (_m = (_l = this.options.listeners) === null || _l === void 0 ? void 0 : _l[event.data.type]) === null || _m === void 0 ? void 0 : _m.call(_l, event.data.data);
+                    break;
+            }
+        };
         // This is required for showing error during old integration usages
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
@@ -78,37 +109,6 @@ class WertWidget {
         clearInterval(this.checkIntervalId);
         this.checkIntervalId = undefined;
         window.removeEventListener('message', this.onMessage);
-    }
-    onMessage(event) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
-        const thisWidgetEvent = event.source === this.widgetWindow;
-        const isDataObject = typeof event.data === 'object';
-        if (!thisWidgetEvent || !isDataObject)
-            return;
-        switch (event.data.type) {
-            case 'loaded':
-                this.sendEvent('extra', this.options.extra);
-                (_b = (_a = this.options.listeners) === null || _a === void 0 ? void 0 : _a[event.data.type]) === null || _b === void 0 ? void 0 : _b.call(_a);
-                break;
-            case "payment-status":
-                (_d = (_c = this.options.listeners) === null || _c === void 0 ? void 0 : _c[event.data.type]) === null || _d === void 0 ? void 0 : _d.call(_c, event.data.data);
-                break;
-            case "position":
-                (_f = (_e = this.options.listeners) === null || _e === void 0 ? void 0 : _e[event.data.type]) === null || _f === void 0 ? void 0 : _f.call(_e, event.data.data);
-                break;
-            case "rate-update":
-                (_h = (_g = this.options.listeners) === null || _g === void 0 ? void 0 : _g[event.data.type]) === null || _h === void 0 ? void 0 : _h.call(_g, event.data.data);
-                break;
-            case 'close':
-                document.body.removeChild(this.iframe);
-                document.body.style.overflow = '';
-                this.unListenWidget();
-                (_k = (_j = this.options.listeners) === null || _j === void 0 ? void 0 : _j[event.data.type]) === null || _k === void 0 ? void 0 : _k.call(_j);
-                break;
-            case "error":
-                (_m = (_l = this.options.listeners) === null || _l === void 0 ? void 0 : _l[event.data.type]) === null || _m === void 0 ? void 0 : _m.call(_l, event.data.data);
-                break;
-        }
     }
     sendEvent(type, data) {
         var _a;

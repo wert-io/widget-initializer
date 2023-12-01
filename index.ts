@@ -104,7 +104,7 @@ class WertWidget {
     window.removeEventListener('message', this.onMessage);
   }
 
-  private onMessage(event: MessageEvent<WidgetEvents>): void {
+  private onMessage = (event: MessageEvent<WidgetEvents>): void => {
     const thisWidgetEvent = event.source === this.widgetWindow;
     const isDataObject = typeof event.data === 'object';
 
