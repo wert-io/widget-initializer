@@ -548,6 +548,8 @@ wertWidget.updateTheme({
 });
 ```
 
+Please note that this **method should be called only after the widget is fully loaded**.
+
 ### Adding event listeners
 
 If you want to listen to the [widget events](#events), you can use the `addEventListeners` method. Pass an object of 
