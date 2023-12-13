@@ -380,11 +380,11 @@ You can define the array of default **wallets** that will be prefilled when the 
 
 The wallet object structure:
 
-| Property   | Type   | Description                                                                                                                           |
-|------------|--------|---------------------------------------------------------------------------------------------------------------------------------------|
-| name       | String | Case-ignored, example: `ETH`. See the [list of supported currencies](https://docs.wert.io/docs/supported-coins-and-blockchains).      |
-| blockchain | String | Case-ignored, example: `Ethereum`. See the [list of supported currencies](https://docs.wert.io/docs/supported-coins-and-blockchains). |
-| address    | String | The wallet address. Non-valid addresses will be ignored.                                                                              |
+| Property | Type   | Description                                                                                                             |
+|----------|--------|-------------------------------------------------------------------------------------------------------------------------|
+| name     | String | Example: `ETH`. See the [list of supported currencies](https://docs.wert.io/docs/supported-coins-and-blockchains).      |
+| network  | String | Example: `ethereum`. See the [list of supported currencies](https://docs.wert.io/docs/supported-coins-and-blockchains). |
+| address  | String | The wallet address. Non-valid addresses will be ignored.                                                                |
 
 ### Listeners
 

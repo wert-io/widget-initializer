@@ -1,4 +1,4 @@
-export type Options = {
+export declare type Options = {
     partner_id: string;
     click_id?: string;
     origin?: string;
@@ -24,7 +24,7 @@ export type Options = {
     is_warranty_disabled?: boolean;
     is_crypto_hidden?: boolean;
 } & SCOptions & ColorsOptions & BordersOptions;
-type SCOptions = {
+declare type SCOptions = {
     sc_address?: string;
     sc_input_data?: string;
     signature?: string;
@@ -42,32 +42,32 @@ interface ItemInfo {
 }
 interface Wallet {
     name: string;
-    blockchain: string;
+    network: string;
     address: string;
 }
-type ColorPrefix = 'color_';
-type ElementWithColor = 'background' | 'buttons' | 'buttons_text' | 'secondary_buttons' | 'secondary_buttons_text' | 'main_text' | 'secondary_text' | 'icons' | 'links' | 'success' | 'warning' | 'error';
-type ElementWithColorType = `${ColorPrefix}${ElementWithColor}`;
-type ColorsOptions = {
+declare type ColorPrefix = 'color_';
+declare type ElementWithColor = 'background' | 'buttons' | 'buttons_text' | 'secondary_buttons' | 'secondary_buttons_text' | 'main_text' | 'secondary_text' | 'icons' | 'links' | 'success' | 'warning' | 'error';
+declare type ElementWithColorType = `${ColorPrefix}${ElementWithColor}`;
+declare type ColorsOptions = {
     [key in ElementWithColorType]?: string;
 };
-type BorderSuffix = '_border_radius';
-type ElementWithBorders = 'buttons' | 'secondary_buttons';
-type ElementWithBordersType = `${ElementWithBorders}${BorderSuffix}`;
-type BordersOptions = {
+declare type BorderSuffix = '_border_radius';
+declare type ElementWithBorders = 'buttons' | 'secondary_buttons';
+declare type ElementWithBordersType = `${ElementWithBorders}${BorderSuffix}`;
+declare type BordersOptions = {
     [key in ElementWithBordersType]?: number;
 };
-type ThemeType = 'dark' | undefined;
-export type SetThemeParameters = {
+declare type ThemeType = 'dark' | undefined;
+export declare type SetThemeParameters = {
     theme?: ThemeType;
     colors?: ColorsOptions;
 };
-export type EventTypes = 'close' | 'error' | 'loaded' | 'payment-status' | 'position' | 'rate-update';
+export declare type EventTypes = 'close' | 'error' | 'loaded' | 'payment-status' | 'position' | 'rate-update';
 interface WidgetEvent<EventType extends EventTypes> {
     type: EventType;
 }
-type CloseEvent = WidgetEvent<"close">;
-type LoadedEvent = WidgetEvent<"loaded">;
+declare type CloseEvent = WidgetEvent<"close">;
+declare type LoadedEvent = WidgetEvent<"loaded">;
 interface ErrorEvent extends WidgetEvent<"error"> {
     data: {
         name: string;
@@ -99,8 +99,8 @@ interface RateUpdateEvent extends WidgetEvent<"rate-update"> {
         currency_miner_fee: string;
     };
 }
-export type WidgetEvents = CloseEvent | ErrorEvent | LoadedEvent | PaymentStatusEvent | PositionEvent | RateUpdateEvent;
-type EventListeners<Events extends {
+export declare type WidgetEvents = CloseEvent | ErrorEvent | LoadedEvent | PaymentStatusEvent | PositionEvent | RateUpdateEvent;
+declare type EventListeners<Events extends {
     type: string;
     data?: Record<string, unknown>;
 }> = {
