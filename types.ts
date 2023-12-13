@@ -47,7 +47,7 @@ interface ItemInfo {
 }
 interface Wallet {
   name: string;
-  blockchain: string;
+  network: string;
   address: string;
 }
 
@@ -143,6 +143,3 @@ export type WidgetEvents =
 type EventListeners<Events extends { type: string; data?: Record<string, unknown> }> = {
   [E in Events as E["type"]]?: E extends { data: Record<string, unknown> } ? (event: E["data"]) => any : () => any;
 }
-
-
-
