@@ -510,6 +510,26 @@ const widget = new WertWidget({
       Information on when does the widget updates the rate.
     </td>
   </tr>
+   <tr>
+    <td>
+      <strong>transfer-started</strong>
+    </td>
+  <td>
+
+  ```
+  { 
+    status: String
+    payment_id: String 
+    order_id: String
+    tx_id: String
+  }
+  ```
+
+  </td>
+    <td>
+      Fires at the moment of receiving tx_id.
+    </td>
+  </tr>
 </table>
 
 ## Widget class methods

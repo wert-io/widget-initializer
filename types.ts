@@ -92,7 +92,8 @@ export type EventTypes =
   | 'loaded'
   | 'payment-status'
   | 'position'
-  | 'rate-update';
+  | 'rate-update'
+  | 'transfer-started';
 
 interface WidgetEvent<EventType extends EventTypes> {
   type: EventType;
@@ -132,13 +133,23 @@ interface RateUpdateEvent extends WidgetEvent<"rate-update"> {
   };
 }
 
+interface TransferStartedEvent extends WidgetEvent<"transfer-started"> {
+  data: {
+    status: string;
+    payment_id: string;
+    order_id: string;
+    tx_id: string;
+  };
+}
+
 export type WidgetEvents =
   | CloseEvent
   | ErrorEvent
   | LoadedEvent
   | PaymentStatusEvent
   | PositionEvent
-  | RateUpdateEvent;
+  | RateUpdateEvent
+  | TransferStartedEvent;
 
 type EventListeners<Events extends { type: string; data?: Record<string, unknown> }> = {
   [E in Events as E["type"]]?: E extends { data: Record<string, unknown> } ? (event: E["data"]) => any : () => any;

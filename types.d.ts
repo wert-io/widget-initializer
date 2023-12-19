@@ -62,7 +62,7 @@ export declare type SetThemeParameters = {
     theme?: ThemeType;
     colors?: ColorsOptions;
 };
-export declare type EventTypes = 'close' | 'error' | 'loaded' | 'payment-status' | 'position' | 'rate-update';
+export declare type EventTypes = 'close' | 'error' | 'loaded' | 'payment-status' | 'position' | 'rate-update' | 'transfer-started';
 interface WidgetEvent<EventType extends EventTypes> {
     type: EventType;
 }
@@ -99,7 +99,15 @@ interface RateUpdateEvent extends WidgetEvent<"rate-update"> {
         currency_miner_fee: string;
     };
 }
-export declare type WidgetEvents = CloseEvent | ErrorEvent | LoadedEvent | PaymentStatusEvent | PositionEvent | RateUpdateEvent;
+interface TransferStartedEvent extends WidgetEvent<"transfer-started"> {
+    data: {
+        status: string;
+        payment_id: string;
+        order_id: string;
+        tx_id: string;
+    };
+}
+export declare type WidgetEvents = CloseEvent | ErrorEvent | LoadedEvent | PaymentStatusEvent | PositionEvent | RateUpdateEvent | TransferStartedEvent;
 declare type EventListeners<Events extends {
     type: string;
     data?: Record<string, unknown>;
