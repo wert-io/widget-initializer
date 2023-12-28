@@ -373,6 +373,7 @@ You can add the following parameters to the **item_info** to display your NFT's 
 | author              | String | The name of the author                                                                 |
 | image_url           | String | The URL of the NFT's image                                                             |
 | name                | String | The name of the NFT                                                                    |
+| category            | String | The category of the NFT                                                                |
 | seller              | String | The name of the NFT's seller                                                           |
 
 #### Adding default wallets

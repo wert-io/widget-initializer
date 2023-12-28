@@ -43,6 +43,7 @@ interface ItemInfo {
   author?: string;
   image_url?: string;
   name?: string;
+  category?: string;
   seller?: string;
 }
 interface Wallet {

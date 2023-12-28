@@ -13,6 +13,7 @@ declare class WertWidget {
     removeEventListeners(types: Array<EventTypes>): void;
     removeEventListeners(): void;
     updateTheme(data: SetThemeParameters): void;
+    private validateOptions;
     private listenWidget;
     private unListenWidget;
     private onMessage;

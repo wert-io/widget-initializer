@@ -39,15 +39,7 @@ class WertWidget {
                     break;
             }
         };
-        // This is required for showing error during old integration usages
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        if (this.options.container_id) {
-            console.error('container_id is no longer supported');
-        }
-        if (!this.options.partner_id) {
-            throw Error("Please provide a partner_id in order for widget to work correctly");
-        }
+        this.validateOptions(options);
         if (!this.options.origin) {
             this.options.origin = 'https://widget.wert.io';
         }
@@ -92,6 +84,24 @@ class WertWidget {
         if (!data || !Object.keys(data).length)
             return;
         this.sendEvent('theme', data);
+    }
+    validateOptions(options) {
+        var _a, _b, _c, _d;
+        const maxNameLength = 50;
+        const maxCategoryLength = 40;
+        if (!options.partner_id) {
+            throw Error("Please provide a partner_id in order for the widget to work correctly");
+        }
+        // This is required for showing error during old integration usages
+        if (options.container_id) {
+            console.error('container_id is no longer supported');
+        }
+        if (((_b = (_a = options.extra) === null || _a === void 0 ? void 0 : _a.item_info) === null || _b === void 0 ? void 0 : _b.name) && options.extra.item_info.name.length > maxNameLength) {
+            console.error(`Max length of the extra.item_info.name value is ${maxNameLength} characters`);
+        }
+        if (((_d = (_c = options.extra) === null || _c === void 0 ? void 0 : _c.item_info) === null || _d === void 0 ? void 0 : _d.category) && options.extra.item_info.category.length > maxCategoryLength) {
+            console.error(`Max length of the extra.item_info.category value is ${maxCategoryLength} characters`);
+        }
     }
     listenWidget() {
         window.addEventListener('message', this.onMessage);
