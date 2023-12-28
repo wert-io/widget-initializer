@@ -11,16 +11,7 @@ class WertWidget {
   private await_data = false
 
   constructor(private options: Options) {
-    // This is required for showing error during old integration usages
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    if (this.options.container_id) {
-      console.error('container_id is no longer supported');
-    }
-
-    if (!this.options.partner_id) {
-      throw Error("Please provide a partner_id in order for widget to work correctly");
-    }
+    this.validateOptions(options);
 
     if (!this.options.origin) {
       this.options.origin = 'https://widget.wert.io';
@@ -80,6 +71,23 @@ class WertWidget {
     this.sendEvent('theme', data);
   }
 
+  private validateOptions(options: Options) {
+    const maxNameLength = 50;
+    const maxCategoryLength = 40;
+    if (!options.partner_id) {
+      throw Error("Please provide a partner_id in order for the widget to work correctly");
+    }
+    // This is required for showing error during old integration usages
+    if ((options as any).container_id) {
+      console.error('container_id is no longer supported');
+    }
+    if (options.extra?.item_info?.name && options.extra.item_info.name.length > maxNameLength) {
+      console.error(`Max length of the extra.item_info.name value is ${maxNameLength} characters`);
+    }
+    if (options.extra?.item_info?.category && options.extra.item_info.category.length > maxCategoryLength) {
+      console.error(`Max length of the extra.item_info.category value is ${maxCategoryLength} characters`);
+    }
+  }
   private listenWidget(): void {
     window.addEventListener('message', this.onMessage);
 
