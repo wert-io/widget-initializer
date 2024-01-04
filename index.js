@@ -87,7 +87,7 @@ class WertWidget {
     }
     validateOptions(options) {
         var _a, _b, _c, _d;
-        const maxNameLength = 50;
+        const maxNameLength = 40;
         const maxCategoryLength = 40;
         if (!options.partner_id) {
             throw Error("Please provide a partner_id in order for the widget to work correctly");
