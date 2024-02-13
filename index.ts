@@ -164,30 +164,6 @@ class WertWidget {
     );
   }
 
-  private getEmbedCode(): string {
-    const br = '\n';
-    const fileScriptOpen = `<script type="text/javascript" src="${externalStaticOrigin}/wert-${version}.js">`;
-    const scriptEnd = '<' + '/script>';
-    const codeScriptOpen = '<script type="text/javascript">';
-    const codeScriptContent1 = `const wertWidget = new WertWidget(${JSON.stringify(
-      this.options,
-      null,
-      2
-    )});`;
-    const codeScriptContent2 = 'wertWidget.open();';
-
-    return fileScriptOpen +
-      scriptEnd +
-      br +
-      codeScriptOpen +
-      br +
-      codeScriptContent1 +
-      br +
-      codeScriptContent2 +
-      br +
-      scriptEnd;
-  }
-
   private getEmbedUrl(): string {
     const parametersString = this.getParametersString();
 
