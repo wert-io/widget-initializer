@@ -1,7 +1,18 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-
-const { describe, expect, test, beforeEach, afterEach, beforeAll, afterAll } = require('@jest/globals');
-const { ALL_OPTIONS_FILLED, MINIMUM_OPTIONS_FILLED, COMMODITIES, WALLETS } = require('./mocks/options.js');
+const {
+  describe,
+  expect,
+  test,
+  beforeEach,
+  afterEach,
+  beforeAll,
+  afterAll,
+} = require('@jest/globals');
+const {
+  ALL_OPTIONS_FILLED,
+  MINIMUM_OPTIONS_FILLED,
+  COMMODITIES,
+  WALLETS,
+} = require('./mocks/options.js');
 
 let widget;
 let widgetLink;
@@ -9,7 +20,8 @@ const WertWidget = require('../index.js');
 
 afterEach(() => {
   widget = null;
-  if (document.body.children[0]) document.body.removeChild(document.body.children[0]);
+  if (document.body.children[0])
+    document.body.removeChild(document.body.children[0]);
 });
 
 const getScript = (url) => {
@@ -18,16 +30,21 @@ const getScript = (url) => {
     const https = require('https');
     const client = url.startsWith('https') ? https : http;
 
-    client.get(url, (resp) => {
+    client
+      .get(url, (resp) => {
         let data = '';
 
-        resp.on('data', (chunk) => data += chunk); // A chunk of data has been recieved
+        resp.on('data', (chunk) => (data += chunk)); // A chunk of data has been recieved
         resp.on('end', () => resolve(data)); // The whole response has been received
-
-    }).on('error', (err) => reject(err));
+      })
+      .on('error', (err) => reject(err));
   });
 };
 describe('open', () => {
+  const validateOptionsSpy = jest.spyOn(
+    WertWidget.prototype,
+    'validateOptions'
+  );
   beforeEach((done) => {
     widget = new WertWidget(MINIMUM_OPTIONS_FILLED);
     widgetLink = widget.getEmbedUrl();
@@ -36,26 +53,27 @@ describe('open', () => {
   afterEach(() => {
     widgetLink = null;
   });
-  test('the widget should not be opened without partner_id', () => {
-    const setEmptyOptions = () => widget = new WertWidget();
-    expect(setEmptyOptions).toThrow();
+  test('should call validateOptions', () => {
+    expect(validateOptionsSpy).toHaveBeenCalled();
   });
-  test('the iframe should be mounted', () => {
-    widget.open();
-
-    expect(widget.widgetWindow).toEqual(document.body.children[0].contentWindow);
-    expect(document.body.innerHTML)
-      .toBe(`<iframe style="width: 100%; height: 100%; bottom: 0px; right: 0px; position: fixed; z-index: 10000;" src="${widgetLink}" allow="camera *; microphone *" sandbox="allow-scripts allow-forms allow-popups allow-same-origin"></iframe>`);
-  });
-  test('the open method should start listening to the widget events', async () => {
+  test('should start listening to the widget events', async () => {
     jest.spyOn(widget, 'listenWidget');
 
     widget.open();
     expect(widget.listenWidget).toHaveBeenCalled();
   });
+  test('the iframe should be mounted', () => {
+    widget.open();
+
+    expect(widget.widgetWindow).toEqual(
+      document.body.children[0].contentWindow
+    );
+    expect(document.body.innerHTML).toBe(
+      `<iframe style="width: 100%; height: 100%; bottom: 0px; right: 0px; position: fixed; z-index: 10000;" src="${widgetLink}" allow="camera *; microphone *" sandbox="allow-scripts allow-forms allow-popups allow-same-origin"></iframe>`
+    );
+  });
   test('the widget should load via link', () => {
-    return expect(getScript(widgetLink))
-      .resolves.not.toBe('');
+    return expect(getScript(widgetLink)).resolves.not.toBe('');
   });
 });
 
@@ -68,7 +86,7 @@ const checkOptionsPresenceInURL = (options, url) => {
   }
   return true;
 };
-describe('getEmbedUrl', () => {
+describe('getEmbedUrl & getParametersString', () => {
   afterEach(() => {
     widgetLink = null;
   });
@@ -76,8 +94,12 @@ describe('getEmbedUrl', () => {
     widget = new WertWidget(MINIMUM_OPTIONS_FILLED);
     widgetLink = widget.getEmbedUrl();
 
-    expect(widgetLink.startsWith(`${MINIMUM_OPTIONS_FILLED.origin}/${MINIMUM_OPTIONS_FILLED.partner_id}/`)).toBe(true);
-  }); 
+    expect(
+      widgetLink.startsWith(
+        `${MINIMUM_OPTIONS_FILLED.origin}/${MINIMUM_OPTIONS_FILLED.partner_id}/`
+      )
+    ).toBe(true);
+  });
   test('all truthy options should be included in the URL query', () => {
     const options = { ...ALL_OPTIONS_FILLED };
     widget = new WertWidget(ALL_OPTIONS_FILLED);
@@ -88,31 +110,42 @@ describe('getEmbedUrl', () => {
     const allOptionsArePresent = checkOptionsPresenceInURL(options, widgetLink);
 
     expect(allOptionsArePresent).toBe(true);
-  }); 
+  });
   test('undefined options should be missing in the URL query', () => {
-    widget = new WertWidget({ ...MINIMUM_OPTIONS_FILLED, theme: undefined, 'click_id': undefined });
+    widget = new WertWidget({
+      ...MINIMUM_OPTIONS_FILLED,
+      theme: undefined,
+      click_id: undefined,
+    });
     widgetLink = widget.getEmbedUrl();
 
     const searchParams = new URLSearchParams(widgetLink.split('?')[1]);
-    const noFalsyValuesFound = ['theme', 'click_id'].every((key) => !searchParams.has(key));
+    const noFalsyValuesFound = ['theme', 'click_id'].every(
+      (key) => !searchParams.has(key)
+    );
 
     expect(noFalsyValuesFound).toBe(true);
   });
   test('objects should be missing in the URL query', () => {
-    widget = new WertWidget({ ...MINIMUM_OPTIONS_FILLED,
+    widget = new WertWidget({
+      ...MINIMUM_OPTIONS_FILLED,
       listeners: {
-        loaded: () => { console.log('loaded'); },
+        loaded: () => {
+          console.log('loaded');
+        },
       },
       extra: {
         item_info: {
-          author: 'TEST'
+          author: 'TEST',
         },
       },
     });
     widgetLink = widget.getEmbedUrl();
 
     const searchParams = new URLSearchParams(widgetLink.split('?')[1]);
-    const noObjectsFound = ['listeners', 'extra'].every((key) => !searchParams.has(key));
+    const noObjectsFound = ['listeners', 'extra'].every(
+      (key) => !searchParams.has(key)
+    );
 
     expect(noObjectsFound).toBe(true);
   });
@@ -125,10 +158,11 @@ describe('getEmbedUrl', () => {
     expect(searchParams.has('widget_layout_mode')).toBe(true);
   });
   test('if the extra param is present, await_data should appear in the URL query', () => {
-    widget = new WertWidget({ ...MINIMUM_OPTIONS_FILLED,
+    widget = new WertWidget({
+      ...MINIMUM_OPTIONS_FILLED,
       extra: {
         item_info: {
-          author: 'TEST'
+          author: 'TEST',
         },
       },
     });
@@ -139,36 +173,39 @@ describe('getEmbedUrl', () => {
     expect(searchParams.has('await_data')).toBe(true);
   });
   test('commodities should be correctly displayed in the URL query', () => {
-    widget = new WertWidget({ ...MINIMUM_OPTIONS_FILLED, commodities: JSON.stringify(COMMODITIES) });
+    widget = new WertWidget({
+      ...MINIMUM_OPTIONS_FILLED,
+      commodities: JSON.stringify(COMMODITIES),
+    });
     widgetLink = widget.getEmbedUrl();
 
     const searchParams = new URLSearchParams(widgetLink.split('?')[1]);
     const commoditiesFromUrl = JSON.parse(searchParams.get('commodities'));
 
-    const arraysAreEqual = JSON.stringify(COMMODITIES) === JSON.stringify(commoditiesFromUrl);
+    const arraysAreEqual =
+      JSON.stringify(COMMODITIES) === JSON.stringify(commoditiesFromUrl);
 
     expect(arraysAreEqual).toBe(true);
-  }); 
+  });
 });
 
 describe('listenWidget', () => {
-  beforeEach(() => {
-    widget = new WertWidget(MINIMUM_OPTIONS_FILLED);
-  });
   test('should start listening to the "message" event', async () => {
+    widget = new WertWidget(MINIMUM_OPTIONS_FILLED);
     jest.spyOn(window, 'addEventListener');
     widget.open();
 
-    expect(window.addEventListener).toHaveBeenCalledWith('message', widget.onMessage);
+    expect(window.addEventListener).toHaveBeenCalledWith(
+      'message',
+      widget.onMessage
+    );
     expect(widget.checkIntervalId).toBeDefined();
   });
 });
 
 describe('unlistenWidget', () => {
-  beforeEach(() => {
-    widget = new WertWidget(MINIMUM_OPTIONS_FILLED);
-  });
   test('should stop listening to the "message" event', async () => {
+    widget = new WertWidget(MINIMUM_OPTIONS_FILLED);
     jest.spyOn(window, 'removeEventListener');
     widget.open();
 
@@ -176,8 +213,11 @@ describe('unlistenWidget', () => {
     const messageEvent = new MessageEvent('message', { data: eventData });
     widget.widgetWindow = null;
     widget.onMessage(messageEvent);
-    
-    expect(window.removeEventListener).toHaveBeenCalledWith('message', widget.onMessage);
+
+    expect(window.removeEventListener).toHaveBeenCalledWith(
+      'message',
+      widget.onMessage
+    );
     expect(widget.checkIntervalId).toBe(undefined);
   });
 });
@@ -185,9 +225,9 @@ describe('unlistenWidget', () => {
 describe('onMessage', () => {
   test('should call correct listeners with the correct data', () => {
     const listeners = {
-      'position': jest.fn()
+      position: jest.fn(),
     };
-    widget = new WertWidget({ ...MINIMUM_OPTIONS_FILLED, listeners});
+    widget = new WertWidget({ ...MINIMUM_OPTIONS_FILLED, listeners });
     widget.open();
 
     const eventData = { type: 'position', data: { step: 'home' } };
@@ -197,9 +237,23 @@ describe('onMessage', () => {
 
     expect(listeners.position).toHaveBeenCalledWith(eventData.data);
   });
+  test('should not call unknown event types listeners', () => {
+    const listeners = {
+      test: jest.fn(),
+    };
+    widget = new WertWidget({ ...MINIMUM_OPTIONS_FILLED, listeners });
+    widget.open();
+
+    const eventData = { type: 'test' };
+    const messageEvent = new MessageEvent('message', { data: eventData });
+    widget.widgetWindow = null;
+    widget.onMessage(messageEvent);
+
+    expect(listeners.test).toBeCalledTimes(0);
+  });
   test('should send an "extra" event when iframe sends "loaded" event', () => {
     const extraData = { wallets: WALLETS };
-    widget = new WertWidget({ ...MINIMUM_OPTIONS_FILLED, extra: extraData});
+    widget = new WertWidget({ ...MINIMUM_OPTIONS_FILLED, extra: extraData });
     jest.spyOn(widget, 'sendEvent');
     widget.open();
 
@@ -211,7 +265,7 @@ describe('onMessage', () => {
     expect(widget.sendEvent).toHaveBeenCalledWith('extra', extraData);
   });
   test('should stop listening to the widget and remove an iframe on the "close" event', () => {
-    widget = new WertWidget({ ...MINIMUM_OPTIONS_FILLED});
+    widget = new WertWidget({ ...MINIMUM_OPTIONS_FILLED });
     jest.spyOn(widget, 'unListenWidget');
     widget.open();
 
@@ -225,7 +279,7 @@ describe('onMessage', () => {
   });
   test('should not proceed with the wrong source', () => {
     const listeners = {
-      'close': jest.fn()
+      close: jest.fn(),
     };
     widget = new WertWidget({ ...MINIMUM_OPTIONS_FILLED, listeners });
     widget.open();
@@ -241,13 +295,47 @@ describe('onMessage', () => {
   });
 });
 
+describe('sendEvent', () => {
+  beforeEach(() => {
+    widget = new WertWidget(MINIMUM_OPTIONS_FILLED);
+    widget.open();
+  });
+
+  test('should send an event with valid data', () => {
+    const postMessageMock = jest.fn();
+    const originalPostMessage = widget.widgetWindow.postMessage;
+    widget.widgetWindow.postMessage = postMessageMock;
+
+    widget.sendEvent('testEvent', { value: 'testData' });
+
+    widget.widgetWindow.postMessage = originalPostMessage;
+
+    expect(postMessageMock).toHaveBeenCalledWith(
+      { type: 'testEvent', data: { value: 'testData' } },
+      MINIMUM_OPTIONS_FILLED.origin
+    );
+  });
+
+  test('should not send an event if data is null', () => {
+    const postMessageMock = jest.fn();
+    const originalPostMessage = widget.widgetWindow.postMessage;
+    widget.widgetWindow.postMessage = postMessageMock;
+
+    widget.sendEvent('testEvent', null);
+
+    widget.widgetWindow.postMessage = originalPostMessage;
+
+    expect(postMessageMock).not.toHaveBeenCalled();
+  });
+});
+
 describe('addEventListeners', () => {
   test('the new listener should be called in the onMessage method', async () => {
     widget = new WertWidget(MINIMUM_OPTIONS_FILLED);
     widget.open();
 
     const listeners = {
-      'position': jest.fn()
+      position: jest.fn(),
     };
     widget.addEventListeners(listeners);
 
@@ -259,11 +347,14 @@ describe('addEventListeners', () => {
     expect(listeners.position).toHaveBeenCalledWith(eventData.data);
   });
   test('the new listener should rewrite the old listener', async () => {
-    widget = new WertWidget({ ...MINIMUM_OPTIONS_FILLED, listeners: { 'rate-update': (value) => console.log(value) }});
+    widget = new WertWidget({
+      ...MINIMUM_OPTIONS_FILLED,
+      listeners: { 'rate-update': jest.fn() },
+    });
     widget.open();
 
     const listeners = {
-      'rate-update': jest.fn()
+      'rate-update': jest.fn(),
     };
     widget.addEventListeners(listeners);
 
@@ -278,8 +369,8 @@ describe('addEventListeners', () => {
         purchase_amount: 'string',
         miner_fee: 'string',
         currency_miner_fee: 'string',
-      }
-   };
+      },
+    };
     const messageEvent = new MessageEvent('message', { data: eventData });
     widget.widgetWindow = null;
     widget.onMessage(messageEvent);
@@ -288,9 +379,12 @@ describe('addEventListeners', () => {
   });
   test('empty listeners object should not replace the old listeners', async () => {
     const oldListeners = {
-      'position': jest.fn()
+      position: jest.fn(),
     };
-    widget = new WertWidget({ ...MINIMUM_OPTIONS_FILLED, listeners: oldListeners});
+    widget = new WertWidget({
+      ...MINIMUM_OPTIONS_FILLED,
+      listeners: oldListeners,
+    });
     widget.open();
 
     widget.addEventListeners({});
@@ -308,11 +402,11 @@ describe('removeEventListeners', () => {
   const loadedCallback = jest.fn();
   const closeCallback = jest.fn();
   const listeners = {
-    'loaded': loadedCallback,
-    'close': closeCallback,
+    loaded: loadedCallback,
+    close: closeCallback,
   };
   beforeEach(() => {
-    widget = new WertWidget({ ...MINIMUM_OPTIONS_FILLED, listeners});
+    widget = new WertWidget({ ...MINIMUM_OPTIONS_FILLED, listeners });
     widget.open();
   });
   test('should remove all listeners if called with no arguments', async () => {
@@ -379,5 +473,72 @@ describe('updateTheme', () => {
 
     widget.updateTheme(incorrectThemeData);
     expect(widget.sendEvent).toHaveBeenCalledTimes(0);
+  });
+});
+
+describe('validateOptions', () => {
+  beforeAll(() => {
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+  });
+  afterAll(() => {
+    console.error.mockRestore();
+  });
+  afterEach(() => {
+    console.error.mockClear();
+  });
+
+  test('should throw an error if partner_id is not provided', () => {
+    const options = { partner_id: '' };
+
+    expect(() => new WertWidget(options)).toThrowError(
+      'Please provide a partner_id'
+    );
+  });
+
+  test('should log a warning if container_id is provided (deprecated)', () => {
+    const options = { partner_id: 'partner123', container_id: 'container123' };
+
+    widget = new WertWidget(options);
+
+    expect(console.error).toHaveBeenCalled();
+    expect(console.error.mock.calls[0][0]).toContain(
+      'container_id is no longer supported'
+    );
+  });
+
+  test('should log a warning if extra.item_info.name exceeds maximum length', () => {
+    const options = {
+      partner_id: 'partner123',
+      extra: {
+        item_info: {
+          name: 'a'.repeat(50),
+        },
+      },
+    };
+
+    widget = new WertWidget(options);
+
+    expect(console.error).toHaveBeenCalled();
+    expect(console.error.mock.calls[0][0]).toContain(
+      `Max length of the extra.item_info.name value is 40 characters`
+    );
+  });
+
+  test('should log a warning if extra.item_info.category exceeds maximum length', () => {
+    const options = {
+      partner_id: 'partner123',
+      extra: {
+        item_info: {
+          category: 'a'.repeat(50), // Category exceeds maximum length
+        },
+      },
+    };
+
+    widget = new WertWidget(options);
+
+    expect(console.error).toHaveBeenCalled();
+    expect(console.error.mock.calls[0][0]).toContain(
+      `Max length of the extra.item_info.category value is 40 characters`
+    );
   });
 });
