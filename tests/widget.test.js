@@ -56,13 +56,13 @@ describe('open', () => {
   test('should call validateOptions', () => {
     expect(validateOptionsSpy).toHaveBeenCalled();
   });
-  test('should start listening to the widget events', async () => {
+  test('should start listening to the widget events', () => {
     jest.spyOn(widget, 'listenWidget');
 
     widget.open();
     expect(widget.listenWidget).toHaveBeenCalled();
   });
-  test('the iframe should be mounted', () => {
+  test('should add an iframe to the document body', () => {
     widget.open();
 
     expect(widget.widgetWindow).toEqual(
@@ -190,35 +190,69 @@ describe('getEmbedUrl & getParametersString', () => {
 });
 
 describe('listenWidget', () => {
-  test('should start listening to the "message" event', async () => {
+  jest.spyOn(window, 'addEventListener');
+  jest.spyOn(window, 'setInterval');
+  beforeEach(() => {
     widget = new WertWidget(MINIMUM_OPTIONS_FILLED);
-    jest.spyOn(window, 'addEventListener');
+    jest.spyOn(widget, 'listenWidget');
     widget.open();
-
+  });
+  test('should start listening to the "message" event', () => {
     expect(window.addEventListener).toHaveBeenCalledWith(
       'message',
       widget.onMessage
     );
     expect(widget.checkIntervalId).toBeDefined();
   });
+  test('should set up checkLiveliness interval', () => {
+    expect(window.setInterval).toHaveBeenCalled();
+  });
 });
 
-describe('unlistenWidget', () => {
-  test('should stop listening to the "message" event', async () => {
+describe('checkLiveliness', () => {
+  beforeEach(() => {
+    jest.useFakeTimers();
     widget = new WertWidget(MINIMUM_OPTIONS_FILLED);
-    jest.spyOn(window, 'removeEventListener');
     widget.open();
+  });
+  afterAll(() => {
+    jest.useRealTimers(); // Restore Jest's real timers
+  });
+  test('should call unListenWidget when widget window is closed', () => {
+    jest.spyOn(widget, 'unListenWidget');
+    widget['widgetWindow'] = { closed: true };
 
-    const eventData = { type: 'close' };
-    const messageEvent = new MessageEvent('message', { data: eventData });
-    widget.widgetWindow = null;
-    widget.onMessage(messageEvent);
+    jest.advanceTimersByTime(200);
+
+    expect(widget.unListenWidget).toHaveBeenCalled();
+  });
+});
+
+describe('unListenWidget', () => {
+  beforeEach(() => {
+    widget = new WertWidget(MINIMUM_OPTIONS_FILLED);
+    widget.open();
+  });
+  afterAll(() => {
+    global.clearInterval.mockRestore();
+  });
+  test('should stop listening to the "message" event', () => {
+    jest.spyOn(window, 'removeEventListener');
+    widget.unListenWidget();
 
     expect(window.removeEventListener).toHaveBeenCalledWith(
       'message',
       widget.onMessage
     );
     expect(widget.checkIntervalId).toBe(undefined);
+  });
+  test('should not proceed if no checkIntervalId exists', () => {
+    jest.spyOn(global, 'clearInterval').mockImplementation(() => {});
+
+    widget['checkIntervalId'] = undefined;
+    widget.unListenWidget();
+
+    expect(global.clearInterval).not.toHaveBeenCalled();
   });
 });
 
@@ -330,23 +364,31 @@ describe('sendEvent', () => {
 });
 
 describe('addEventListeners', () => {
-  test('the new listener should be called in the onMessage method', async () => {
+  test('the new listener should be called in the onMessage method', () => {
     widget = new WertWidget(MINIMUM_OPTIONS_FILLED);
     widget.open();
 
     const listeners = {
-      position: jest.fn(),
+      'payment-status': jest.fn(),
     };
     widget.addEventListeners(listeners);
 
-    const eventData = { type: 'position', data: { step: 'home' } };
+    const eventData = {
+      type: 'payment-status',
+      data: {
+        status: 'string',
+        payment_id: 'string',
+        order_id: 'string',
+        tx_id: 'string',
+      },
+    };
     const messageEvent = new MessageEvent('message', { data: eventData });
     widget.widgetWindow = null;
     widget.onMessage(messageEvent);
 
-    expect(listeners.position).toHaveBeenCalledWith(eventData.data);
+    expect(listeners['payment-status']).toHaveBeenCalledWith(eventData.data);
   });
-  test('the new listener should rewrite the old listener', async () => {
+  test('the new listener should rewrite the old listener', () => {
     widget = new WertWidget({
       ...MINIMUM_OPTIONS_FILLED,
       listeners: { 'rate-update': jest.fn() },
@@ -377,9 +419,9 @@ describe('addEventListeners', () => {
 
     expect(listeners['rate-update']).toHaveBeenCalledWith(eventData.data);
   });
-  test('empty listeners object should not replace the old listeners', async () => {
+  test('empty listeners object should not replace the old listeners', () => {
     const oldListeners = {
-      position: jest.fn(),
+      error: jest.fn(),
     };
     widget = new WertWidget({
       ...MINIMUM_OPTIONS_FILLED,
@@ -389,12 +431,15 @@ describe('addEventListeners', () => {
 
     widget.addEventListeners({});
 
-    const eventData = { type: 'position', data: { step: 'home' } };
+    const eventData = {
+      type: 'error',
+      data: { name: 'string', message: 'string' },
+    };
     const messageEvent = new MessageEvent('message', { data: eventData });
     widget.widgetWindow = null;
     widget.onMessage(messageEvent);
 
-    expect(oldListeners.position).toHaveBeenCalled();
+    expect(oldListeners.error).toHaveBeenCalled();
   });
 });
 
@@ -409,7 +454,7 @@ describe('removeEventListeners', () => {
     widget = new WertWidget({ ...MINIMUM_OPTIONS_FILLED, listeners });
     widget.open();
   });
-  test('should remove all listeners if called with no arguments', async () => {
+  test('should remove all listeners if called with no arguments', () => {
     widget.removeEventListeners();
 
     const loaded = { type: 'loaded' };
@@ -425,7 +470,7 @@ describe('removeEventListeners', () => {
     expect(loadedCallback).toHaveBeenCalledTimes(0);
     expect(closeCallback).toHaveBeenCalledTimes(0);
   });
-  test('should remove the listener passed as a string', async () => {
+  test('should remove the listener passed as a string', () => {
     widget.removeEventListeners('close');
 
     const close = { type: 'close' };
@@ -458,7 +503,7 @@ describe('updateTheme', () => {
     widget = new WertWidget(MINIMUM_OPTIONS_FILLED);
     widget.open();
   });
-  test('should send the "theme" event', async () => {
+  test('should send the "theme" event', () => {
     jest.spyOn(widget, 'sendEvent');
 
     const testData = { theme: 'dark' };
@@ -466,7 +511,7 @@ describe('updateTheme', () => {
     widget.updateTheme(testData);
     expect(widget.sendEvent).toHaveBeenCalledWith('theme', testData);
   });
-  test('should not send the "theme" event if called incorrectly', async () => {
+  test('should not send the "theme" event if called incorrectly', () => {
     jest.spyOn(widget, 'sendEvent');
 
     const incorrectThemeData = {};
