@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
-const { describe, expect, test, beforeEach, afterEach } = require('@jest/globals');
-const { ALL_OPTIONS_FILLED, MINIMUM_OPTIONS_FILLED, COMMODITIES } = require('./mocks/options.js');
+const { describe, expect, test, beforeEach, afterEach, beforeAll, afterAll } = require('@jest/globals');
+const { ALL_OPTIONS_FILLED, MINIMUM_OPTIONS_FILLED, COMMODITIES, WALLETS } = require('./mocks/options.js');
 
 let widget;
 let widgetLink;
@@ -22,20 +22,17 @@ const getScript = (url) => {
     }).on('error', (err) => reject(err));
   });
 };
-
-describe('widget starts properly', () => {
+describe('widget opens properly', () => {
   beforeEach((done) => {
     widget = new WertWidget(MINIMUM_OPTIONS_FILLED);
-  
     widgetLink = widget.getEmbedUrl();
-  
     done();
   });
   afterEach(() => {
     widget = null;
     widgetLink = null;
+    if (document.body.children[0]) document.body.removeChild(document.body.children[0]);
   });
-  
   test('widget loads via link', () => {
     return expect(getScript(widgetLink))
       .resolves.not.toBe('');
@@ -51,8 +48,13 @@ describe('widget starts properly', () => {
     expect(document.body.innerHTML)
       .toBe(`<iframe style="width: 100%; height: 100%; bottom: 0px; right: 0px; position: fixed; z-index: 10000;" src="${widgetLink}" allow="camera *; microphone *" sandbox="allow-scripts allow-forms allow-popups allow-same-origin"></iframe>`);
   });
-});
+  test('the open method starts listening to the widget events', async () => {
+    jest.spyOn(widget, 'listenWidget');
 
+    widget.open();
+    expect(widget.listenWidget).toHaveBeenCalled();
+  });
+});
 
 const checkOptionsPresenceInURL = (options, url) => {
   const searchParams = new URLSearchParams(url.split('?')[1]);
@@ -63,10 +65,11 @@ const checkOptionsPresenceInURL = (options, url) => {
   }
   return true;
 };
-describe('getEmbedUrl correctly generates the URL', () => {
+describe('the getEmbedUrl method correctly generates the URL', () => {
   afterEach(() => {
     widget = null;
     widgetLink = null;
+    if (document.body.children[0]) document.body.removeChild(document.body.children[0]);
   });
   test('URL contains origin and partner_id', () => {
     widget = new WertWidget(MINIMUM_OPTIONS_FILLED);
@@ -145,4 +148,92 @@ describe('getEmbedUrl correctly generates the URL', () => {
 
     expect(arraysAreEqual).toBe(true);
   }); 
+});
+
+describe('the onMessage method works correctly', () => {
+  afterEach(() => {
+    widget = null;
+    if (document.body.children[0]) document.body.removeChild(document.body.children[0]);
+  });
+  test('calls correct listeners with the correct data', () => {
+    const listeners = {
+      'position': jest.fn()
+    };
+    widget = new WertWidget({ ...MINIMUM_OPTIONS_FILLED, listeners});
+    widget.open();
+
+    const eventData = { type: 'position', data: { step: 'home' } };
+    const messageEvent = new MessageEvent('message', { data: eventData });
+    widget.widgetWindow = null;
+    widget.onMessage(messageEvent);
+
+    expect(listeners.position).toHaveBeenCalledWith(eventData.data);
+  });
+  test('sends an "extra" event when iframe sends "loaded" event', () => {
+    const extraData = { wallets: WALLETS };
+    widget = new WertWidget({ ...MINIMUM_OPTIONS_FILLED, extra: extraData});
+    jest.spyOn(widget, 'sendEvent');
+    widget.open();
+
+    const eventData = { type: 'loaded' };
+    const messageEvent = new MessageEvent('message', { data: eventData });
+    widget.widgetWindow = null;
+    widget.onMessage(messageEvent);
+
+    expect(widget.sendEvent).toHaveBeenCalledWith('extra', extraData);
+  });
+  test('stops listening to the widget and removes an iframe on the "close" event', () => {
+    widget = new WertWidget({ ...MINIMUM_OPTIONS_FILLED});
+    jest.spyOn(widget, 'unListenWidget');
+    widget.open();
+
+    const eventData = { type: 'close' };
+    const messageEvent = new MessageEvent('message', { data: eventData });
+    widget.widgetWindow = null;
+    widget.onMessage(messageEvent);
+
+    expect(widget.unListenWidget).toHaveBeenCalled();
+    expect(document.body.innerHTML).toBeFalsy();
+  });
+  test('is not called with the wrong source', () => {
+    const listeners = {
+      'close': jest.fn()
+    };
+    widget = new WertWidget({ ...MINIMUM_OPTIONS_FILLED, listeners });
+    widget.open();
+
+    const eventData = { type: 'close' };
+    const messageEvent = new MessageEvent('message', eventData);
+    widget.widgetWindow = 'test';
+    widget.onMessage(messageEvent);
+
+    expect(listeners.close).toHaveBeenCalledTimes(0);
+  });
+});
+
+describe('the updateTheme method works correctly', () => {
+  beforeEach(() => {
+    widget = new WertWidget(MINIMUM_OPTIONS_FILLED);
+    widget.open();
+  });
+  afterEach(() => {
+    widget = null;
+    if (document.body.children[0]) document.body.removeChild(document.body.children[0]);
+  });
+  test('sends a theme event', async () => {
+    jest.spyOn(widget, 'sendEvent');
+
+    const testData = { theme: 'dark' };
+
+    widget.updateTheme(testData);
+    expect(widget.sendEvent).toHaveBeenCalledWith('theme', testData);
+  });
+  test('incorrect call does not send a theme event', async () => {
+    jest.spyOn(widget, 'sendEvent');
+
+    const incorrectThemeData = {};
+
+    widget.updateTheme(incorrectThemeData);
+    expect(widget.sendEvent).toHaveBeenCalledTimes(0);
+  });
 });

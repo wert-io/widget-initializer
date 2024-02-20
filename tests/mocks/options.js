@@ -29,8 +29,17 @@ const MINIMUM_OPTIONS_FILLED = {
 
 const COMMODITIES = [{"commodity":"GHST","network":"mumbai"}, {"commodity":"STX","network":"testnet"}];
 
+const WALLETS = [
+  {
+    name: 'BTC',
+    network: 'testnet',
+    address: 'btc-address'
+  }
+];
+
 module.exports = {
   ALL_OPTIONS_FILLED,
   MINIMUM_OPTIONS_FILLED,
-  COMMODITIES
+  COMMODITIES,
+  WALLETS
 };
