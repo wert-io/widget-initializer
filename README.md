@@ -188,14 +188,6 @@ const wertWidget = new WertWidget(options);
     <td>Commodities that will be available in the module. By default, all commodities are present. Should contain a stringified JSON of an array of objects with commodity and network fields. Fields are filled with the same values as a default commodity and network, e.g. <code>JSON.stringify([{ commodity: 'USDC', network: 'ethereum' }])</code>.</td>
   </tr>
   <tr>
-    <td><strong>currency</strong></td>
-    <td>optional</td>
-    <td><i>String</i></td>
-    <td><code>USD</code></td>
-    <td><code>USD</code></td>
-    <td>Default currency which will be selected when the module opens.</td>
-  </tr>
-  <tr>
     <td><strong>currency_amount</strong></td>
     <td>optional</td>
     <td><i>Number</i></td>

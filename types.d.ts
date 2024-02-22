@@ -5,7 +5,6 @@ export declare type Options = {
     lang?: 'en' | 'fr';
     address?: string;
     theme?: ThemeType;
-    currency?: 'USD';
     currency_amount?: number;
     country_of_residence?: string;
     state_of_residence?: string;
