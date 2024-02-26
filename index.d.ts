@@ -18,7 +18,6 @@ declare class WertWidget {
     private unListenWidget;
     private onMessage;
     private sendEvent;
-    private getEmbedCode;
     private getEmbedUrl;
     private getParametersString;
 }

@@ -1,5 +1,4 @@
 "use strict";
-const package_json_1 = require("./package.json");
 const externalStaticOrigin = 'https://javascript.wert.io';
 class WertWidget {
     constructor(options) {
@@ -125,24 +124,6 @@ class WertWidget {
         if (!data)
             return;
         (_a = this.widgetWindow) === null || _a === void 0 ? void 0 : _a.postMessage({ data, type }, this.options.origin);
-    }
-    getEmbedCode() {
-        const br = '\n';
-        const fileScriptOpen = `<script type="text/javascript" src="${externalStaticOrigin}/wert-${package_json_1.version}.js">`;
-        const scriptEnd = '<' + '/script>';
-        const codeScriptOpen = '<script type="text/javascript">';
-        const codeScriptContent1 = `const wertWidget = new WertWidget(${JSON.stringify(this.options, null, 2)});`;
-        const codeScriptContent2 = 'wertWidget.open();';
-        return fileScriptOpen +
-            scriptEnd +
-            br +
-            codeScriptOpen +
-            br +
-            codeScriptContent1 +
-            br +
-            codeScriptContent2 +
-            br +
-            scriptEnd;
     }
     getEmbedUrl() {
         const parametersString = this.getParametersString();
