@@ -58,6 +58,9 @@ class WertWidget {
         document.body.appendChild(this.iframe);
         this.widgetWindow = this.iframe.contentWindow;
         this.listenWidget();
+        this.sendEvent('allow-redirect', {
+            redirectAllowed: false
+        });
     }
     addEventListeners(listeners) {
         this.options.listeners = Object.assign(Object.assign({}, this.options.listeners), listeners);
