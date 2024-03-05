@@ -15,6 +15,9 @@ class WertWidget {
                 return;
             switch (event.data.type) {
                 case 'loaded':
+                    this.sendEvent('allow-redirect', {
+                        redirectAllowed: false
+                    });
                     this.sendEvent('extra', this.options.extra);
                     (_b = (_a = this.options.listeners) === null || _a === void 0 ? void 0 : _a[event.data.type]) === null || _b === void 0 ? void 0 : _b.call(_a);
                     break;
@@ -58,9 +61,6 @@ class WertWidget {
         document.body.appendChild(this.iframe);
         this.widgetWindow = this.iframe.contentWindow;
         this.listenWidget();
-        this.sendEvent('allow-redirect', {
-            redirectAllowed: false
-        });
     }
     addEventListeners(listeners) {
         this.options.listeners = Object.assign(Object.assign({}, this.options.listeners), listeners);
