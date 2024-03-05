@@ -71,6 +71,13 @@ class WertWidget {
     this.sendEvent('theme', data);
   }
 
+  close(): void {
+    document.body.removeChild(this.iframe);
+    document.body.style.overflow = '';
+    this.unListenWidget();
+    this.options.listeners?.close?.();
+  }
+
   private validateOptions(options: Options) {
     const maxNameLength = 40;
     const maxCategoryLength = 40;
@@ -120,6 +127,9 @@ class WertWidget {
 
     switch (event.data.type) {
       case 'loaded':
+        this.sendEvent('allow-redirect', {
+          redirectAllowed: false
+        });
         this.sendEvent('extra', this.options.extra);
         this.options.listeners?.[event.data.type]?.();
 
@@ -141,10 +151,7 @@ class WertWidget {
         break;
 
       case 'close':
-        document.body.removeChild(this.iframe);
-        document.body.style.overflow = '';
-        this.unListenWidget();
-        this.options.listeners?.[event.data.type]?.();
+        this.close();
 
         break;
 

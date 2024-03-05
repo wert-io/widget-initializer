@@ -18,6 +18,7 @@
       - [Events](#events)
   - [Widget class methods](#widget-class-methods)
     - [Showing the module](#showing-the-module)
+    - [Closing the module](#closing-the-module)
     - [Switching themes without reload](#switching-themes-without-reload)
     - [Adding event listeners](#adding-event-listeners)
     - [Removing event listeners](#removing-event-listeners)
@@ -94,7 +95,7 @@ const wertWidget = new WertWidget(options);
     <td><i>String</i></td>
     <td>-</td>
     <td><code>https://origin.us/item_id</code></td>
-    <td>Full url string (with protocol). Users will be redirected there from KYC emails to proceed to payment.</td>
+    <td>Full url string (with protocol). This link will be used for user redirection.</td>
   </tr>
 </table>
 
@@ -521,11 +522,7 @@ const widget = new WertWidget({
 | **updateTheme**          | Switches the theme without reload         |
 | **addEventListeners**    | Adds event listeners                      |
 | **removeEventListeners** | Removes event listeners                   |
-
-Please note that **there is no need anymore for a call of the destroy() method** and manual removal of the 
-iframe. Before, 
-the widget didn’t have the close button, so our partners had to manually remove it from the webpage. Since then, 
-we’ve improved the widget, and now **users can easily close the widget at their convenience**.
+| **close**                | Closes the widget                         |
 
 ### Showing the module
 
@@ -533,6 +530,14 @@ After creating an instance of the widget class, you can call the `open` method t
 
 ```
 wertWidget.open();
+```
+
+### Closing the module
+
+You can call the `close` method to close and remove the widget modal at any time:
+
+```
+wertWidget.close();
 ```
 
 ### Switching themes without reload
