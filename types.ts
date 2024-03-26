@@ -44,6 +44,7 @@ interface ItemInfo {
   name?: string;
   category?: string;
   seller?: string;
+  header?: string;
 }
 interface Wallet {
   name: string;
