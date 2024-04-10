@@ -368,6 +368,7 @@ You can add the following parameters to the **item_info** to display your NFT's 
 | name                | String | The name of the NFT                                                                    |
 | category            | String | The category of the NFT                                                                |
 | seller              | String | The name of the NFT's seller                                                           |
+| header              | String | The header to be shown instead of 'Buy token'                                          |
 
 #### Adding default wallets
 You can define the array of default **wallets** that will be prefilled when the user changes cryptocurrency. Non-valid addresses will be ignored.
