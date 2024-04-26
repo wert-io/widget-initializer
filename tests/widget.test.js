@@ -72,8 +72,36 @@ describe('open', () => {
       `<iframe style="width: 100%; height: 100%; bottom: 0px; right: 0px; position: fixed; z-index: 10000;" src="${widgetLink}" allow="camera *; microphone *" sandbox="allow-scripts allow-forms allow-popups allow-same-origin"></iframe>`
     );
   });
+  const SECONDS = 1000;
   test('the widget should load via link', () => {
     return expect(getScript(widgetLink)).resolves.not.toBe('');
+  }, 10 * SECONDS);
+});
+describe('close', () => {
+  test('should stop listening to the widget', () => {
+    widget = new WertWidget(MINIMUM_OPTIONS_FILLED);
+    jest.spyOn(widget, 'unListenWidget');
+    widget.open();
+    widget.close();
+
+    expect(widget.unListenWidget).toHaveBeenCalled();
+  });
+  test('should remove an iframe', () => {
+    widget = new WertWidget(MINIMUM_OPTIONS_FILLED);
+    widget.open();
+    widget.close();
+
+    expect(document.body.innerHTML).toBeFalsy();
+  });
+  test('should call a close listener', () => {
+    const listeners = {
+      close: jest.fn(),
+    };
+    widget = new WertWidget({ ...MINIMUM_OPTIONS_FILLED, listeners });
+    widget.open();
+    widget.close();
+
+    expect(listeners.close).toHaveBeenCalled();
   });
 });
 
@@ -298,9 +326,24 @@ describe('onMessage', () => {
 
     expect(widget.sendEvent).toHaveBeenCalledWith('extra', extraData);
   });
-  test('should stop listening to the widget and remove an iframe on the "close" event', () => {
+  test('should send an "allow-redirect" event when iframe sends "loaded" event', () => {
+    const allowRedirectData = {
+      redirectAllowed: false
+    };
     widget = new WertWidget({ ...MINIMUM_OPTIONS_FILLED });
-    jest.spyOn(widget, 'unListenWidget');
+    jest.spyOn(widget, 'sendEvent');
+    widget.open();
+
+    const eventData = { type: 'loaded' };
+    const messageEvent = new MessageEvent('message', { data: eventData });
+    widget.widgetWindow = null;
+    widget.onMessage(messageEvent);
+
+    expect(widget.sendEvent).toHaveBeenCalledWith('allow-redirect', allowRedirectData);
+  });
+  test('should call the close method on the "close" event', () => {
+    widget = new WertWidget({ ...MINIMUM_OPTIONS_FILLED });
+    jest.spyOn(widget, 'close');
     widget.open();
 
     const eventData = { type: 'close' };
@@ -308,8 +351,7 @@ describe('onMessage', () => {
     widget.widgetWindow = null;
     widget.onMessage(messageEvent);
 
-    expect(widget.unListenWidget).toHaveBeenCalled();
-    expect(document.body.innerHTML).toBeFalsy();
+    expect(widget.close).toHaveBeenCalled();
   });
   test('should not proceed with the wrong source', () => {
     const listeners = {
