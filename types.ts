@@ -3,7 +3,7 @@ export type Options = {
   partner_id: string;
   click_id?: string;
   origin?: string;
-  lang?: 'en' | 'fr';
+  lang?: string;
   address?: string;
   theme?: ThemeType;
   currency_amount?: number;
