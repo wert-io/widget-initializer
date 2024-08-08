@@ -36,6 +36,12 @@ class WertWidget {
                 case "error":
                     (_k = (_j = this.options.listeners) === null || _j === void 0 ? void 0 : _j[event.data.type]) === null || _k === void 0 ? void 0 : _k.call(_j, event.data.data);
                     break;
+                case "3ds-start":
+                    this.iframe.style.background = "#fff";
+                    break;
+                case "3ds-end":
+                    this.iframe.style.background = "transparent";
+                    break;
             }
         };
         this.validateOptions(options);
