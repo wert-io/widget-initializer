@@ -159,6 +159,14 @@ class WertWidget {
         this.options.listeners?.[event.data.type]?.(event.data.data);
 
         break;
+      case "3ds-start":
+        this.iframe.style.background = "#fff";
+
+        break;
+      case "3ds-end":
+        this.iframe.style.background = "transparent";
+
+        break;
     }
   }
 
