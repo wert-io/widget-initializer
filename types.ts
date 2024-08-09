@@ -93,11 +93,11 @@ export type EventTypes =
   | 'loaded'
   | 'payment-status'
   | 'position'
-  | 'rate-update'
-  | '3ds-start'
-  | '3ds-end';
+  | 'rate-update';
 
-interface WidgetEvent<EventType extends EventTypes> {
+export type InternalEventTypes = '3ds-start' | '3ds-end';
+
+interface WidgetEvent<EventType extends EventTypes | InternalEventTypes> {
   type: EventType;
 }
 
@@ -144,9 +144,9 @@ export type WidgetEvents =
   | LoadedEvent
   | PaymentStatusEvent
   | PositionEvent
-  | RateUpdateEvent
-  | Start3dsEvent
-  | End3dsEvent;
+  | RateUpdateEvent;
+
+export type InternalWidgetEvents = Start3dsEvent | End3dsEvent;
 
 type EventListeners<Events extends { type: string; data?: Record<string, unknown> }> = {
   [E in Events as E["type"]]?: E extends { data: Record<string, unknown> } ? (event: E["data"]) => any : () => any;

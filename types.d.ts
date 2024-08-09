@@ -63,8 +63,9 @@ export type SetThemeParameters = {
     theme?: ThemeType;
     colors?: ColorsOptions;
 };
-export type EventTypes = 'close' | 'error' | 'loaded' | 'payment-status' | 'position' | 'rate-update' | '3ds-start' | '3ds-end';
-interface WidgetEvent<EventType extends EventTypes> {
+export type EventTypes = 'close' | 'error' | 'loaded' | 'payment-status' | 'position' | 'rate-update';
+export type InternalEventTypes = '3ds-start' | '3ds-end';
+interface WidgetEvent<EventType extends EventTypes | InternalEventTypes> {
     type: EventType;
 }
 type CloseEvent = WidgetEvent<"close">;
@@ -102,7 +103,8 @@ interface RateUpdateEvent extends WidgetEvent<"rate-update"> {
 }
 type Start3dsEvent = WidgetEvent<"3ds-start">;
 type End3dsEvent = WidgetEvent<"3ds-end">;
-export type WidgetEvents = CloseEvent | ErrorEvent | LoadedEvent | PaymentStatusEvent | PositionEvent | RateUpdateEvent | Start3dsEvent | End3dsEvent;
+export type WidgetEvents = CloseEvent | ErrorEvent | LoadedEvent | PaymentStatusEvent | PositionEvent | RateUpdateEvent;
+export type InternalWidgetEvents = Start3dsEvent | End3dsEvent;
 type EventListeners<Events extends {
     type: string;
     data?: Record<string, unknown>;
