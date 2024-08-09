@@ -1,5 +1,5 @@
 import { version } from './package.json';
-import { EventTypes, Options, WidgetEvents, SetThemeParameters } from './types';
+import { EventTypes, Options, WidgetEvents, SetThemeParameters, InternalWidgetEvents } from './types';
 
 const externalStaticOrigin = 'https://javascript.wert.io';
 
@@ -119,7 +119,7 @@ class WertWidget {
     window.removeEventListener('message', this.onMessage);
   }
 
-  private onMessage = (event: MessageEvent<WidgetEvents>): void => {
+  private onMessage = (event: MessageEvent<WidgetEvents | InternalWidgetEvents>): void => {
     const thisWidgetEvent = event.source === this.widgetWindow;
     const isDataObject = typeof event.data === 'object';
 
