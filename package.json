@@ -1,6 +1,6 @@
 {
   "name": "@wert-io/widget-initializer",
-  "version": "6.3.1-beta.1",
+  "version": "6.3.1",
   "description": "WertWidget helper",
   "main": "index.js",
   "types": "index.d.ts",
