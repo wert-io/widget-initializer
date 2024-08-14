@@ -261,8 +261,8 @@ const wertWidget = new WertWidget(options);
     <td>optional</td>
     <td><i>String</i></td>
     <td><code>en</code></td>
-    <td><code>en</code>, <code>fr</code></td>
-    <td>Defines the language in the module.</td>
+    <td><a href="https://docs.wert.io/docs/fiat-onramp#widget-customization" target="_blank">List of supported languages</a></td>
+    <td>Defines the language in the module. Falls back to English.</td>
   </tr>
   <tr>
     <td><strong>is_crypto_hidden</strong></td>
