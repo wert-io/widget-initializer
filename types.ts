@@ -23,6 +23,7 @@ export type Options = {
   skip_init_navigation?: boolean;
   is_warranty_disabled?: boolean;
   is_crypto_hidden?: boolean;
+  card_billing_address?: CardBillingAddress;
 } & SCOptions &
   ColorsOptions & BordersOptions;
 
@@ -37,6 +38,13 @@ export interface ExtraOptions {
   wallets?: Wallet[];
 }
 
+interface CardBillingAddress {
+  country_code?: string;
+  city?: string;
+  state_code?: string;
+  post_code?: string;
+  street?: string;
+}
 interface ItemInfo {
   author_image_url?: string;
   author?: string;

@@ -143,7 +143,7 @@ class WertWidget {
         return `${this.options.origin}/${this.options.partner_id}/widget${parametersString}`;
     }
     getParametersString() {
-        return Object.entries(Object.assign(Object.assign(Object.assign({}, this.options), { widget_layout_mode: this.widget_layout_mode }), (this.await_data && { await_data: this.await_data }))).reduce((accum, [key, value]) => {
+        return Object.entries(Object.assign(Object.assign(Object.assign({}, this.options), { card_billing_address: this.options.card_billing_address && JSON.stringify(this.options.card_billing_address), widget_layout_mode: this.widget_layout_mode }), (this.await_data && { await_data: this.await_data }))).reduce((accum, [key, value]) => {
             if (value === undefined || typeof value === 'object' || ['origin', 'partner_id'].includes(key)) {
                 return accum;
             }

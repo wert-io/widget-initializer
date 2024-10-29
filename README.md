@@ -243,6 +243,14 @@ const wertWidget = new WertWidget(options);
     <td><code>+11014321111</code> / <code>11014321111</code></td>
     <td>User's phone number in the international format (E. 164 standard). Can be with or without +.</td>
   </tr>
+  <tr>
+    <td><strong>card_billing_address</strong></td>
+    <td>optional</td>
+    <td><i>String</i></td>
+    <td>-</td>
+    <td>See the <a href="#adding-card-billing-address">card billing address object structure</a></td>
+    <td>User's card billing address data</td>
+  </tr>
 </table>
 
 ### Appearance and restrictions
@@ -380,6 +388,19 @@ The wallet object structure:
 | name     | String | Example: `ETH`. See the [list of supported currencies](https://docs.wert.io/docs/supported-coins-and-blockchains).      |
 | network  | String | Example: `ethereum`. See the [list of supported currencies](https://docs.wert.io/docs/supported-coins-and-blockchains). |
 | address  | String | The wallet address. Non-valid addresses will be ignored.                                                                |
+
+#### Adding card billing address
+You can pass user's card billing address. This data will appear on the 'Enter your card details' or ‘Add a new card’ screen for users who have no added card yet. If a user already has a card, then when adding another card, the card billing address data is not prefilled.
+
+The card billing address object structure:
+
+| Property     | Type   | Description                                     |
+|--------------|--------|-------------------------------------------------|
+| country_code | String | card billing address alpha2 country code        |
+| city         | String | card billing address city                       |
+| state_code   | String | card billing address alpha2 state code (For US) |
+| post_code    | String | card billing address postal code                |
+| street       | String | card billing address street                     |
 
 ### Listeners
 

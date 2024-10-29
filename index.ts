@@ -188,6 +188,7 @@ class WertWidget {
   private getParametersString(): string {
     return Object.entries({
       ...this.options,
+      card_billing_address: this.options.card_billing_address && JSON.stringify(this.options.card_billing_address),
       widget_layout_mode: this.widget_layout_mode,
       ...(this.await_data && { await_data: this.await_data })
     }).reduce(
