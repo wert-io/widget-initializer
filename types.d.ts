@@ -22,7 +22,14 @@ export type Options = {
     skip_init_navigation?: boolean;
     is_warranty_disabled?: boolean;
     is_crypto_hidden?: boolean;
-} & SCOptions & ColorsOptions & BordersOptions;
+} & CardBillingAddressOptions & SCOptions & ColorsOptions & BordersOptions;
+type CardBillingAddressOptions = {
+    card_country_code?: string;
+    card_city?: string;
+    card_state_code?: string;
+    card_post_code?: string;
+    card_street?: string;
+};
 type SCOptions = {
     sc_address?: string;
     sc_input_data?: string;
