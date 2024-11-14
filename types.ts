@@ -23,6 +23,7 @@ export type Options = {
   skip_init_navigation?: boolean;
   is_warranty_disabled?: boolean;
   is_crypto_hidden?: boolean;
+  session_id?: string;
 } & CardBillingAddressOptions & SCOptions &
   ColorsOptions & BordersOptions;
 
