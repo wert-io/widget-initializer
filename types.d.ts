@@ -22,6 +22,7 @@ export type Options = {
     skip_init_navigation?: boolean;
     is_warranty_disabled?: boolean;
     is_crypto_hidden?: boolean;
+    session_id?: string;
 } & SCOptions & ColorsOptions & BordersOptions;
 type SCOptions = {
     sc_address?: string;
