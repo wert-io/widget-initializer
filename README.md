@@ -243,6 +243,46 @@ const wertWidget = new WertWidget(options);
     <td><code>+11014321111</code> / <code>11014321111</code></td>
     <td>User's phone number in the international format (E. 164 standard). Can be with or without +.</td>
   </tr>
+  <tr>
+    <td><strong>card_country_code</strong></td>
+    <td>optional</td>
+    <td><i>String</i></td>
+    <td>-</td>
+    <td><code>US</code></td>
+    <td>Card billing address alpha2 country code.</td>
+  </tr>
+  <tr>
+    <td><strong>card_city</strong></td>
+    <td>optional</td>
+    <td><i>String</i></td>
+    <td>-</td>
+    <td><code>New York</code></td>
+    <td>Card billing address city.</td>
+  </tr>
+  <tr>
+    <td><strong>card_state_code</strong></td>
+    <td>optional</td>
+    <td><i>String</i></td>
+    <td>-</td>
+    <td><code>NY</code></td>
+    <td>Card billing address alpha2 state code (For US).</td>
+  </tr>
+  <tr>
+    <td><strong>card_post_code</strong></td>
+    <td>optional</td>
+    <td><i>String</i></td>
+    <td>-</td>
+    <td><code>12345</code></td>
+    <td>Card billing address postal code.</td>
+  </tr>
+  <tr>
+    <td><strong>card_street</strong></td>
+    <td>optional</td>
+    <td><i>String</i></td>
+    <td>-</td>
+    <td><code>### Church St</code></td>
+    <td>Card billing address street.</td>
+  </tr>
 </table>
 
 ### Appearance and restrictions
