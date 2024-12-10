@@ -33,7 +33,7 @@ class WertWidget {
     document.body.style.overflow = 'hidden';
 
     this.iframe.setAttribute('src', this.getEmbedUrl());
-    this.iframe.setAttribute('allow', 'camera *; microphone *');
+    this.iframe.setAttribute('allow', 'camera *; microphone *; payment');
     this.iframe.setAttribute(
       'sandbox',
       'allow-scripts allow-forms allow-popups allow-same-origin'
