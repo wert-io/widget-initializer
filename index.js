@@ -19,6 +19,7 @@ class WertWidget {
                         redirectAllowed: false
                     });
                     this.sendEvent('extra', this.options.extra);
+                    this.sendEvent('parent-hostname', { hostname: window.location.hostname });
                     (_b = (_a = this.options.listeners) === null || _a === void 0 ? void 0 : _a[event.data.type]) === null || _b === void 0 ? void 0 : _b.call(_a);
                     break;
                 case "payment-status":

@@ -131,6 +131,7 @@ class WertWidget {
           redirectAllowed: false
         });
         this.sendEvent('extra', this.options.extra);
+        this.sendEvent('parent-hostname', { hostname: window.location.hostname });
         this.options.listeners?.[event.data.type]?.();
 
         break;
