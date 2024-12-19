@@ -24,6 +24,7 @@ export type Options = {
   is_warranty_disabled?: boolean;
   is_crypto_hidden?: boolean;
   session_id?: string;
+  terms_on_payment?: boolean;
 } & CardBillingAddressOptions & SCOptions &
   ColorsOptions & BordersOptions;
 
