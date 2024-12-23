@@ -1,4 +1,5 @@
 "use strict";
+const package_json_1 = require("./package.json");
 const externalStaticOrigin = 'https://javascript.wert.io';
 class WertWidget {
     constructor(options) {
@@ -65,6 +66,7 @@ class WertWidget {
         this.iframe.setAttribute('src', this.getEmbedUrl());
         this.iframe.setAttribute('allow', 'camera *; microphone *; payment');
         this.iframe.setAttribute('sandbox', 'allow-scripts allow-forms allow-popups allow-same-origin');
+        this.iframe.setAttribute('data-version', package_json_1.version);
         document.body.appendChild(this.iframe);
         this.widgetWindow = this.iframe.contentWindow;
         this.listenWidget();

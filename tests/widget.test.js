@@ -13,6 +13,7 @@ const {
   COMMODITIES,
   WALLETS,
 } = require('./mocks/options.js');
+const { version } = require('../package.json');
 
 let widget;
 let widgetLink;
@@ -69,7 +70,7 @@ describe('open', () => {
       document.body.children[0].contentWindow
     );
     expect(document.body.innerHTML).toBe(
-      `<iframe style="width: 100%; height: 100%; bottom: 0px; right: 0px; position: fixed; z-index: 10000;" src="${widgetLink}" allow="camera *; microphone *; payment" sandbox="allow-scripts allow-forms allow-popups allow-same-origin"></iframe>`
+      `<iframe style="width: 100%; height: 100%; bottom: 0px; right: 0px; position: fixed; z-index: 10000;" src="${widgetLink}" allow="camera *; microphone *; payment" sandbox="allow-scripts allow-forms allow-popups allow-same-origin" data-version="${version}"></iframe>`
     );
   });
   const SECONDS = 1000;
