@@ -38,6 +38,7 @@ class WertWidget {
       'sandbox',
       'allow-scripts allow-forms allow-popups allow-same-origin'
     );
+    this.iframe.setAttribute('data-version', version);
 
     document.body.appendChild(this.iframe);
 
