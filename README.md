@@ -317,18 +317,6 @@ const wertWidget = new WertWidget(options);
     </td>
   </tr>
   <tr>
-    <td><strong>is_warranty_disabled</strong></td>
-    <td>optional</td>
-    <td><i>Boolean</i></td>
-    <td><code>undefined</code></td>
-    <td><code>true</code></td>
-    <td>
-      Allows to disable NFT warranty option for a specific widget mount, even if it is enabled for your partner_id and smart contract.
-      <br/><br/>
-      <i>- Please check the <a href="#boolean-usage">boolean usage note</a></i>
-    </td>
-  </tr>
-  <tr>
     <td><strong>skip_init_navigation</strong></td>
     <td>optional</td>
     <td><i>Boolean</i></td>
