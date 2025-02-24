@@ -6,6 +6,7 @@ export type Options = {
   lang?: string;
   address?: string;
   theme?: ThemeType;
+  brand_color?: string;
   currency_amount?: number;
   country_of_residence?: string;
   state_of_residence?: string;
@@ -25,8 +26,7 @@ export type Options = {
   is_crypto_hidden?: boolean;
   session_id?: string;
   terms_on_payment?: boolean;
-} & CardBillingAddressOptions & SCOptions &
-  ColorsOptions & BordersOptions;
+} & CardBillingAddressOptions & SCOptions;
 
 type CardBillingAddressOptions = {
   card_country_code?: string;
@@ -61,38 +61,11 @@ interface Wallet {
   address: string;
 }
 
-// Theme types
-type ColorPrefix = 'color_';
-type ElementWithColor =
-  | 'background'
-  | 'buttons'
-  | 'buttons_text'
-  | 'secondary_buttons'
-  | 'secondary_buttons_text'
-  | 'main_text'
-  | 'secondary_text'
-  | 'icons'
-  | 'links'
-  | 'success'
-  | 'warning'
-  | 'error';
-type ElementWithColorType = `${ColorPrefix}${ElementWithColor}`;
-type ColorsOptions = {
-  [key in ElementWithColorType]?: string;
-};
-
-type BorderSuffix = '_border_radius';
-type ElementWithBorders = 'buttons' | 'secondary_buttons';
-type ElementWithBordersType = `${ElementWithBorders}${BorderSuffix}`;
-type BordersOptions = {
-  [key in ElementWithBordersType]?: number;
-}
-
 type ThemeType = 'dark' | undefined;
 
 export type SetThemeParameters = {
   theme?: ThemeType;
-  colors?: ColorsOptions;
+  brand_color?: string;
 };
 
 // Event Types
@@ -123,7 +96,7 @@ interface PaymentStatusEvent extends WidgetEvent<"payment-status"> {
     status: string;
     payment_id: string;
     order_id: string;
-    tx_id: string;
+    tx_id?: string;
   };
 }
 

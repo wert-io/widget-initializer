@@ -350,39 +350,13 @@ const wertWidget = new WertWidget(options);
   </tr>
   <tr>
     <td>
-      <strong>
-        buttons_border_radius <br/>
-        secondary_buttons_border_radius <br/>
-      </strong>
-    </td>
-    <td>optional</td>
-    <td><i>Number</i></td>
-    <td><code>4</code></td>
-    <td>-</td>
-    <td>Custom radius of elements (in pixels).</td>
-  </tr>
-  <tr>
-    <td>
-      <strong>
-        color_background <br/>
-        color_buttons <br/>
-        color_buttons_text <br/>
-        color_secondary_buttons <br/>
-        color_secondary_buttons_text <br/>
-        color_main_text <br/>
-        color_secondary_text <br/>
-        color_icons <br/>
-        color_links <br/>
-        color_success <br/>
-        color_warning <br/>
-        color_error <br/>
-      </strong>
+      <strong>brand_color</strong>
     </td>
     <td>optional</td>
     <td><i>String</i></td>
-    <td>-</td>
-    <td><code>red</code> / <code>#FF0000</code> / <code>rgb(255,255,0)</code></td>
-    <td>Custom colors of elements. Can be in any suitable format (string, HEX, rgb etc.).</td>
+    <td><code>undefined</code></td>
+    <td><code>#FF0000</code></td>
+    <td>Custom brand color that affects the following components: primary buttons, tooltips, steppers, tabs, checkboxes, toasts, pie countdowns.</td>
   </tr>
 </table>
 
@@ -580,10 +554,7 @@ To switch to another theme without reloading the whole widget you can use the `u
 ```
 wertWidget.updateTheme({
   theme: 'dark', // undefined — for the default light theme 
-  colors: {
-    // supported colors listed in options table above 
-    color_buttons: 'red',
-  },
+  brand_color: '#FF0000',
 });
 ```
 
