@@ -21,7 +21,6 @@ export declare type Options = {
     extra?: ExtraOptions;
     listeners?: EventListeners<WidgetEvents>;
     skip_init_navigation?: boolean;
-    is_warranty_disabled?: boolean;
     is_crypto_hidden?: boolean;
     session_id?: string;
     terms_on_payment?: boolean;
