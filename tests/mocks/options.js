@@ -15,7 +15,6 @@ const ALL_OPTIONS_FILLED = {
   phone: '+11014321111',
   email: 'test@test.com',
   skip_init_navigation: 'true', 
-  is_warranty_disabled: 'true', 
   is_crypto_hidden: 'true',
   sc_address: 'test-sc-address',
   sc_input_data: 'test-sc-input-data',
