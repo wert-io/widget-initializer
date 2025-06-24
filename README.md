@@ -153,7 +153,7 @@ const wertWidget = new WertWidget(options);
     <td><i>String</i></td>
     <td>-</td>
     <td>-</td>
-    <td>User's wallet address. The address is checked for validity based on the chosen <strong>commodity</strong>. <code>BTC</code> address format is used by default. If the address is invalid, this option is ignored.</td>
+    <td>User's wallet address. The address is checked for validity based on the chosen <strong>commodity</strong>. <code>BTC</code> address format is used by default. If the address is invalid, this option is ignored. Will be ignored if the session has <code>"flow_type": "simple_full_restrict"</code> or if it was passed to the session with <code>"flow_type": "simple"</code>.</td>
   </tr>
   <tr>
     <td><strong>commodity</strong></td>
@@ -161,7 +161,7 @@ const wertWidget = new WertWidget(options);
     <td><i>String</i></td>
     <td><code>BTC</code></td>
     <td><a href="https://docs.wert.io/docs/supported-coins-and-blockchains" target="_blank">List of supported currencies</a></td>
-    <td>Default commodity that will be selected in the module.</td>
+    <td>Default commodity that will be selected in the module. Will be ignored if the session has <code>"flow_type": "simple_full_restrict"</code> or if it was passed to the session with <code>"flow_type": "simple"</code>.</td>
   </tr>
   <tr>
     <td><strong>network</strong></td>
@@ -169,7 +169,7 @@ const wertWidget = new WertWidget(options);
     <td><i>String</i></td>
     <td><code>bitcoin</code></td>
     <td><a href="https://docs.wert.io/docs/supported-coins-and-blockchains" target="_blank">List of supported currencies</a></td>
-    <td>Network that will be selected for default commodity.</td>
+    <td>Network that will be selected for default commodity. Will be ignored if the session has <code>"flow_type": "simple_full_restrict"</code> or if it was passed to the session with <code>"flow_type": "simple"</code>.</td>
   </tr>
   <tr>
     <td><strong>commodity_amount</strong></td>
@@ -177,7 +177,7 @@ const wertWidget = new WertWidget(options);
     <td><i>Number</i></td>
     <td>-</td>
     <td>-</td>
-    <td>Default commodity amount that will be pre-filled in the module. This option is ignored if the <strong>currency_amount</strong> has been set.</td>
+    <td>Default commodity amount that will be pre-filled in the module. This option is ignored if the <strong>currency_amount</strong> has been set. Will be ignored if the session has <code>"flow_type": "simple_full_restrict"</code> or if it was passed to the session with <code>"flow_type": "simple"</code>.</td>
   </tr>
     <tr>
     <td><strong>commodities</strong></td>
@@ -185,7 +185,7 @@ const wertWidget = new WertWidget(options);
     <td><i>String</i></td>
     <td>-</td>
     <td><a href="https://docs.wert.io/docs/supported-coins-and-blockchains" target="_blank">List of supported currencies</a></td>
-    <td>Commodities that will be available in the module. By default, all commodities are present. Should contain a stringified JSON of an array of objects with commodity and network fields. Fields are filled with the same values as a default commodity and network, e.g. <code>JSON.stringify([{ commodity: 'USDC', network: 'ethereum' }])</code>.</td>
+    <td>Commodities that will be available in the module. By default, all commodities are present. Should contain a stringified JSON of an array of objects with commodity and network fields. Fields are filled with the same values as a default commodity and network, e.g. <code>JSON.stringify([{ commodity: 'USDC', network: 'ethereum' }])</code>. Will be ignored if the session has <code>"flow_type": "simple_full_restrict"</code>.</td>
   </tr>
   <tr>
     <td><strong>currency_amount</strong></td>
@@ -193,7 +193,7 @@ const wertWidget = new WertWidget(options);
     <td><i>Number</i></td>
     <td>-</td>
     <td>-</td>
-    <td>Default currency amount that can be pre-filled in the module.</td>
+    <td>Default currency amount that can be pre-filled in the module. Will be ignored if the session has <code>"flow_type": "simple_full_restrict"</code> or if it was passed to the session with <code>"flow_type": "simple"</code>.</td>
   </tr>
   <tr>
     <td><strong>country_of_residence</strong></td>
@@ -241,7 +241,7 @@ const wertWidget = new WertWidget(options);
     <td><i>String</i></td>
     <td>-</td>
     <td><code>+11014321111</code> / <code>11014321111</code></td>
-    <td>User's phone number in the international format (E. 164 standard). Can be with or without +.</td>
+    <td>User's phone number in the international format (E. 164 standard). Can be with or without +. Will be ignored if <code>user_id</code> was passed to the session.</td>
   </tr>
   <tr>
     <td><strong>card_country_code</strong></td>
@@ -373,7 +373,7 @@ You can add the following parameters to the **item_info** to display your NFT's 
 | header              | String | The header to be shown instead of 'Buy token'                                          |
 
 #### Adding default wallets
-You can define the array of default **wallets** that will be prefilled when the user changes cryptocurrency. Non-valid addresses will be ignored.
+You can define the array of default **wallets** that will be prefilled when the user changes cryptocurrency. The array will be ignored if the session has `"flow_type": "simple_full_restrict"` or if `address` was passed to the session with `"flow_type": "simple"`. Non-valid addresses will be ignored. 
 
 The wallet object structure:
 
