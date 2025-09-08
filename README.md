@@ -102,7 +102,7 @@ const wertWidget = new WertWidget(options);
     <td>optional</td>
     <td><i>String</i></td>
     <td><code>card</code></td>
-    <td><code>card</code> <card>apple-pay</card> <card>google-pay</card></td>
+    <td><code>card</code><br/><code>apple-pay</code><br/><code>google-pay</code></td>
     <td>If set, this method will be <b>pre-selected and shown first</b> in the list of available methods. Other methods will still be available unless <code>payment_method_restriction</code> is used.</td>
   </tr>
   <tr>
