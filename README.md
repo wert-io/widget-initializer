@@ -103,7 +103,7 @@ const wertWidget = new WertWidget(options);
     <td><i>String</i></td>
     <td><code>card</code></td>
     <td><code>card</code> <card>apple-pay</card> <card>google-pay</card></td>
-    <td>Without <code>payment_method_restriction</code> being set works like preferred payment method. Specified method will be preselected & displayed first in a list.</td>
+    <td>If set, this method will be <b>pre-selected and shown first</b> in the list of available methods. Other methods will still be available unless <code>payment_method_restriction</code> is used.</td>
   </tr>
   <tr>
     <td><strong>payment_method_restriction</strong></td>
@@ -111,7 +111,7 @@ const wertWidget = new WertWidget(options);
     <td><i>Boolean</i></td>
     <td><code>false</code></td>
     <td><code>true</code></td>
-    <td>If set to <code>true</code> and specified payment method (in <code>payment_method</code> parameter) is available it will be the only option for user. If it's not available widget falls back to the default state, where all available methods are shown.</td>
+    <td>If <code>true</code>, the widget will show <b>only</b> the method specified in <code>payment_method</code> (if it’s available). If that method isn’t available, the widget will fall back to showing all available methods.</td>
   </tr>
 </table>
 
