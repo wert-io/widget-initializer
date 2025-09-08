@@ -26,6 +26,8 @@ export type Options = {
   is_crypto_hidden?: boolean;
   session_id?: string;
   terms_on_payment?: boolean;
+  payment_method?: string;
+  payment_method_restriction?: boolean;
 } & CardBillingAddressOptions & SCOptions;
 
 type CardBillingAddressOptions = {
