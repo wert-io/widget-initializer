@@ -179,13 +179,21 @@ const wertWidget = new WertWidget(options);
     <td>-</td>
     <td>Default commodity amount that will be pre-filled in the module. This option is ignored if the <strong>currency_amount</strong> has been set. Will be ignored if the session has <code>"flow_type": "simple_full_restrict"</code> or if it was passed to the session with <code>"flow_type": "simple"</code>.</td>
   </tr>
-    <tr>
+  <tr>
     <td><strong>commodities</strong></td>
     <td>optional</td>
     <td><i>String</i></td>
     <td>-</td>
     <td><a href="https://docs.wert.io/docs/supported-coins-and-blockchains" target="_blank">List of supported currencies</a></td>
     <td>Commodities that will be available in the module. By default, all commodities are present. Should contain a stringified JSON of an array of objects with commodity and network fields. Fields are filled with the same values as a default commodity and network, e.g. <code>JSON.stringify([{ commodity: 'USDC', network: 'ethereum' }])</code>. Will be ignored if the session has <code>"flow_type": "simple_full_restrict"</code>.</td>
+  </tr>
+  <tr>
+    <td><strong>currencies</strong></td>
+    <td>optional</td>
+    <td><i>String</i></td>
+    <td>-</td>
+    <td><a href="https://docs.wert.io/docs/supported-coins-and-blockchains" target="_blank">List of supported currencies</a></td>
+    <td>?</td>
   </tr>
   <tr>
     <td><strong>currency_amount</strong></td>

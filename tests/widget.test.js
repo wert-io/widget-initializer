@@ -11,6 +11,7 @@ const {
   ALL_OPTIONS_FILLED,
   MINIMUM_OPTIONS_FILLED,
   COMMODITIES,
+  CURRENCIES,
   WALLETS,
 } = require('./mocks/options.js');
 const { version } = require('../package.json');
@@ -205,14 +206,17 @@ describe('getEmbedUrl & getParametersString', () => {
     widget = new WertWidget({
       ...MINIMUM_OPTIONS_FILLED,
       commodities: JSON.stringify(COMMODITIES),
+      currencies: JSON.stringify(CURRENCIES),
     });
     widgetLink = widget.getEmbedUrl();
 
     const searchParams = new URLSearchParams(widgetLink.split('?')[1]);
     const commoditiesFromUrl = JSON.parse(searchParams.get('commodities'));
+    const currenciesFromUrl = JSON.parse(searchParams.get('currencies'));
 
     const arraysAreEqual =
-      JSON.stringify(COMMODITIES) === JSON.stringify(commoditiesFromUrl);
+      JSON.stringify(COMMODITIES) === JSON.stringify(commoditiesFromUrl)
+      && JSON.stringify(CURRENCIES) === JSON.stringify(currenciesFromUrl);
 
     expect(arraysAreEqual).toBe(true);
   });

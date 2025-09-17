@@ -15,6 +15,7 @@ export declare type Options = {
     commodity_amount?: number;
     network?: string;
     commodities?: string;
+    currencies?: string;
     phone?: string;
     email?: string;
     redirect_url?: string;
