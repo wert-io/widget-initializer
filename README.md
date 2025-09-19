@@ -97,6 +97,22 @@ const wertWidget = new WertWidget(options);
     <td><code>https://origin.us/item_id</code></td>
     <td>Full url string (with protocol). This link will be used for user redirection.</td>
   </tr>
+  <tr>
+    <td><strong>payment_method</strong></td>
+    <td>optional</td>
+    <td><i>String</i></td>
+    <td><code>card</code></td>
+    <td><code>card</code><br/><code>apple-pay</code><br/><code>google-pay</code></td>
+    <td>If set, this method will be <b>pre-selected and shown first</b> in the list of available methods. Other methods will still be available unless <code>payment_method_restriction</code> is used.</td>
+  </tr>
+  <tr>
+    <td><strong>payment_method_restriction</strong></td>
+    <td>optional</td>
+    <td><i>Boolean</i></td>
+    <td><code>false</code></td>
+    <td><code>true</code></td>
+    <td>If <code>true</code>, the widget will show <b>only</b> the method specified in <code>payment_method</code> (if it’s available). If that method isn’t available, the widget will fall back to showing all available methods.</td>
+  </tr>
 </table>
 
 ### Smart contract options
