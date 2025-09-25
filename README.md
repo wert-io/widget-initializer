@@ -193,7 +193,7 @@ const wertWidget = new WertWidget(options);
     <td><i>String</i></td>
     <td>-</td>
     <td><a href="https://docs.wert.io/docs/supported-coins-and-blockchains" target="_blank">List of supported currencies</a></td>
-    <td>?</td>
+    <td>Set currencies to control what appears in the widget; if empty, invalid, or not passed, all supported currencies are shown, and in <code>simple_full_restrict</code> sessions a mismatched currency will result in a "Purchase can’t be made" message. Example: <code>JSON.stringify(['EUR'])</code></td>
   </tr>
   <tr>
     <td><strong>currency_amount</strong></td>
