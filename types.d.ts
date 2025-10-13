@@ -19,6 +19,7 @@ export declare type Options = {
     phone?: string;
     email?: string;
     redirect_url?: string;
+    support_url?: string;
     extra?: ExtraOptions;
     listeners?: EventListeners<WidgetEvents>;
     skip_init_navigation?: boolean;

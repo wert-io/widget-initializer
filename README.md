@@ -98,6 +98,14 @@ const wertWidget = new WertWidget(options);
     <td>Full url string (with protocol). This link will be used for user redirection.</td>
   </tr>
   <tr>
+    <td><strong>support_url</strong></td>
+    <td>optional</td>
+    <td><i>String</i></td>
+    <td>-</td>
+    <td><code>https://partner.com/support</code></td>
+    <td>Full url string (with protocol). This link will be used for helping users with failed orders.</td>
+  </tr>
+  <tr>
     <td><strong>payment_method</strong></td>
     <td>optional</td>
     <td><i>String</i></td>
