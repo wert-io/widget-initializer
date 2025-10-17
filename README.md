@@ -315,6 +315,14 @@ const wertWidget = new WertWidget(options);
     <td><code>### Church St</code></td>
     <td>Card billing address street.</td>
   </tr>
+  <tr>
+    <td><strong>display_currency</strong></td>
+    <td>optional</td>
+    <td><i>String</i></td>
+    <td>-</td>
+    <td><code>AUD</code></td>
+    <td>ISO currency code to display an estimated approximate amount in that currency next to the order amount. Must differ from the currencies supported in the widget.</td>
+  </tr>
 </table>
 
 ### Appearance and restrictions
