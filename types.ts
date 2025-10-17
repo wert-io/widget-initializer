@@ -29,6 +29,7 @@ export type Options = {
   terms_on_payment?: boolean;
   payment_method?: string;
   payment_method_restriction?: boolean;
+  display_currency?: string;
 } & CardBillingAddressOptions & SCOptions;
 
 type CardBillingAddressOptions = {

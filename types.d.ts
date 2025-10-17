@@ -28,6 +28,7 @@ export declare type Options = {
     terms_on_payment?: boolean;
     payment_method?: string;
     payment_method_restriction?: boolean;
+    display_currency?: string;
 } & CardBillingAddressOptions & SCOptions;
 declare type CardBillingAddressOptions = {
     card_country_code?: string;
