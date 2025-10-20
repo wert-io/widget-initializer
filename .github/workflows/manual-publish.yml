@@ -2,14 +2,35 @@ name: manual publish to npmjs.com and GitHub Pages
 
 on: [workflow_dispatch]
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   npmjs_deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - uses: JS-DevTools/npm-publish@v1
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-node@v4
       with:
-        token: ${{ secrets.NPM_TOKEN }}
+        node-version: '20'
+        registry-url: 'https://registry.npmjs.org'
+
+    - name: Update npm
+      run: npm install -g npm@latest
+
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Build
+      run: npm run build
+    
+    - name: Run tests
+      run: npm test
+
+    - name: Publish to npm (trusted publishing)
+      run: npm publish
  
   gh_pages_deploy:
     runs-on: ubuntu-latest
