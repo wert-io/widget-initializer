@@ -38,8 +38,8 @@ jobs:
           echo "Package $NPM_NAME@$NPM_VERSION already exists, skipping publish."
           echo "publish=false" >> $GITHUB_ENV
         else
+          echo "Package $NPM_NAME@$NPM_VERSION not found - will publish."
           echo "publish=true" >> $GITHUB_ENV
-          npm view "$NPM_NAME@$NPM_VERSION"
         fi
     - name: Publish to npm (trusted publishing)
       if: env.publish == 'true'
