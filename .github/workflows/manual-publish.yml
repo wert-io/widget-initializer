@@ -29,22 +29,32 @@ jobs:
     - name: Run tests
       run: npm test
 
-    - name: Publish to npm (trusted publishing)
-      run: npm publish
+    - name: Chaek version in repository
+      run: |
+        NPM_NAME=$(node -p "require('./package.json').name")
+        NPM_VERSION=$(node -p "require('./package.json').version")
+        echo "Check release version $NPM_NAME@$NPM_VERSION"
+
+        npm view "$NPM_NAME@$NPM_VERSION"
+        
+      
+
+    # - name: Publish to npm (trusted publishing)
+    #   run: npm publish
  
-  gh_pages_deploy:
-    runs-on: ubuntu-latest
-    #runs-on: self-hosted
-    steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 16
-      - run: npm install
-      - run: npm run build-script
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          keep_files: true
+  # gh_pages_deploy:
+  #   runs-on: ubuntu-latest
+  #   #runs-on: self-hosted
+  #   steps:
+  #     - uses: actions/checkout@v1
+  #     - uses: actions/setup-node@v1
+  #       with:
+  #         node-version: 16
+  #     - run: npm install
+  #     - run: npm run build-script
+  #     - name: Deploy
+  #       uses: peaceiris/actions-gh-pages@v3
+  #       with:
+  #         github_token: ${{ secrets.GITHUB_TOKEN }}
+  #         publish_dir: ./dist
+  #         keep_files: true
