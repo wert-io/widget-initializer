@@ -34,10 +34,16 @@ jobs:
         NPM_NAME=$(node -p "require('./package.json').name")
         NPM_VERSION=$(node -p "require('./package.json').version")
         echo "Check release version $NPM_NAME@$NPM_VERSION"
-
-        npm view "$NPM_NAME@$NPM_VERSION"
+        if npm view "$NPM_NAME@$NPM_VERSION" > /dev/null 2>&1; then
+          echo "Package $NPM_NAME@$NPM_VERSION already exists, skipping publish."
+          echo "publish=false" >> $GITHUB_ENV
+        else
+          echo "publish=true" >> $GITHUB_ENV
+          npm view "$NPM_NAME@$NPM_VERSION"
         
-      
+    - name: Publish to npm (trusted publishing)
+      if: env.publish == 'true'
+      run: echo "Package publish."
 
     # - name: Publish to npm (trusted publishing)
     #   run: npm publish
