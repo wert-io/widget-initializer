@@ -40,7 +40,7 @@ jobs:
         else
           echo "publish=true" >> $GITHUB_ENV
           npm view "$NPM_NAME@$NPM_VERSION"
-        
+        fi
     - name: Publish to npm (trusted publishing)
       if: env.publish == 'true'
       run: echo "Package publish."
