@@ -41,26 +41,24 @@ jobs:
           echo "Package $NPM_NAME@$NPM_VERSION not found - will publish."
           echo "publish=true" >> $GITHUB_ENV
         fi
+
     - name: Publish to npm (trusted publishing)
       if: env.publish == 'true'
-      run: echo "Package publish."
-
-    # - name: Publish to npm (trusted publishing)
-    #   run: npm publish
+      run: npm publish
  
-  # gh_pages_deploy:
-  #   runs-on: ubuntu-latest
-  #   #runs-on: self-hosted
-  #   steps:
-  #     - uses: actions/checkout@v1
-  #     - uses: actions/setup-node@v1
-  #       with:
-  #         node-version: 16
-  #     - run: npm install
-  #     - run: npm run build-script
-  #     - name: Deploy
-  #       uses: peaceiris/actions-gh-pages@v3
-  #       with:
-  #         github_token: ${{ secrets.GITHUB_TOKEN }}
-  #         publish_dir: ./dist
-  #         keep_files: true
+  gh_pages_deploy:
+    runs-on: ubuntu-latest
+    #runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 16
+      - run: npm install
+      - run: npm run build-script
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          keep_files: true
