@@ -17,6 +17,7 @@ export declare type Options = {
     commodities?: string;
     currencies?: string;
     phone?: string;
+    user_id?: string;
     email?: string;
     redirect_url?: string;
     support_url?: string;
