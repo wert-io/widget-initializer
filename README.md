@@ -276,6 +276,14 @@ const wertWidget = new WertWidget(options);
     <td>User's phone number in the international format (E. 164 standard). Can be with or without +. Will be ignored if <code>user_id</code> was passed to the session.</td>
   </tr>
   <tr>
+    <td><strong>user_id</strong></td>
+    <td>optional</td>
+    <td><i>String</i></td>
+    <td>-</td>
+    <td><code>01K88HMYQAK47DSWB9RM3ZBNTP</code></td>
+    <td>User's ID. ?</td>
+  </tr>
+  <tr>
     <td><strong>card_country_code</strong></td>
     <td>optional</td>
     <td><i>String</i></td>
