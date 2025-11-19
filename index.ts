@@ -133,6 +133,7 @@ class WertWidget {
         });
         this.sendEvent('extra', this.options.extra);
         this.sendEvent('parent-hostname', { hostname: window.location.hostname });
+        this.sendEvent('version', { version });
         this.options.listeners?.[event.data.type]?.();
 
         break;

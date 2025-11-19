@@ -21,6 +21,7 @@ class WertWidget {
                     });
                     this.sendEvent('extra', this.options.extra);
                     this.sendEvent('parent-hostname', { hostname: window.location.hostname });
+                    this.sendEvent('version', { version: package_json_1.version });
                     (_b = (_a = this.options.listeners) === null || _a === void 0 ? void 0 : _a[event.data.type]) === null || _b === void 0 ? void 0 : _b.call(_a);
                     break;
                 case "payment-status":
