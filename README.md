@@ -281,7 +281,7 @@ const wertWidget = new WertWidget(options);
     <td><i>String</i></td>
     <td>-</td>
     <td><code>01K88HMYQAK47DSWB9RM3ZBNTP</code></td>
-    <td>User's ID. ?</td>
+    <td>Applicable for NFT checkout only. Upon loading the Widget with user_id, sms with OTP code is automatically sent to the corresponding phone number. A user lands straight to ‘Enter OTP’ code and proceeds to log in.</td>
   </tr>
   <tr>
     <td><strong>card_country_code</strong></td>
