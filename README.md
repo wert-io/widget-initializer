@@ -506,6 +506,7 @@ const widget = new WertWidget({
     payment_id: String 
     order_id: String
     tx_id: String // if available
+    external_order_id: string;
   }
   ```
 

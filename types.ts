@@ -103,6 +103,7 @@ interface PaymentStatusEvent extends WidgetEvent<"payment-status"> {
     payment_id: string;
     order_id: string;
     tx_id?: string;
+    external_order_id: string;
   };
 }
 
