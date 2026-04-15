@@ -1,4 +1,4 @@
-export type Options = {
+export declare type Options = {
     partner_id: string;
     click_id?: string;
     origin?: string;
@@ -32,14 +32,14 @@ export type Options = {
     display_currency?: string;
     hide_fee_breakdown?: boolean;
 } & CardBillingAddressOptions & SCOptions;
-type CardBillingAddressOptions = {
+declare type CardBillingAddressOptions = {
     card_country_code?: string;
     card_city?: string;
     card_state_code?: string;
     card_post_code?: string;
     card_street?: string;
 };
-type SCOptions = {
+declare type SCOptions = {
     sc_address?: string;
     sc_input_data?: string;
     signature?: string;
@@ -62,18 +62,18 @@ interface Wallet {
     network: string;
     address: string;
 }
-type ThemeType = 'dark' | undefined;
-export type SetThemeParameters = {
+declare type ThemeType = 'dark' | undefined;
+export declare type SetThemeParameters = {
     theme?: ThemeType;
     brand_color?: string;
 };
-export type EventTypes = 'close' | 'error' | 'loaded' | 'payment-status' | 'position' | 'rate-update';
-export type InternalEventTypes = '3ds-start' | '3ds-end';
+export declare type EventTypes = 'close' | 'error' | 'loaded' | 'payment-status' | 'position' | 'rate-update';
+export declare type InternalEventTypes = '3ds-start' | '3ds-end';
 interface WidgetEvent<EventType extends EventTypes | InternalEventTypes> {
     type: EventType;
 }
-type CloseEvent = WidgetEvent<"close">;
-type LoadedEvent = WidgetEvent<"loaded">;
+declare type CloseEvent = WidgetEvent<"close">;
+declare type LoadedEvent = WidgetEvent<"loaded">;
 interface ErrorEvent extends WidgetEvent<"error"> {
     data: {
         name: string;
@@ -106,11 +106,11 @@ interface RateUpdateEvent extends WidgetEvent<"rate-update"> {
         currency_miner_fee: string;
     };
 }
-type Start3dsEvent = WidgetEvent<"3ds-start">;
-type End3dsEvent = WidgetEvent<"3ds-end">;
-export type WidgetEvents = CloseEvent | ErrorEvent | LoadedEvent | PaymentStatusEvent | PositionEvent | RateUpdateEvent;
-export type InternalWidgetEvents = Start3dsEvent | End3dsEvent;
-type EventListeners<Events extends {
+declare type Start3dsEvent = WidgetEvent<"3ds-start">;
+declare type End3dsEvent = WidgetEvent<"3ds-end">;
+export declare type WidgetEvents = CloseEvent | ErrorEvent | LoadedEvent | PaymentStatusEvent | PositionEvent | RateUpdateEvent;
+export declare type InternalWidgetEvents = Start3dsEvent | End3dsEvent;
+declare type EventListeners<Events extends {
     type: string;
     data?: Record<string, unknown>;
 }> = {
