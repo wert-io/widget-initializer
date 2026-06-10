@@ -32,6 +32,7 @@ export type Options = {
   payment_method_restriction?: boolean;
   display_currency?: string;
   hide_fee_breakdown?: boolean;
+  is_auto_logout_on_order_complete_enabled?: boolean;
 } & CardBillingAddressOptions & SCOptions;
 
 type CardBillingAddressOptions = {

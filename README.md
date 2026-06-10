@@ -394,6 +394,18 @@ const wertWidget = new WertWidget(options);
     <td><code>#FF0000</code></td>
     <td>Custom brand color that affects the following components: primary buttons, tooltips, steppers, tabs, checkboxes, toasts, pie countdowns.</td>
   </tr>
+  <tr>
+    <td><strong>is_auto_logout_on_order_complete_enabled</strong></td>
+    <td>optional</td>
+    <td><i>Boolean</i></td>
+    <td><code>undefined</code></td>
+    <td><code>true</code></td>
+    <td>
+      When <code>true</code>, the user's auth session is silently cleared as soon as an order reaches <code>success</code> status. The success screen remains visible; no redirect occurs. Any subsequent navigation to an auth-protected route will resolve to the login page.
+      <br/><br/>
+      <i>- Please check the <a href="#boolean-usage">boolean usage note</a></i>
+    </td>
+  </tr>
 </table>
 
 ### Extra object structure
