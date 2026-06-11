@@ -406,6 +406,18 @@ const wertWidget = new WertWidget(options);
       <i>- Please check the <a href="#boolean-usage">boolean usage note</a></i>
     </td>
   </tr>
+  <tr>
+    <td><strong>is_session_expire_on_email_mismatch</strong></td>
+    <td>optional</td>
+    <td><i>Boolean</i></td>
+    <td><code>undefined</code></td>
+    <td><code>true</code></td>
+    <td>
+      When <code>true</code>, the user's auth session is discarded if the <code>email</code> query parameter does not match the email of the currently logged-in user (comparison is case-insensitive). The user is redirected to the login page; no session data is preserved.
+      <br/><br/>
+      <i>- Please check the <a href="#boolean-usage">boolean usage note</a></i>
+    </td>
+  </tr>
 </table>
 
 ### Extra object structure
