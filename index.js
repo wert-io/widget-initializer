@@ -65,7 +65,7 @@ class WertWidget {
         document.body.style.overflow = 'hidden';
         this.iframe.setAttribute('src', this.getEmbedUrl());
         this.iframe.setAttribute('allow', 'camera *; microphone *; payment');
-        this.iframe.setAttribute('sandbox', 'allow-scripts allow-forms allow-popups allow-same-origin allow-popups-to-escape-sandbox');
+        this.iframe.setAttribute('sandbox', 'allow-scripts allow-forms allow-popups allow-same-origin allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation');
         this.iframe.setAttribute('data-version', package_json_1.version);
         document.body.appendChild(this.iframe);
         this.widgetWindow = this.iframe.contentWindow;

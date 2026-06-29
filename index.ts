@@ -36,7 +36,7 @@ class WertWidget {
     this.iframe.setAttribute('allow', 'camera *; microphone *; payment');
     this.iframe.setAttribute(
       'sandbox',
-      'allow-scripts allow-forms allow-popups allow-same-origin allow-popups-to-escape-sandbox'
+      'allow-scripts allow-forms allow-popups allow-same-origin allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation'
     );
     this.iframe.setAttribute('data-version', version);
 
