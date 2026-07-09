@@ -28,6 +28,7 @@ const MINIMUM_OPTIONS_FILLED = {
 
 const COMMODITIES = [{"commodity":"GHST","network":"mumbai"}, {"commodity":"STX","network":"testnet"}];
 const CURRENCIES = ["USD"];
+const PAYMENT_METHODS = ["apple-pay", "cashapp"];
 
 const WALLETS = [
   {
@@ -42,5 +43,6 @@ module.exports = {
   MINIMUM_OPTIONS_FILLED,
   COMMODITIES,
   CURRENCIES,
+  PAYMENT_METHODS,
   WALLETS
 };

@@ -188,8 +188,14 @@ class WertWidget {
   }
 
   private getParametersString(): string {
+    const { payment_method, ...restOptions } = this.options;
+    const normalizedPaymentMethod = Array.isArray(payment_method)
+      ? JSON.stringify(payment_method)
+      : payment_method;
+
     return Object.entries({
-      ...this.options,
+      ...restOptions,
+      payment_method: normalizedPaymentMethod,
       widget_layout_mode: this.widget_layout_mode,
       ...(this.await_data && { await_data: this.await_data })
     }).reduce(

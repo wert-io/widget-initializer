@@ -28,7 +28,7 @@ export type Options = {
   is_crypto_hidden?: boolean;
   session_id?: string;
   terms_on_payment?: boolean;
-  payment_method?: string;
+  payment_method?: string | string[];
   payment_method_restriction?: boolean;
   display_currency?: string;
   hide_fee_breakdown?: boolean;

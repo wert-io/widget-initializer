@@ -108,10 +108,10 @@ const wertWidget = new WertWidget(options);
   <tr>
     <td><strong>payment_method</strong></td>
     <td>optional</td>
-    <td><i>String</i></td>
+    <td><i>String | String[]</i></td>
     <td><code>card</code></td>
-    <td><code>card</code><br/><code>apple-pay</code><br/><code>google-pay</code></td>
-    <td>If set, this method will be <b>pre-selected and shown first</b> in the list of available methods. Other methods will still be available unless <code>payment_method_restriction</code> is used.</td>
+    <td><code>card</code><br/><code>apple-pay</code><br/><code>google-pay</code><br/><code>cash-app</code><br/><code>sepa</code><br/><code>blik</code><br/><code>['apple-pay', 'cash-app']</code></td>
+    <td>One method (as a plain string, e.g. <code>'card'</code>) or several methods (as an array, e.g. <code>['apple-pay', 'cash-app']</code>) to pre-select and show first, in the given order. Other methods will still be available unless <code>payment_method_restriction</code> is used. Passing a single string keeps working exactly as before — passing an array is fully backward-compatible and not required.</td>
   </tr>
   <tr>
     <td><strong>payment_method_restriction</strong></td>
@@ -119,7 +119,7 @@ const wertWidget = new WertWidget(options);
     <td><i>Boolean</i></td>
     <td><code>false</code></td>
     <td><code>true</code></td>
-    <td>If <code>true</code>, the widget will show <b>only</b> the method specified in <code>payment_method</code> (if it’s available). If that method isn’t available, the widget will fall back to showing all available methods.</td>
+    <td>If <code>true</code>, the widget will show <b>only</b> the method(s) specified in <code>payment_method</code>, in the given order (any methods that aren’t available are ignored). If none of the specified methods are available, the widget will fall back to showing all available methods.</td>
   </tr>
 </table>
 

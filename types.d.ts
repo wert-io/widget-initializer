@@ -27,10 +27,12 @@ export declare type Options = {
     is_crypto_hidden?: boolean;
     session_id?: string;
     terms_on_payment?: boolean;
-    payment_method?: string;
+    payment_method?: string | string[];
     payment_method_restriction?: boolean;
     display_currency?: string;
     hide_fee_breakdown?: boolean;
+    is_auto_logout_on_order_complete_enabled?: boolean;
+    is_session_expire_on_email_mismatch?: boolean;
 } & CardBillingAddressOptions & SCOptions;
 declare type CardBillingAddressOptions = {
     card_country_code?: string;

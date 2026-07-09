@@ -1,4 +1,15 @@
 "use strict";
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 const package_json_1 = require("./package.json");
 const externalStaticOrigin = 'https://javascript.wert.io';
 class WertWidget {
@@ -146,7 +157,11 @@ class WertWidget {
         return `${this.options.origin}/${this.options.partner_id}/widget${parametersString}`;
     }
     getParametersString() {
-        return Object.entries(Object.assign(Object.assign(Object.assign({}, this.options), { widget_layout_mode: this.widget_layout_mode }), (this.await_data && { await_data: this.await_data }))).reduce((accum, [key, value]) => {
+        const _a = this.options, { payment_method } = _a, restOptions = __rest(_a, ["payment_method"]);
+        const normalizedPaymentMethod = Array.isArray(payment_method)
+            ? JSON.stringify(payment_method)
+            : payment_method;
+        return Object.entries(Object.assign(Object.assign(Object.assign({}, restOptions), { payment_method: normalizedPaymentMethod, widget_layout_mode: this.widget_layout_mode }), (this.await_data && { await_data: this.await_data }))).reduce((accum, [key, value]) => {
             if (value === undefined || typeof value === 'object' || ['origin', 'partner_id'].includes(key)) {
                 return accum;
             }

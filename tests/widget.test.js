@@ -12,6 +12,7 @@ const {
   MINIMUM_OPTIONS_FILLED,
   COMMODITIES,
   CURRENCIES,
+  PAYMENT_METHODS,
   WALLETS,
 } = require('./mocks/options.js');
 const { version } = require('../package.json');
@@ -219,6 +220,29 @@ describe('getEmbedUrl & getParametersString', () => {
       && JSON.stringify(CURRENCIES) === JSON.stringify(currenciesFromUrl);
 
     expect(arraysAreEqual).toBe(true);
+  });
+  test('payment_method as an array should be JSON-serialized in the URL query', () => {
+    widget = new WertWidget({
+      ...MINIMUM_OPTIONS_FILLED,
+      payment_method: PAYMENT_METHODS,
+    });
+    widgetLink = widget.getEmbedUrl();
+
+    const searchParams = new URLSearchParams(widgetLink.split('?')[1]);
+    const paymentMethodFromUrl = JSON.parse(searchParams.get('payment_method'));
+
+    expect(paymentMethodFromUrl).toEqual(PAYMENT_METHODS);
+  });
+  test('payment_method as a plain string should still be present in the URL query', () => {
+    widget = new WertWidget({
+      ...MINIMUM_OPTIONS_FILLED,
+      payment_method: 'card',
+    });
+    widgetLink = widget.getEmbedUrl();
+
+    const searchParams = new URLSearchParams(widgetLink.split('?')[1]);
+
+    expect(searchParams.get('payment_method')).toBe('card');
   });
 });
 
