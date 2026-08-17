@@ -5,6 +5,7 @@
 - [WertWidget initializer](#wertwidget-initializer)
   - [Installation](#installation)
   - [Usage](#usage)
+  - [Using without npm (browser `<script>` build)](#using-without-npm-browser-script-build)
   - [Options](#options)
     - [General options](#general-options)
     - [Smart contract options](#smart-contract-options)
@@ -43,6 +44,33 @@ First of all, you need to create a widget class:
 ```
 const wertWidget = new WertWidget(options);
 ```
+
+## Using without npm (browser `<script>` build)
+
+If your app doesn't use npm/a bundler, you can load a pre-built version of this package straight from `https://javascript.wert.io/`. Two formats are published for every version, replace `VERSION` below with the package version you need (e.g. `7.0.6`):
+
+- **IIFE** (`wert-VERSION.js`) — a classic script that exposes the widget as `window.WertWidget`:
+
+  ```html
+  <script src="https://javascript.wert.io/wert-VERSION.js"></script>
+  <script>
+    const wertWidget = new window.WertWidget(options);
+    wertWidget.open();
+  </script>
+  ```
+
+- **ES module** (`wert-VERSION.esm.js`) — can be imported directly in a `<script type="module">` or from your own JS module:
+
+  ```html
+  <script type="module">
+    import WertWidget from 'https://javascript.wert.io/wert-VERSION.esm.js';
+
+    const wertWidget = new WertWidget(options);
+    wertWidget.open();
+  </script>
+  ```
+
+Both files are built from this package via `npm run build-script` (see `rollup.config.js`) and published to GitHub Pages on release, so they always match the corresponding npm version.
 
 ## Options
 
