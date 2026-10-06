@@ -111,7 +111,7 @@ const wertWidget = new WertWidget(options);
     <td><i>String | String[]</i></td>
     <td><code>card</code></td>
     <td><code>card</code><br/><code>apple-pay</code><br/><code>google-pay</code><br/><code>cash-app</code><br/><code>sepa</code><br/><code>blik</code><br/><code>tr-bank-transfer</code><br/><code>['apple-pay', 'cash-app']</code></td>
-    <td>One method (as a plain string, e.g. <code>'card'</code>) or several methods (as an array, e.g. <code>['apple-pay', 'cash-app']</code>) to pre-select and show first, in the given order. Other methods will still be available unless <code>payment_method_restriction</code> is used. Passing a single string keeps working exactly as before — passing an array is fully backward-compatible and not required.</td>
+    <td>One method (as a plain string, e.g. <code>'card'</code>) or several methods (as an array, e.g. <code>['apple-pay', 'cash-app']</code>) to pre-select and show first, in the given order. Other methods will still be available unless <code>payment_method_restriction</code> is used. Passing a single string keeps working exactly as before — passing an array is fully backward-compatible and not required. <code>tr-bank-transfer</code> is available only for TRY, and a TRY order shows only that method. <code>blik</code> is available only for PLN, and a PLN order shows only that method.</td>
   </tr>
   <tr>
     <td><strong>payment_method_restriction</strong></td>
